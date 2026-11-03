@@ -7,7 +7,7 @@ import DataContext from "../context/DataContext";
 import LanguageContext from "../context/LanguageContext";
 
 const FloattingBubble = () => {
-  const { modalStrong, strongFun } = useContext(DataContext);
+  const { modalStrong, strongFun, fichaSuelta } = useContext(DataContext);
   const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -15,8 +15,10 @@ const FloattingBubble = () => {
   // `modalStrong`. Este modal vive aquí, así que hay que abrirlo desde ese aviso
   // en vez de esperar a que el usuario toque la burbuja.
   useEffect(() => {
-    if (modalStrong) setIsModalOpen(true);
-  }, [modalStrong]);
+    // Una ficha pedida desde el texto se abre sola (App.jsx): abrir también
+    // el diccionario dejaba la lista entera detrás de ella.
+    if (modalStrong && !fichaSuelta) setIsModalOpen(true);
+  }, [modalStrong, fichaSuelta]);
   const bubbleRef = useRef(null);
   const modalRef = useRef(null);
   const startPosition = useRef({ x: 0, y: 0 });

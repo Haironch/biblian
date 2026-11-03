@@ -4,9 +4,10 @@ import LanguageContext from "../context/LanguageContext";
 import { getStrongAudioUrl } from "../services/bibleSource";
 import indexHebrew from "../assets/strongs/IndexHebrew.json";
 import indexGreek from "../assets/strongs/IndexGreek.json";
+import BotonCopiar from "./BotonCopiar";
 
 const StrongPopup = () => {
-  const { strongPopup, cerrarStrongPopup, abrirDefinicionStrong, abrirConcordancia } = useContext(DataContext);
+  const { strongPopup, mostrarStrongPopup, cerrarStrongPopup, abrirDefinicionStrong, abrirConcordancia } = useContext(DataContext);
   const { t } = useContext(LanguageContext);
 
   const [audio, setAudio] = useState(null);
@@ -19,6 +20,34 @@ const StrongPopup = () => {
   const code = strongPopup?.code;
   const isHebrew = code?.startsWith("H");
   const isGreek = code?.startsWith("G");
+
+  /*
+   * Abierto desde una palabra (no desde un número): `palabra` es lo que se
+   * tocó, `opciones` las palabras originales del versículo y `cargando` el
+   * rato en que se consulta la versión puente.
+   */
+  const palabra = strongPopup?.palabra ?? null;
+  const opciones = strongPopup?.opciones ?? [];
+  const cargando = Boolean(strongPopup?.cargando);
+  const [verTodas, setVerTodas] = useState(false);
+  useEffect(() => setVerTodas(false), [strongPopup]);
+
+  // Al abrir la lista desde una palabra ya encontrada, esa palabra puede
+  // quedar abajo del todo: se trae a la vista para no tener que buscarla.
+  const opcionActual = useRef(null);
+
+  // Sin código hay que elegir: la palabra no estaba tal cual en el original.
+  const modoLista = !cargando && (verTodas || (!code && palabra !== null));
+
+  useEffect(() => {
+    if (modoLista) opcionActual.current?.scrollIntoView({ block: "nearest" });
+  }, [modoLista]);
+
+  /** La palabra original de un código, para la lista de opciones. */
+  const originalDe = useCallback(
+    (codigo) => (codigo?.startsWith("H") ? indexHebrew : indexGreek).find((item) => item.id === codigo)?.le ?? "",
+    [],
+  );
 
   // Información instantánea desde los índices locales (sin llamadas de red redundantes)
   const entryData = useMemo(() => {
@@ -106,7 +135,9 @@ const StrongPopup = () => {
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     const popupWidth = Math.min(viewportWidth - 24, 310);
-    const popupHeight = 165;
+    // La lista de palabras es más alta que la ficha: si se calcula con la
+    // altura de la ficha, cerca del borde inferior se sale de la pantalla.
+    const popupHeight = modoLista ? 320 : 190;
     const margin = 10;
 
     if (!anchor) {
@@ -142,7 +173,7 @@ const StrongPopup = () => {
     }
 
     setCoords({ top, left, placement, arrowLeft });
-  }, [strongPopup]);
+  }, [strongPopup, modoLista]);
 
   // Cerrar con Escape
   useEffect(() => {
@@ -181,6 +212,60 @@ const StrongPopup = () => {
           }`}
         />
 
+        {palabra !== null && (cargando || modoLista) ? (
+          <div className="relative z-30">
+            <div className="mb-2 flex items-start justify-between gap-2 border-b border-linea pb-2">
+              <p className="min-w-0 text-sm font-semibold text-tinta">«{palabra}»</p>
+              <button
+                onClick={cerrarStrongPopup}
+                className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-tinta-3 transition hover:bg-tinta/5 hover:text-tinta-2"
+                title={t("Cerrar")}
+                aria-label={t("Cerrar")}
+              >
+                &times;
+              </button>
+            </div>
+
+            {cargando ? (
+              <p className="flex items-center gap-2 py-3 text-xs text-tinta-2">
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-acento/30 border-t-acento" aria-hidden="true"></span>
+                {t("StrongBuscandoOriginal")}
+              </p>
+            ) : opciones.length === 0 ? (
+              <p className="py-2 text-xs leading-relaxed text-tinta-2">{t("StrongSinOriginal")}</p>
+            ) : (
+              <>
+                <p className="mb-2 text-xs leading-relaxed text-tinta-2">
+                  {code ? t("StrongPalabrasDelVersiculo") : t("StrongSinCoincidencia", { palabra })}
+                </p>
+                <ul className="no-scrollbar -mx-1 max-h-56 overflow-y-auto">
+                  {opciones.map((opcion) => (
+                    <li key={`${opcion.texto}-${opcion.code}`} ref={opcion.code === code ? opcionActual : undefined}>
+                      <button
+                        type="button"
+                        onClick={() => mostrarStrongPopup(opcion.code, strongPopup.anchorRect, { palabra: opcion.texto, opciones })}
+                        className={`flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-acento-suave ${
+                          opcion.code === code ? "bg-acento-suave" : ""
+                        }`}
+                      >
+                        <span className="min-w-0 flex-1 truncate text-sm text-tinta">{opcion.texto}</span>
+                        <span className="shrink-0 text-sm text-tinta-2" dir="auto">
+                          {originalDe(opcion.code)}
+                        </span>
+                        <span className="w-12 shrink-0 text-right font-mono text-[11px] font-semibold text-acento">{opcion.code}</span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        ) : (
+        <>
+        {palabra !== null && (
+          <p className="relative z-30 mb-1 text-xs text-tinta-3">{t("StrongPalabraEnOriginal", { palabra })}</p>
+        )}
+
         {/* Encabezado: Código + Idioma + Botón cerrar */}
         <div className="relative z-30 flex items-center justify-between border-b border-linea pb-2 mb-3">
           <div className="flex items-center gap-2">
@@ -192,13 +277,23 @@ const StrongPopup = () => {
             </span>
           </div>
 
-          <button
-            onClick={cerrarStrongPopup}
-            className="flex h-6 w-6 items-center justify-center rounded-full text-tinta-3 hover:bg-tinta/5 hover:text-tinta-2 transition"
-            title={t("Cerrar") || "Cerrar"}
-          >
-            &times;
-          </button>
+          <div className="flex items-center gap-0.5">
+            {/* Lo corto, para pegar: "amó → ἀγαπάω (agapao) · G25". */}
+            {entryData && (
+              <BotonCopiar
+                obtenerTexto={() => `${palabra ? `${palabra} → ` : ""}${entryData.le}${entryData.pl ? ` (${entryData.pl})` : ""} · ${code}`}
+                etiqueta={t("CopiarPalabra")}
+                className="h-6 w-6"
+              />
+            )}
+            <button
+              onClick={cerrarStrongPopup}
+              className="flex h-6 w-6 items-center justify-center rounded-full text-tinta-3 hover:bg-tinta/5 hover:text-tinta-2 transition"
+              title={t("Cerrar") || "Cerrar"}
+            >
+              &times;
+            </button>
+          </div>
         </div>
 
         {/* Cuerpo: Palabra original + Transliteración + Audio */}
@@ -325,6 +420,20 @@ const StrongPopup = () => {
         >
           <span>{t("ConcordanciaVerDonde")}</span>
         </button>
+
+        {/* La palabra se eligió por coincidencia de texto: puede no ser la que
+            se quería. Se deja a mano el resto del versículo. */}
+        {opciones.length > 1 && (
+          <button
+            type="button"
+            onClick={() => setVerTodas(true)}
+            className="mt-2 w-full text-center text-[11px] font-medium text-tinta-3 underline-offset-2 transition hover:text-acento hover:underline"
+          >
+            {t("StrongVerTodas")}
+          </button>
+        )}
+        </>
+        )}
       </div>
     </div>
   );

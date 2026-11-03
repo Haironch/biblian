@@ -5,6 +5,8 @@ import ThemeContext from "../context/ThemeContext";
 import LanguageContext from "../context/LanguageContext";
 import { useHistoryBlocker } from "../hooks/useHistoryBlocker";
 import { Loader2, Pause, Volume2, X } from "lucide-react";
+import BotonCopiar from "./BotonCopiar";
+import { aTextoPlano } from "../utils/textoPlano";
 
 const processText = (html, strongFun) => {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -212,6 +214,20 @@ const StrongSingle = () => {
     strongFun("");
   };
 
+  /** La ficha como texto para pegar en notas o mensajes, sin el marcado de colores. */
+  const textoFicha = () =>
+    [
+      `${strongIndividual.id} · ${strongIndividual.le ?? ""}${strongIndividual.pl ? ` (${strongIndividual.pl})` : ""}`,
+      strongIndividual.ps ? `${t("StrongPronunciacion")}: ${strongIndividual.ps}` : null,
+      // Al quitar las etiquetas quedan espacios pegados a corchetes y
+      // paréntesis ("compare H5689 ]"): se cierran para que pegado se lea bien.
+      strongIndividual.df
+        ? `${t("StrongDefinicion")}: ${aTextoPlano(strongIndividual.df).replace(/([[(])\s+/g, "$1").replace(/\s+([\])])/g, "$1")}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
   /*
    * La ficha era un pergamino ilustrado con el texto encima en posiciones
    * fijas y un sello de lacre como botón de cerrar. Ahora es una tarjeta del
@@ -235,15 +251,18 @@ const StrongSingle = () => {
               {strongIndividual.pl} {strongIndividual.ti ? `(${strongIndividual.ti})` : ""}
             </p>
           </div>
-          <button
-            type="button"
-            onClick={cerrarFicha}
-            aria-label={t("Cerrar")}
-            title={t("Cerrar")}
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-tinta-3 transition-colors hover:bg-tinta/5 hover:text-tinta"
-          >
-            <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
-          </button>
+          <div className="flex shrink-0 items-center gap-0.5">
+            <BotonCopiar obtenerTexto={textoFicha} etiqueta={t("CopiarDefinicion")} className="h-8 w-8" />
+            <button
+              type="button"
+              onClick={cerrarFicha}
+              aria-label={t("Cerrar")}
+              title={t("Cerrar")}
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-tinta-3 transition-colors hover:bg-tinta/5 hover:text-tinta"
+            >
+              <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
+            </button>
+          </div>
         </header>
 
         <div className="overflow-y-auto px-5 py-4">

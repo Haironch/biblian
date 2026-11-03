@@ -281,10 +281,14 @@ const Navbar = () => {
               onClick={() => setMenuAbierto((abierto) => !abierto)}
               aria-expanded={menuAbierto}
               aria-haspopup="menu"
+              aria-label={t("Menu")}
               className={`flex h-full w-full flex-col items-center justify-center gap-0.5 ${enSecundaria || menuAbierto ? "text-acento" : "text-tinta-3"}`}
             >
               <Ellipsis className="h-[22px] w-[22px]" strokeWidth={1.8} aria-hidden="true" />
-              <span className="w-full truncate text-center text-[10px] font-medium">{t("Menu")}</span>
+              {/* "Más opciones" no cabe en un teléfono de 320 px: la pestaña dice
+                  "Más", como en iOS, y el nombre largo queda para lectores de
+                  pantalla en el `aria-label`. */}
+              <span className="w-full truncate text-center text-[10px] font-medium">{t("MenuCorto")}</span>
             </button>
           </li>
         </ul>

@@ -107,7 +107,7 @@ const TabGreek = () => {
 
   return (
     <>
-      <div className="sticky top-[41px] z-20 -mx-4 mb-3 flex items-center justify-center border-b border-linea bg-superficie px-4 pb-3 pt-1 sm:-mx-5 sm:px-5">
+      <div className="sticky top-[41px] z-20 -mx-3 mb-3 flex items-center justify-center border-b border-linea bg-superficie px-3 pb-3 pt-1 sm:-mx-5 sm:px-5">
         <div className="relative w-full max-w-sm">
           <input
             className="block w-full rounded-lg border border-linea-fuerte bg-superficie-2 p-3 text-sm text-tinta outline-none placeholder:text-tinta-3 focus:border-acento focus:ring-2 focus:ring-acento/20"
@@ -127,13 +127,13 @@ const TabGreek = () => {
           {filteredResults.map((result) => (
             <button
               type="button"
-              className="my-1.5 flex w-full items-center gap-3 rounded-lg border border-linea bg-superficie px-3 py-2.5 text-left transition-colors hover:border-acento/40 hover:bg-acento-suave"
+              className="my-1.5 flex w-full items-center gap-2 rounded-lg border border-linea bg-superficie px-2.5 py-2.5 text-left sm:gap-3 sm:px-3 transition-colors hover:border-acento/40 hover:bg-acento-suave"
               key={result.id}
               onClick={() => strongFun(result.id)}
             >
-              <span className="w-14 shrink-0 font-mono text-xs font-semibold text-acento">{result.id}</span>
+              <span className="w-11 shrink-0 font-mono text-xs font-semibold text-acento sm:w-14">{result.id}</span>
               <span className="min-w-0 flex-1 truncate text-tinta">{result.pl}</span>
-              <span className="w-20 shrink-0 truncate text-right text-sm text-tinta-3" title={result.le}>
+              <span className="max-w-[40%] shrink-0 truncate text-right text-sm text-tinta-3 sm:w-20 sm:max-w-none" title={result.le}>
                 {result.le}
               </span>
             </button>

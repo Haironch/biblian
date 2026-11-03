@@ -13,6 +13,7 @@ import Notes from "./pages/Notes";
 import { useSync } from "./hooks/useSync";
 import FloatingBubble from "./components/FloatingBubble";
 import StrongPopup from "./components/StrongPopup";
+import StrongSingle from "./components/StrongSingle";
 import DataContext from "./context/DataContext";
 import ShareModal from "./components/ShareModal";
 import PaletaComandos from "./components/PaletaComandos";
@@ -46,7 +47,7 @@ const MemoriaScroll = () => {
 };
 
 const App = () => {
-  const { setCompartir, compartir } = useContext(DataContext);
+  const { setCompartir, compartir, modalStrong, fichaSuelta } = useContext(DataContext);
 
   const modalRef = useRef(null);
 
@@ -81,6 +82,12 @@ const App = () => {
     <>
       <ShareModal />
       <StrongPopup />
+      {/* La definición pedida desde el globito, sin el diccionario detrás. */}
+      {modalStrong && fichaSuelta && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+          <StrongSingle />
+        </div>
+      )}
       <BrowserRouter>
         {/*
           Todo se aparta de la lateral (escritorio) y de las pestañas (móvil)

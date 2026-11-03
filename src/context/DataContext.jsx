@@ -189,16 +189,34 @@ export const DataProvider = ({ children }) => {
   // Popup rápido de Strong al hacer clic en números del versículo
   const [strongPopup, setStrongPopup] = useState(null);
 
-  const mostrarStrongPopup = useCallback((code, anchorRect = null) => {
-    setStrongPopup({ code, anchorRect });
+  /*
+   * `extra` llega cuando el globito se abre desde una PALABRA y no desde un
+   * número: la palabra tocada (para decir "«amó» en el original"), las
+   * palabras originales del versículo (para elegir otra si no era esa) y
+   * `cargando` mientras se consulta la versión puente.
+   */
+  const mostrarStrongPopup = useCallback((code, anchorRect = null, extra = null) => {
+    setStrongPopup({ code, anchorRect, ...(extra ?? {}) });
   }, []);
 
   const cerrarStrongPopup = useCallback(() => {
     setStrongPopup(null);
   }, []);
 
+  /*
+   * La ficha de una definición vivía solo DENTRO del diccionario: pedirla
+   * desde el globito abría el diccionario entero para poder enseñarla, y al
+   * cerrar la ficha quedaba la lista de 14,000 entradas encima de la lectura.
+   *
+   * `fichaSuelta` dice que esta ficha se pidió desde el texto: se pinta sola
+   * (ver App.jsx) y el diccionario no se abre. Desde el propio diccionario se
+   * sigue llamando a `strongFun` directo y todo funciona como antes.
+   */
+  const [fichaSuelta, setFichaSuelta] = useState(false);
+
   const abrirDefinicionStrong = useCallback((code) => {
     setStrongPopup(null);
+    setFichaSuelta(true);
     strongFun(code);
   }, [strongFun]);
 
@@ -596,6 +614,10 @@ export const DataProvider = ({ children }) => {
   }, [setModalStrong]);
 
   useEffect(() => {
+    if (!modalStrong) setFichaSuelta(false);
+  }, [modalStrong]);
+
+  useEffect(() => {
     if (strong.length === 0) return;
 
     const controller = new AbortController();
@@ -936,6 +958,7 @@ export const DataProvider = ({ children }) => {
         mostrarStrongPopup,
         cerrarStrongPopup,
         abrirDefinicionStrong,
+        fichaSuelta,
         // Concordancia inversa
         concordanciaStrong,
         abrirConcordancia,

@@ -202,3 +202,26 @@
 .dark .texto-biblico mark.dif-parcial {
   text-decoration-color: #fbbf24;
 }
+
+/*
+ * Palabras del versículo seleccionado que tienen equivalente en hebreo o
+ * griego (ver `utils/puenteStrong.js`). Punteado y no continuo: un subrayado
+ * lleno se lee como enlace a otra página, y esto abre un globito en el sitio.
+ * Al pasar el cursor se vuelve sólido y toma el acento, que es la señal de
+ * "esto se toca".
+ */
+.texto-biblico .palabra-original {
+  cursor: pointer;
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: rgb(var(--acento) / 0.6);
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 0.22em;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+
+.texto-biblico .palabra-original:hover {
+  color: rgb(var(--acento));
+  text-decoration-style: solid;
+  text-decoration-color: rgb(var(--acento));
+}

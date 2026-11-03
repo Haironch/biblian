@@ -16,7 +16,7 @@
  * cargarse y un enlace a la RV60 abría la griega. Como texto, "75" y "075" son
  * distintos, y los enlaces viejos con "75" siguen abriendo la española.
  */
-import { BIBLIAS } from "../data/biblias";
+import { BIBLIAS, CARACTERISTICAS_POR_BIBLIA } from "../data/biblias";
 
 /**
  * Cuántas versiones se pueden comparar a la vez.
@@ -35,6 +35,19 @@ export const MAX_VERSIONES_COMPARADAS = 25;
 
 /** "001. Español - Biblia al día (1989)" -> "Español" */
 export const idiomaDeVersion = (ruta) => String(ruta ?? "").split(". ")[1]?.split(" -")[0]?.trim() ?? "";
+
+/**
+ * `true` si en esta versión se puede tocar una palabra y ver su original en
+ * hebreo o griego.
+ *
+ * Dos casos: la versión trae sus propios números Strong (las RV con Strong y
+ * los textos griegos y hebreos marcados), o está en español y se puede leer a
+ * través de la Reina Valera con Strong (ver `utils/puenteStrong.js`). Es la
+ * misma regla que aplica el panel al tocar una palabra; vive aquí para que el
+ * filtro del selector y el panel no puedan contradecirse.
+ */
+export const tieneOriginales = (ruta) =>
+  idiomaDeVersion(ruta) === "Español" || (CARACTERISTICAS_POR_BIBLIA[ruta] ?? []).includes("strong");
 
 /** Nombre de idioma del catálogo -> código ISO, para la voz y la traducción. */
 export const ISO_POR_IDIOMA = {

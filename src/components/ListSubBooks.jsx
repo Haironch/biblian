@@ -38,7 +38,9 @@ const ListSubBooks = () => {
   /*
    * Una sola rejilla para los dos modos. En compacto entran más columnas y se
    * enseña la abreviatura; en normal, el nombre entero, y los nombres largos
-   * ocupan dos celdas para no partirse en tres renglones.
+   * ocupan dos celdas para no partirse en tres renglones. Bajo 360 px (iPhone
+   * SE de primera generación) "Deuteronomio" y "Lamentaciones" tampoco caben
+   * en una celda, así que ahí también toman dos.
    */
   const testamento = (titulo, desde, hasta) => (
     <section className="mb-5">
@@ -50,7 +52,7 @@ const ListSubBooks = () => {
               key={key}
               type="button"
               onClick={() => selectBook(key, index)}
-              className={`${claseCelda(selectedBook === key)} ${modoCompacto ? "px-1 py-2 text-xs" : "px-2 py-2.5"} ${!modoCompacto && value.length > 13 ? "col-span-2" : ""}`}
+              className={`${claseCelda(selectedBook === key)} ${modoCompacto ? "px-1 py-2 text-xs" : "px-2 py-2.5"} ${!modoCompacto && value.length > 13 ? "col-span-2" : !modoCompacto && value.length > 11 ? "max-[359px]:col-span-2" : ""}`}
             >
               {value}
             </button>

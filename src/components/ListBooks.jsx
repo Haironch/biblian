@@ -6,7 +6,7 @@ import ReadMore from "./ReadMore";
 import { useHistoryBlocker } from "../hooks/useHistoryBlocker";
 import { useBloquearScroll } from "../hooks/useBloquearScroll";
 import { favoritos as almacenFavoritos, useAlmacen } from "../services/almacenLocal";
-import { MAX_VERSIONES_COMPARADAS as MAX_SELECTIONS } from "../utils/versiones";
+import { MAX_VERSIONES_COMPARADAS as MAX_SELECTIONS, tieneOriginales } from "../utils/versiones";
 import {
   BIBLIAS,
   RECOMENDADAS,
@@ -20,9 +20,12 @@ import {
 
 const CLAVE_SECCIONES = "seccionesBibliasAbiertas";
 
-const FILTROS = ["todas", "favoritas", "seleccionadas", "recomendadas"];
+const FILTROS = ["todas", "favoritas", "seleccionadas", "recomendadas", "originales"];
 
 const TOTAL_BIBLIAS = Object.values(BIBLIAS).reduce((total, grupo) => total + Object.keys(grupo).length, 0);
+const TOTAL_CON_ORIGINALES = Object.values(BIBLIAS)
+  .flatMap((grupo) => Object.values(grupo))
+  .filter((libro) => tieneOriginales(libro.ruta)).length;
 
 const normalizar = (texto) =>
   String(texto)
@@ -313,6 +316,7 @@ const ListBooks = () => {
         const cat = CATEGORIAS_RECOMENDADAS.find((c) => c.id === subFiltroRecomendada);
         return cat ? cat.versiones.some((v) => v.ruta === ruta) : false;
       }
+      if (filtro === "originales") return tieneOriginales(ruta);
       return true;
     },
     [filtro, subFiltroRecomendada, favoriteBooks, selectedBooks]
@@ -347,6 +351,7 @@ const ListBooks = () => {
     if (nombre === "favoritas") return favoriteBooks.length;
     if (nombre === "seleccionadas") return selectedBooks.length;
     if (nombre === "recomendadas") return RECOMENDADAS.length;
+    if (nombre === "originales") return TOTAL_CON_ORIGINALES;
     return TOTAL_BIBLIAS;
   };
 
@@ -512,6 +517,12 @@ const ListBooks = () => {
                   {seccionesAbiertas.length ? t("ContraerTodo") : t("ExpandirTodo")}
                 </button>
               </div>
+
+              {/* Qué significa "con originales": sin esto el filtro es solo una
+                  lista más corta y no dice qué tienen de especial. */}
+              {filtro === "originales" && (
+                <p className="mt-2.5 rounded-xl bg-acento-suave px-3 py-2 text-[11px] leading-snug text-tinta-2">{t("Desc_originales")}</p>
+              )}
 
               {/* SUB-FILTROS DE RECOMENDADAS Y SELECCIÓN RÁPIDA POR TIPO */}
               {filtro === "recomendadas" && (
@@ -785,10 +796,12 @@ const ListBooks = () => {
                                         {recInfo && (
                                           <span
                                             title={t(recInfo.categoriaKey)}
-                                            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-acento-suave px-2 py-0.5 text-[10px] font-medium text-acento"
+                                            className="inline-flex max-w-full items-center gap-1 whitespace-nowrap rounded-full bg-acento-suave px-2 py-0.5 text-[10px] font-medium text-acento"
                                           >
                                             <span>{recInfo.icono}</span>
-                                            <span>{t(recInfo.tagKey)}</span>
+                                            {/* En un teléfono angosto la frase no cabe: termina en "…" en
+                                                vez de cortarse a media letra. El texto completo va en el `title`. */}
+                                            <span className="min-w-0 truncate">{t(recInfo.tagKey)}</span>
                                           </span>
                                         )}
 

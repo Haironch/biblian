@@ -205,14 +205,14 @@ const BarraEstudio = () => {
       title={etiqueta}
       aria-label={etiqueta}
       aria-expanded={panel === id}
-      className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
+      className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
         panel === id || activo ? "bg-acento-suave text-acento" : "text-tinta-2 hover:bg-tinta/5 hover:text-tinta"
       }`}
     >
       <Icono className="h-5 w-5 shrink-0" />
       {/* `truncate` y no un texto más corto: en una pantalla estrecha se
           recorta el final, que sigue siendo más informativo que nada. */}
-      <span className="w-full truncate text-center text-[10px] font-medium leading-none sm:text-xs">{etiqueta}</span>
+      <span className="w-full truncate text-center text-[10px] font-medium leading-none tracking-tight max-[359px]:text-[9px] sm:text-xs sm:tracking-normal">{etiqueta}</span>
       {insignia !== null && insignia > 0 && (
         <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-acento-solido px-1 text-[10px] font-semibold text-white">{insignia}</span>
       )}
@@ -306,7 +306,7 @@ const BarraEstudio = () => {
         En escritorio es una tarjeta flotante centrada sobre el contenido; en
         móvil va de borde a borde, apoyada encima de las pestañas.
       */}
-      <div className="mx-auto flex w-full items-center gap-1 border-t border-linea bg-superficie/95 px-2 py-1.5 backdrop-blur sm:w-11/12 sm:max-w-3xl sm:gap-2 sm:rounded-t-2xl sm:border sm:border-b-0 sm:px-3 sm:py-2 sm:shadow-lg">
+      <div className="mx-auto flex w-full items-center gap-1 border-t border-linea bg-superficie/95 px-1 py-1.5 backdrop-blur sm:px-2 sm:w-11/12 sm:max-w-3xl sm:gap-2 sm:rounded-t-2xl sm:border sm:border-b-0 sm:px-3 sm:py-2 sm:shadow-lg">
         {/* La referencia no cabe en móvil junto a seis botones, y ya está en la
             miga de pan de arriba: aquí solo aparece cuando sobra sitio. */}
         <span className="hidden min-w-0 flex-1 truncate text-xs font-medium text-tinta-2 lg:block">{referencia}</span>
@@ -314,7 +314,7 @@ const BarraEstudio = () => {
         {/* `items-stretch` y cada botón con `flex-1`: en móvil los seis se
             reparten el ancho a partes iguales, así que el área de toque no
             depende de lo larga que sea la palabra. */}
-        <div className="flex flex-1 items-stretch gap-0.5 lg:flex-none lg:justify-end lg:gap-2">
+        <div className="flex flex-1 items-stretch gap-0 sm:gap-0.5 lg:flex-none lg:justify-end lg:gap-2">
           {/* Resaltar y anotar eran dos botones. Son la misma accion —marcar
               este versiculo— y separarlas obligaba a abrir un panel, cerrarlo y
               abrir otro para hacer lo normal: resaltar y escribir por que. */}
@@ -331,12 +331,12 @@ const BarraEstudio = () => {
             title={t("DiferenciasTitulo")}
             aria-label={t("DiferenciasTitulo")}
             aria-pressed={modoDiferencias}
-            className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
+            className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
               modoDiferencias ? "bg-acento-suave text-acento" : "text-tinta-2 hover:bg-tinta/5 hover:text-tinta"
             }`}
           >
             <IconoDiferencias className="h-5 w-5 shrink-0" />
-            <span className="w-full truncate text-center text-[10px] font-medium leading-none sm:text-xs">{t("DiferenciasTitulo")}</span>
+            <span className="w-full truncate text-center text-[10px] font-medium leading-none tracking-tight max-[359px]:text-[9px] sm:text-xs sm:tracking-normal">{t("DiferenciasTitulo")}</span>
           </button>
 
           {boton("exportar", IconoExportar, t("ExportarTitulo"))}

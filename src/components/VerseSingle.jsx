@@ -9,6 +9,7 @@ import AnotacionesContext from "../context/AnotacionesContext";
 import { CLASES_COLOR } from "../utils/paletaAnotaciones";
 import { codigoDeVersion } from "../utils/versiones";
 import { marcarDiferencias } from "../utils/diffVersiones";
+import { buscarOriginal, etiquetasParaVersiculo, marcarPalabrasConOriginal, normalizarPalabra, palabrasConOriginal } from "../utils/puenteStrong";
 import { Languages, Share } from "lucide-react";
 
 /**
@@ -68,6 +69,64 @@ const CLASES_STRONG = [
  */
 const BOTON_ICONO = "relative grid h-8 w-8 shrink-0 place-items-center rounded-lg text-tinta-3 transition-colors hover:bg-tinta/5 hover:text-tinta disabled:opacity-40";
 
+const LETRA = /[\p{L}\p{M}]/u;
+
+/*
+ * Consulta de palabra en curso. Es de todo el módulo y no de cada panel: si se
+ * toca una palabra en un panel y enseguida otra en otro, la respuesta que
+ * llegue tarde no debe pisar a la nueva.
+ */
+let consultaVigente = 0;
+
+/**
+ * La palabra que se tocó (o se seleccionó) dentro del versículo.
+ *
+ * Devuelve la palabra, el rectángulo donde está (para anclar el globito) y el
+ * texto del versículo que va antes, que sirve para saber si es el primer
+ * "Verbo" o el segundo.
+ */
+const palabraTocada = (evento, contenedor) => {
+  let rango = null;
+  const seleccion = window.getSelection?.();
+
+  if (seleccion && !seleccion.isCollapsed && seleccion.rangeCount > 0 && contenedor.contains(seleccion.anchorNode)) {
+    rango = seleccion.getRangeAt(0).cloneRange();
+  } else {
+    let nodo = null;
+    let offset = 0;
+    if (document.caretPositionFromPoint) {
+      const posicion = document.caretPositionFromPoint(evento.clientX, evento.clientY);
+      nodo = posicion?.offsetNode;
+      offset = posicion?.offset ?? 0;
+    } else if (document.caretRangeFromPoint) {
+      const posicion = document.caretRangeFromPoint(evento.clientX, evento.clientY);
+      nodo = posicion?.startContainer;
+      offset = posicion?.startOffset ?? 0;
+    }
+    if (!nodo || nodo.nodeType !== Node.TEXT_NODE || !contenedor.contains(nodo)) return null;
+
+    const texto = nodo.textContent;
+    let inicio = offset;
+    let fin = offset;
+    while (inicio > 0 && LETRA.test(texto[inicio - 1])) inicio--;
+    while (fin < texto.length && LETRA.test(texto[fin])) fin++;
+    if (inicio === fin) return null;
+
+    rango = document.createRange();
+    rango.setStart(nodo, inicio);
+    rango.setEnd(nodo, fin);
+  }
+
+  const palabra = rango.toString().match(/[\p{L}\p{M}]+/u)?.[0];
+  if (!palabra) return null;
+
+  const previo = document.createRange();
+  previo.setStart(contenedor, 0);
+  previo.setEnd(rango.startContainer, rango.startOffset);
+
+  return { palabra, rect: rango.getBoundingClientRect(), antes: previo.toString() };
+};
+
 /** "034. Español - Biblia ccc" -> { idioma: "Español", version: "Biblia cc" } */
 const partirNombre = (nombre) => {
   const idioma = nombre.split(".")[1]?.split("-")[0]?.trim() ?? "";
@@ -82,6 +141,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
     setCompartirVerse,
     tamanioVerseAlto,
     mostrarStrongPopup,
+    strongPopup,
     leerMarcado,
     libroSeleccionado,
     capituloSeleccionadoNumero,
@@ -187,10 +247,95 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
    * Se determina si es Hebreo (H) o Griego (G) considerando la versión (ej. Septuaginta /
    * Filos Pergamos en el AT es griega), el alfabeto del texto y el testamento.
    */
+  /*
+   * Palabras del versículo seleccionado que tienen equivalente en el original.
+   * Se subrayan (`.palabra-original`) para que se note que se pueden tocar sin
+   * tener que leer ningún aviso. Se calcula al seleccionar el versículo, con
+   * la misma búsqueda que usa el toque: lo subrayado es lo que va a funcionar.
+   */
+  const [marcables, setMarcables] = useState(null);
+
+  useEffect(() => {
+    const versiculo = versiculoSeleccionadoNumero;
+    const html = esCapitulo ? texto?.[versiculo] : null;
+    const tieneNumeros = /<sup>\s*\d+\s*<\/sup>/i.test(html ?? "");
+    if (!html || (!tieneNumeros && iso !== "es")) {
+      setMarcables(null);
+      return undefined;
+    }
+
+    let cancelado = false;
+    etiquetasParaVersiculo({ html, bookId, capitulo: capituloSeleccionadoNumero, versiculo }).then((etiquetas) => {
+      if (!cancelado) setMarcables({ versiculo: String(versiculo), palabras: palabrasConOriginal(html, etiquetas) });
+    });
+    return () => {
+      cancelado = true;
+    };
+  }, [esCapitulo, texto, versiculoSeleccionadoNumero, iso, bookId, capituloSeleccionadoNumero]);
+
+  // Si el globito se cierra mientras se consulta la versión puente, la
+  // respuesta ya no debe volver a abrirlo.
+  const globitoAbierto = useRef(false);
+  useEffect(() => {
+    globitoAbierto.current = Boolean(strongPopup);
+  }, [strongPopup]);
+
+  /**
+   * Tocar una PALABRA (no su número) del versículo seleccionado la busca en el
+   * hebreo o griego original.
+   *
+   * Solo en el versículo ya seleccionado: el primer toque sigue siendo el de
+   * siempre (elegir versículo) y el segundo, ya leyendo, pregunta por la
+   * palabra. Así no cambia nada para quien solo quiere moverse por el texto.
+   *
+   * Si la versión trae números Strong se usan los suyos; si no, el puente lee
+   * el mismo versículo en una Reina Valera con Strong (solo para español: es
+   * con lo que se puede comparar palabra por palabra).
+   */
+  const consultarPalabra = useCallback(
+    async (evento, contenedor, versiculo) => {
+      const html = texto?.[versiculo];
+      const tieneNumeros = /<sup>\s*\d+\s*<\/sup>/i.test(html ?? "");
+      if (!tieneNumeros && iso !== "es") return false;
+      // Un versículo traducido ya no es el texto que el puente sabe leer.
+      if (traducciones[versiculo]) return false;
+
+      const tocada = palabraTocada(evento, contenedor);
+      if (!tocada) return false;
+
+      const buscada = normalizarPalabra(tocada.palabra);
+      const ocurrencia = tocada.antes.split(/\s+/).filter((parte) => normalizarPalabra(parte) === buscada).length;
+
+      const mia = ++consultaVigente;
+      mostrarStrongPopup(null, tocada.rect, { palabra: tocada.palabra, cargando: true });
+
+      const { code, opciones } = await buscarOriginal({
+        html,
+        bookId,
+        capitulo: capituloSeleccionadoNumero,
+        versiculo,
+        palabra: tocada.palabra,
+        ocurrencia,
+      });
+
+      if (mia !== consultaVigente || !globitoAbierto.current) return true;
+      mostrarStrongPopup(code, tocada.rect, { palabra: tocada.palabra, opciones });
+      return true;
+    },
+    [texto, iso, traducciones, mostrarStrongPopup, bookId, capituloSeleccionadoNumero],
+  );
+
   const handleStrongClick = useCallback(
     (evento) => {
       const sup = evento.target.closest?.("sup");
-      if (!sup) return;
+      if (!sup) {
+        const parrafo = evento.target.closest?.("[data-verse]");
+        const versiculo = parrafo?.dataset.verse;
+        if (versiculo && String(versiculo) === String(versiculoSeleccionadoNumero)) {
+          consultarPalabra(evento, evento.currentTarget, versiculo);
+        }
+        return;
+      }
 
       const numero = sup.textContent.replace(/\D/g, "");
       if (!numero) return;
@@ -224,7 +369,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
       const rect = sup.getBoundingClientRect();
       mostrarStrongPopup(code, rect);
     },
-    [bookId, iso, nombre, mostrarStrongPopup],
+    [bookId, iso, nombre, mostrarStrongPopup, versiculoSeleccionadoNumero, consultarPalabra],
   );
 
   const handleTranslate = async (iso) => {
@@ -306,6 +451,21 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
       clearTimeout(apagar);
     };
   }, [destacado, cargando, destacarVersion]);
+
+  /**
+   * El subrayado de palabras con original va solo en el versículo
+   * seleccionado y sin traducir. Con "Diferencias" encendido no se pone: ese
+   * modo ya subraya en rojo y ámbar, y dos subrayados con sentidos distintos
+   * en la misma palabra no se leen.
+   */
+  const marcarSiToca = (versiculo, html) =>
+    !diferencias &&
+    marcables &&
+    marcables.versiculo === String(versiculo) &&
+    String(versiculo) === String(versiculoSeleccionadoNumero) &&
+    !traducciones[versiculo]
+      ? marcarPalabrasConOriginal(html, marcables.palabras)
+      : html;
 
   /** Descarta la traducción de este versículo y deja el original. */
   const revertirTraduccion = () => {
@@ -451,7 +611,10 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                     // de subrayados y la comparación se hace de un versículo a
                     // la vez, que es como se lee.
                     dangerouslySetInnerHTML={{
-                      __html: seleccionado && diferencias ? marcarDiferencias(normalizarMarcado(contenido), diferencias) : normalizarMarcado(contenido),
+                      __html: marcarSiToca(
+                        versiculo,
+                        seleccionado && diferencias ? marcarDiferencias(normalizarMarcado(contenido), diferencias) : normalizarMarcado(contenido),
+                      ),
                     }}
                   ></span>
                 </p>

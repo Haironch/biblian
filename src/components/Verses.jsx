@@ -2,6 +2,7 @@ import { useContext } from "react";
 import VerseWindow from "./VerseWindow";
 import DataContext from "../context/DataContext";
 import IndiceBiblias from "./IndiceBiblias";
+import PistaPalabra from "./PistaPalabra";
 
 /**
  * Rejilla de comparación.
@@ -32,6 +33,8 @@ const Verses = () => {
         parte de la línea— para un control que se ve tres segundos.
       */}
       <IndiceBiblias />
+
+      <PistaPalabra />
 
       <div
         // Mas separacion VERTICAL que horizontal: en movil los paneles caen en

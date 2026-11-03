@@ -39,7 +39,7 @@ const Tabs = () => {
           </div>
         </div>
       </div>
-      <div className="p-4 sm:p-5">
+      <div className="p-3 sm:p-5">
         {activeTab === 0 && <TabHebrew />}
         {activeTab === 1 && <TabGreek />}
         {/* {activeTab === 2 && <div>{t("Cognados")}</div>} */}
