@@ -10,12 +10,6 @@ export const BIBLIAS = {
       "old": true,
       "year": 1989
     },
-    "Biblia Corona de Jerusalen (1937)": {
-      "ruta": "002. Español - Biblia Biblia Corona de Jerusalen (1937)",
-      "new": true,
-      "old": true,
-      "year": 1937
-    },
     "Bizantino Español-Griego (1551)": {
       "ruta": "003. Español - Biblia Bizantino Español-Griego (1551)",
       "new": true,
@@ -34,35 +28,11 @@ export const BIBLIAS = {
       "old": true,
       "year": 2003
     },
-    "de Jerusalem (2010)": {
-      "ruta": "006. Español - Biblia de Jerusalem (2010)",
-      "new": true,
-      "old": true,
-      "year": 2010
-    },
-    "de Jerusalén (1998)": {
-      "ruta": "007. Español - Biblia de Jerusalén (1998)",
-      "new": true,
-      "old": true,
-      "year": 1998
-    },
-    "de Jerusalén 3ra Edición (2013)": {
-      "ruta": "008. Español - Biblia de Jerusalén 3ra Edición (2013)",
-      "new": true,
-      "old": true,
-      "year": 2013
-    },
     "de las Américas (1997)": {
       "ruta": "009. Español - Biblia de las Américas (1997)",
       "new": true,
       "old": true,
       "year": 1997
-    },
-    "de nuestro Pueblo (2005)": {
-      "ruta": "010. Español - Biblia de nuestro Pueblo (2005)",
-      "new": true,
-      "old": true,
-      "year": 2005
     },
     "del Oso (1569)": {
       "ruta": "011. Español - Biblia del Oso (1569)",
@@ -81,18 +51,6 @@ export const BIBLIAS = {
       "new": true,
       "old": false,
       "year": 2019
-    },
-    "El Libro del Pueblo de Dios (2017)": {
-      "ruta": "014. Español - Biblia El Libro del Pueblo de Dios (2017)",
-      "new": true,
-      "old": true,
-      "year": 2017
-    },
-    "Jünemann Septuaginta (1928)": {
-      "ruta": "015. Español - Biblia Jünemann Septuaginta (1928)",
-      "new": true,
-      "old": true,
-      "year": 1928
     },
     "Kadosh Israelita Mesiánica (2014)": {
       "ruta": "016. Español - Biblia Kadosh Israelita Mesiánica (2014)",
@@ -118,23 +76,11 @@ export const BIBLIAS = {
       "old": true,
       "year": 2010
     },
-    "Latinoamericana (1995)": {
-      "ruta": "020. Español - Biblia Latinoamericana (1995)",
-      "new": true,
-      "old": true,
-      "year": 1995
-    },
     "Lenguaje Sencillo (2000)": {
       "ruta": "021. Español - Biblia Lenguaje Sencillo (2000)",
       "new": true,
       "old": false,
       "year": 2000
-    },
-    "Martin Nieto (2017)": {
-      "ruta": "022. Español - Biblia Martin Nieto (2017)",
-      "new": true,
-      "old": true,
-      "year": 2017
     },
     "Nestle-Aland 27 Español-Griego (2009)": {
       "ruta": "023. Español - Biblia Nestle-Aland 27 Español-Griego (2009)",
@@ -147,12 +93,6 @@ export const BIBLIAS = {
       "new": true,
       "old": true,
       "year": 2015
-    },
-    "Nueva Reina Valera Adventista (1990)": {
-      "ruta": "025. Español - Biblia Nueva Reina Valera Adventista (1990)",
-      "new": true,
-      "old": true,
-      "year": 1990
     },
     "Nueva Traducción Viviente (2009)": {
       "ruta": "026. Español - Biblia Nueva Traducción Viviente (2009)",
@@ -322,18 +262,6 @@ export const BIBLIAS = {
       "old": false,
       "year": 2005
     },
-    "Septuaginta al Español [LXX] (2009)": {
-      "ruta": "054. Español - Biblia Septuaginta al Español [LXX] (2009)",
-      "new": true,
-      "old": true,
-      "year": 2009
-    },
-    "Serafín de Ausejo (1975)": {
-      "ruta": "055. Español - Biblia Serafín de Ausejo (1975)",
-      "new": true,
-      "old": true,
-      "year": 1975
-    },
     "Textual (1999)": {
       "ruta": "056. Español - Biblia Textual (1999)",
       "new": true,
@@ -400,12 +328,6 @@ export const BIBLIAS = {
       "old": true,
       "year": 1986
     },
-    "Nueva Biblia Española (1975)": {
-      "ruta": "067. Español - Nueva Biblia Española (1975)",
-      "new": true,
-      "old": true,
-      "year": 1975
-    },
     "Nueva Biblia Viva (2006)": {
       "ruta": "068. Español - Nueva Biblia Viva (2006)",
       "new": true,
@@ -430,23 +352,11 @@ export const BIBLIAS = {
       "old": false,
       "year": 2019
     },
-    "Sagrada Biblia - Versión de la LXX (1986)": {
-      "ruta": "072. Español - Sagrada Biblia - Versión de la LXX (1986)",
-      "new": true,
-      "old": true,
-      "year": 1986
-    },
     "Versión Biblia Libre (2022)": {
       "ruta": "073. Español - Versión Biblia Libre (2022)",
       "new": true,
       "old": true,
       "year": 2022
-    },
-    "Hispanoamericana [BHTI] (2011)": {
-      "ruta": "130. Español - Biblia Hispanoamericana [BHTI] (2011)",
-      "new": true,
-      "old": true,
-      "year": 2011
     },
     "del Jubileo [JBS] (2000)": {
       "ruta": "131. Español - Biblia del Jubileo [JBS] (2000)",
@@ -887,38 +797,6 @@ export const BIBLIAS = {
       "year": 1926
     }
   },
-  "latin": {
-    "Vulgate Version (405)": {
-      "ruta": "51. Latin - Vulgate Version (405)",
-      "new": true,
-      "old": true,
-      "year": 405
-    },
-    "Vulgata Clementina Hetzenauer Editore (1914)": {
-      "ruta": "52. Latin - Vulgata Clementina Hetzenauer Editore (1914)",
-      "new": true,
-      "old": true,
-      "year": 1914
-    },
-    "Clementine Vulgata (1598)": {
-      "ruta": "53. Latin - Clementine Vulgata (1598)",
-      "new": true,
-      "old": true,
-      "year": 1598
-    },
-    "Nova Vulgata (1979)": {
-      "ruta": "54. Latin - Nova Vulgata (1979)",
-      "new": true,
-      "old": true,
-      "year": 1979
-    },
-    "Vulgata Sistina (1590)": {
-      "ruta": "55. Latin - Vulgata Sistina (1590)",
-      "new": true,
-      "old": true,
-      "year": 1590
-    }
-  },
   "nahuatl": {
     "(2012)": {
       "ruta": "56. Náhuatl - (2012)",
@@ -1034,11 +912,6 @@ export const CATEGORIAS_RECOMENDADAS = [
         tagKey: "Tag_Tyndale"
       },
       {
-        titulo: "Vulgata Latina (405 d.C.)",
-        ruta: "51. Latin - Vulgate Version (405)",
-        tagKey: "Tag_Vulgate"
-      },
-      {
         titulo: "Reina Valera Antigua (1602)",
         ruta: "043. Español - Biblia Reina Valera Antigua (1602)",
         tagKey: "Tag_RVA"
@@ -1118,16 +991,6 @@ export const CATEGORIAS_RECOMENDADAS = [
     icono: "🏛️",
     versiones: [
       {
-        titulo: "Biblia de Jerusalén (1998)",
-        ruta: "007. Español - Biblia de Jerusalén (1998)",
-        tagKey: "Tag_Jerusalem"
-      },
-      {
-        titulo: "Biblia Hispanoamericana (BHTI)",
-        ruta: "130. Español - Biblia Hispanoamericana [BHTI] (2011)",
-        tagKey: "Tag_BHTI"
-      },
-      {
         titulo: "Berean Standard Bible (BSB)",
         ruta: "128. English - Berean Standard Bible [BSB] (2020)",
         tagKey: "Tag_BSB"
@@ -1199,7 +1062,6 @@ export const ORDEN_IDIOMAS = [
   "english",
   "greek",
   "hebrew",
-  "latin",
   "aramaic",
   "guatemala",
   "nahuatl",
@@ -1296,10 +1158,6 @@ export const CARACTERISTICAS_POR_BIBLIA = {
   ],
   "069. Español - Nueva Versión Internacional (2015)": [
     "glosas"
-  ],
-  "072. Español - Sagrada Biblia - Versión de la LXX (1986)": [
-    "glosas",
-    "cursivas"
   ],
   "074. Greek - Analytic Septuagint (2014)": [
     "strong",

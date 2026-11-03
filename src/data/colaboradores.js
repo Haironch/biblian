@@ -25,15 +25,6 @@ export const BIBLIAS_ATRIBUCION = {
       "link": ""
     },
     {
-      "title": "Biblia Biblia Corona de Jerusalen (1937)",
-      "language": "Español",
-      "rawDir": "002. Español - Biblia Biblia Corona de Jerusalen (1937)",
-      "editorial": "P. Juan José de la Torre",
-      "info": "Traducción clásica católica de los Sagrados Evangelios por el Pbro. Juan José de la Torre (1937). Dominio Público.",
-      "tipo": "Dominio Público",
-      "link": ""
-    },
-    {
       "title": "Biblia Bizantino Español-Griego (1551)",
       "language": "Español",
       "rawDir": "003. Español - Biblia Bizantino Español-Griego (1551)",
@@ -61,47 +52,11 @@ export const BIBLIAS_ATRIBUCION = {
       "link": ""
     },
     {
-      "title": "Biblia de Jerusalem (2010)",
-      "language": "Español",
-      "rawDir": "006. Español - Biblia de Jerusalem (2010)",
-      "editorial": "Editorial Desclée de Brouwer",
-      "info": "Biblia de Jerusalén (Edición 2010) © Escuela Bíblica y Arqueológica Francesa de Jerusalén / Editorial Desclée de Brouwer.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
-      "title": "Biblia de Jerusalén (1998)",
-      "language": "Español",
-      "rawDir": "007. Español - Biblia de Jerusalén (1998)",
-      "editorial": "Editorial Desclée de Brouwer",
-      "info": "Biblia de Jerusalén (Revisión 1998) © Escuela Bíblica de Jerusalén / Editorial Desclée de Brouwer.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
-      "title": "Biblia de Jerusalén 3ra Edición (2013)",
-      "language": "Español",
-      "rawDir": "008. Español - Biblia de Jerusalén 3ra Edición (2013)",
-      "editorial": "Editorial Desclée de Brouwer",
-      "info": "Biblia de Jerusalén 3ra Edición © Escuela Bíblica de Jerusalén / Editorial Desclée de Brouwer.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
       "title": "Biblia de las Américas (1997)",
       "language": "Español",
       "rawDir": "009. Español - Biblia de las Américas (1997)",
       "editorial": "The Lockman Foundation",
       "info": "La Biblia de las Américas® (LBLA®), Copyright © 1986, 1995, 1997 por The Lockman Foundation. Todos los derechos reservados.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
-      "title": "Biblia de nuestro Pueblo (2005)",
-      "language": "Español",
-      "rawDir": "010. Español - Biblia de nuestro Pueblo (2005)",
-      "editorial": "Ediciones Mensajero / Luis Alonso Schökel",
-      "info": "La Biblia de Nuestro Pueblo: Biblia del Peregrino para América Latina © 2005 Luis Alonso Schökel / Ediciones Mensajero.",
       "tipo": "Copyright / Editorial",
       "link": ""
     },
@@ -130,24 +85,6 @@ export const BIBLIAS_ATRIBUCION = {
       "editorial": "Editorial Menorah / Dan ben Avraham",
       "info": "El Código Real: Nuevo Testamento Judío Mesiánico © 2019 Dr. Dan ben Avraham / Editorial Menorah.",
       "tipo": "Copyright / Ministerio",
-      "link": ""
-    },
-    {
-      "title": "Biblia El Libro del Pueblo de Dios (2017)",
-      "language": "Español",
-      "rawDir": "014. Español - Biblia El Libro del Pueblo de Dios (2017)",
-      "editorial": "Fundación Palabra de Vida / San Pablo",
-      "info": "El Libro del Pueblo de Dios © 1981, 2015 Armando J. Levoratti y Alfredo B. Trusso / Fundación Palabra de Vida.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
-      "title": "Biblia Jünemann Septuaginta (1928)",
-      "language": "Español",
-      "rawDir": "015. Español - Biblia Jünemann Septuaginta (1928)",
-      "editorial": "Mons. Guillermo Jünemann",
-      "info": "Traducción de la Septuaginta griega al castellano (Concepción, Chile, 1928) por Guillermo Jünemann Beckschäfer. Dominio Público.",
-      "tipo": "Dominio Público",
       "link": ""
     },
     {
@@ -187,30 +124,12 @@ export const BIBLIAS_ATRIBUCION = {
       "link": ""
     },
     {
-      "title": "Biblia Latinoamericana (1995)",
-      "language": "Español",
-      "rawDir": "020. Español - Biblia Latinoamericana (1995)",
-      "editorial": "Ediciones Paulinas / Verbo Divino",
-      "info": "Biblia Latinoamericana © 1972, 1995 Bernardo Hurault y Ramón Ricciardi / Ediciones Paulinas.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
       "title": "Biblia Lenguaje Sencillo (2000)",
       "language": "Español",
       "rawDir": "021. Español - Biblia Lenguaje Sencillo (2000)",
       "editorial": "Sociedades Bíblicas Unidas",
       "info": "Traducción en Lenguaje Actual (TLA) © 2000 Sociedades Bíblicas Unidas.",
       "tipo": "Copyright / Sociedad Bíblica",
-      "link": ""
-    },
-    {
-      "title": "Biblia Martin Nieto (2017)",
-      "language": "Español",
-      "rawDir": "022. Español - Biblia Martin Nieto (2017)",
-      "editorial": "Ediciones Paulinas",
-      "info": "La Santa Biblia: Edición Pastoral © Eutimio Martín Nieto / Ediciones Paulinas.",
-      "tipo": "Copyright / Editorial",
       "link": ""
     },
     {
@@ -229,15 +148,6 @@ export const BIBLIAS_ATRIBUCION = {
       "editorial": "Sociedad Bíblica Emmanuel",
       "info": "Nueva Reina Valera (NRV2015) © 2015 Sociedad Bíblica Emmanuel.",
       "tipo": "Copyright / Sociedad Bíblica",
-      "link": ""
-    },
-    {
-      "title": "Biblia Nueva Reina Valera Adventista (1990)",
-      "language": "Español",
-      "rawDir": "025. Español - Biblia Nueva Reina Valera Adventista (1990)",
-      "editorial": "ACES (Asociación Casa Editora Sudamericana)",
-      "info": "Nueva Reina-Valera (NRV 1990) © 1990 Asociación Casa Editora Sudamericana.",
-      "tipo": "Copyright / Editorial",
       "link": ""
     },
     {
@@ -493,24 +403,6 @@ export const BIBLIAS_ATRIBUCION = {
       "link": ""
     },
     {
-      "title": "Biblia Septuaginta al Español [LXX] (2009)",
-      "language": "Español",
-      "rawDir": "054. Español - Biblia Septuaginta al Español [LXX] (2009)",
-      "editorial": "Guillermo Jünemann / SBO",
-      "info": "Septuaginta en Español basada en Guillermo Jünemann © 2009.",
-      "tipo": "Dominio Público",
-      "link": ""
-    },
-    {
-      "title": "Biblia Serafín de Ausejo (1975)",
-      "language": "Español",
-      "rawDir": "055. Español - Biblia Serafín de Ausejo (1975)",
-      "editorial": "Editorial Herder",
-      "info": "La Sagrada Biblia (traducción de Serafín de Ausejo) © 1975 Editorial Herder.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
       "title": "Biblia Textual (1999)",
       "language": "Español",
       "rawDir": "056. Español - Biblia Textual (1999)",
@@ -610,15 +502,6 @@ export const BIBLIAS_ATRIBUCION = {
       "link": ""
     },
     {
-      "title": "Nueva Biblia Española (1975)",
-      "language": "Español",
-      "rawDir": "067. Español - Nueva Biblia Española (1975)",
-      "editorial": "Ediciones Cristiandad",
-      "info": "Nueva Biblia Española © 1975 Luis Alonso Schökel y Juan Mateos / Ediciones Cristiandad.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
       "title": "Nueva Biblia Viva (2006)",
       "language": "Español",
       "rawDir": "068. Español - Nueva Biblia Viva (2006)",
@@ -655,15 +538,6 @@ export const BIBLIAS_ATRIBUCION = {
       "link": ""
     },
     {
-      "title": "Sagrada Biblia - Versión de la LXX (1986)",
-      "language": "Español",
-      "rawDir": "072. Español - Sagrada Biblia - Versión de la LXX (1986)",
-      "editorial": "Agustín Magaña Méndez / Ediciones Paulinas",
-      "info": "Sagrada Biblia (Traducción de la Septuaginta) © 1986 Pbro. Agustín Magaña Méndez.",
-      "tipo": "Copyright / Editorial",
-      "link": ""
-    },
-    {
       "title": "Versión Biblia Libre (2022)",
       "language": "Español",
       "rawDir": "073. Español - Versión Biblia Libre (2022)",
@@ -671,15 +545,6 @@ export const BIBLIAS_ATRIBUCION = {
       "info": "Versión Biblia Libre (VBL) © 2018-2022 Dr. Jonathan Gallagher y Shelly Barrios de Ávila (Licencia Creative Commons CC BY-SA 4.0).",
       "tipo": "Creative Commons / Abierta",
       "link": ""
-    },
-    {
-      "title": "Biblia Hispanoamericana [BHTI] (2011)",
-      "language": "Español",
-      "rawDir": "130. Español - Biblia Hispanoamericana [BHTI] (2011)",
-      "editorial": "Sociedad Bíblica de España",
-      "info": "La Biblia Hispanoamericana (BHTI) Traducción Interconfesional © 2011 Sociedad Bíblica de España. Usada con permiso.",
-      "tipo": "Copyright / Sociedad Bíblica",
-      "link": "https://www.bible.com/bible/222/MAT.3.BHTI"
     },
     {
       "title": "Biblia del Jubileo [JBS] (2000)",
@@ -1398,53 +1263,6 @@ export const BIBLIAS_ATRIBUCION = {
       "rawDir": "20. Esperanto - Bible (1926)",
       "editorial": "L. L. Zamenhof / British and Foreign Bible Society",
       "info": "La Sankta Biblio: Malnova kaj Nova Testamentoj (Londini, 1926) traducida por L. L. Zamenhof. Dominio Público.",
-      "tipo": "Dominio Público",
-      "link": ""
-    }
-  ],
-  "Latin": [
-    {
-      "title": "Vulgate Version (405)",
-      "language": "Latin",
-      "rawDir": "51. Latin - Vulgate Version (405)",
-      "editorial": "San Jerónimo de Estridón",
-      "info": "Biblia Sacra Vulgata (c. 382-405 d.C.) traducida por San Jerónimo. Dominio Público.",
-      "tipo": "Dominio Público",
-      "link": ""
-    },
-    {
-      "title": "Vulgata Clementina Hetzenauer Editore (1914)",
-      "language": "Latin",
-      "rawDir": "52. Latin - Vulgata Clementina Hetzenauer Editore (1914)",
-      "editorial": "P. Michael Hetzenauer / Pustet",
-      "info": "Biblia Sacra Vulgatae Editionis Sixti V Pont. Max. iussu recognita et Clementis VIII auctoritate edita (Ed. Hetzenauer 1914). Dominio Público.",
-      "tipo": "Dominio Público",
-      "link": ""
-    },
-    {
-      "title": "Clementine Vulgata (1598)",
-      "language": "Latin",
-      "rawDir": "53. Latin - Clementine Vulgata (1598)",
-      "editorial": "Vulgata Sixto-Clementina",
-      "info": "Biblia Sacra Vulgata Clementina (Roma, 1598). Dominio Público.",
-      "tipo": "Dominio Público",
-      "link": ""
-    },
-    {
-      "title": "Nova Vulgata (1979)",
-      "language": "Latin",
-      "rawDir": "54. Latin - Nova Vulgata (1979)",
-      "editorial": "Libreria Editrice Vaticana",
-      "info": "Nova Vulgata Bibliorum Sacrorum Editio © 1979 Libreria Editrice Vaticana. Usada para fines de estudio bíblico.",
-      "tipo": "Copyright / Santa Sede",
-      "link": ""
-    },
-    {
-      "title": "Vulgata Sistina (1590)",
-      "language": "Latin",
-      "rawDir": "55. Latin - Vulgata Sistina (1590)",
-      "editorial": "Papa Sixto V / Typographia Apostolica Vaticana",
-      "info": "Biblia Sacra Vulgata Sixtina (1590). Dominio Público.",
       "tipo": "Dominio Público",
       "link": ""
     }
