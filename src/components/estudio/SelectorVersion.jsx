@@ -27,12 +27,12 @@ const SelectorVersion = ({ etiqueta }) => {
   if (bibliasSeleccionadas.length < 2) return null;
 
   return (
-    <label className="flex items-center gap-2 text-[11px] font-medium text-neutral-500 dark:text-neutral-400">
+    <label className="flex items-center gap-2 text-[11px] font-medium text-tinta-3">
       <span className="shrink-0">{etiqueta ?? t("VersionDeTrabajo")}</span>
       <select
         value={versionTrabajo ?? ""}
         onChange={(evento) => setVersionPreferida(evento.target.value)}
-        className="min-w-0 flex-1 truncate rounded-lg border border-neutral-300 bg-white px-2 py-1 text-xs text-neutral-900 outline-none focus:border-amber-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-purple-400"
+        className="min-w-0 flex-1 truncate rounded-lg border border-linea-fuerte bg-superficie px-2 py-1 text-xs text-tinta outline-none focus:border-acento"
       >
         {bibliasSeleccionadas.map((ruta) => (
           <option key={ruta} value={ruta}>

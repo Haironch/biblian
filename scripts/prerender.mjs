@@ -28,7 +28,7 @@
  * un parpadeo entre dos contenidos distintos.
  *
  * El texto prerenderizado es Reina Valera 1909, de dominio público. La app deja
- * elegir entre 150+ versiones, pero volcar una moderna en 1189 archivos
+ * elegir entre 140+ versiones, pero volcar una moderna en 1189 archivos
  * estáticos sería republicar una traducción con derechos vigentes.
  *
  *   node scripts/prerender.mjs [directorio-de-dist]
@@ -48,7 +48,7 @@ const DIST = path.resolve(process.argv[2] ?? path.join(RAIZ, "dist"));
 const VERSION_ESTATICA = {
   directorio: "033. Español - Biblia Reina Valera (1909)",
   nombre: "Reina Valera 1909",
-  nota: "Texto de dominio público. En la app se puede comparar con 150+ versiones más.",
+  nota: "Texto de dominio público. En la app se puede comparar con 140+ versiones más.",
 };
 
 const IDIOMA = "es";

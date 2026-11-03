@@ -189,10 +189,10 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
         aria-modal="true"
         aria-labelledby={tituloId}
         tabIndex={-1}
-        className="animate-fade-in-up animate-duration-200 flex h-[80vh] max-h-[92dvh] w-full flex-col rounded-t-2xl bg-white shadow-2xl outline-none dark:bg-neutral-900 dark:text-white sm:h-[70vh] sm:max-w-2xl sm:rounded-2xl"
+        className="animate-fade-in-up animate-duration-200 flex h-[80vh] max-h-[92dvh] w-full flex-col rounded-t-2xl bg-superficie shadow-2xl outline-none sm:h-[70vh] sm:max-w-2xl sm:rounded-2xl"
         onMouseDown={(evento) => evento.stopPropagation()}
       >
-        <header className="flex items-center gap-3 border-b border-black/10 px-4 py-3 dark:border-white/10">
+        <header className="flex items-center gap-3 border-b border-linea px-4 py-3">
           <h2 id={tituloId} className="flex-1 truncate text-base font-bold">
             {titulo}
           </h2>
@@ -200,7 +200,7 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
             type="button"
             onClick={onCerrar}
             aria-label={t("Cerrar")}
-            className="grid h-9 w-9 place-items-center rounded-lg text-xl transition-colors hover:bg-black/5 dark:hover:bg-white/10"
+            className="grid h-9 w-9 place-items-center rounded-lg text-xl transition-colors hover:bg-tinta/5"
           >
             &times;
           </button>
@@ -214,7 +214,7 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
               value={busqueda}
               onChange={(evento) => setBusqueda(evento.target.value)}
               placeholder={modo === "version" ? t("BuscarVersionPlaceholder") : t("BuscarLibros")}
-              className="w-full rounded-lg border border-black/15 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-[#a97109] dark:border-white/15 dark:bg-neutral-800 dark:focus:border-purple-400"
+              className="w-full rounded-lg border border-linea-fuerte bg-superficie-2 px-3 py-2 text-sm outline-none focus:border-acento"
             />
           </div>
         )}
@@ -229,7 +229,7 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
                   {/* El encabezado es pegajoso porque las secciones de español
                       e inglés son largas: sin él se pierde de vista a qué
                       idioma pertenece lo que se está mirando. */}
-                  <h3 className="sticky top-0 z-10 bg-white py-1.5 text-[11px] font-bold uppercase tracking-wider text-[#a97109] dark:bg-neutral-900 dark:text-purple-300">
+                  <h3 className="sticky top-0 z-10 bg-superficie py-1.5 text-[11px] font-semibold uppercase tracking-wider text-acento">
                     {seccion.nombre}
                   </h3>
                   <ul className="space-y-1">
@@ -242,8 +242,8 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
                             type="button"
                             aria-current={esActual ? "true" : undefined}
                             onClick={() => onElegir(datos.ruta)}
-                            className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-black/5 dark:hover:bg-white/10 ${
-                              esActual ? "bg-[#a97109]/15 font-semibold dark:bg-purple-500/25" : ""
+                            className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-tinta/5 ${
+                              esActual ? "bg-acento-suave font-semibold text-acento" : ""
                             }`}
                           >
                             {titulo}
@@ -267,8 +267,8 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
                       type="button"
                       aria-current={esActual ? "true" : undefined}
                       onClick={() => onElegir(id)}
-                      className={`w-full truncate rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-black/5 dark:hover:bg-white/10 ${
-                        esActual ? "bg-[#a97109]/15 font-semibold dark:bg-purple-500/25" : ""
+                      className={`w-full truncate rounded-lg px-3 py-2.5 text-left text-sm transition-colors hover:bg-tinta/5 ${
+                        esActual ? "bg-acento-suave font-semibold text-acento" : ""
                       }`}
                     >
                       {nombre}
@@ -290,8 +290,8 @@ const Selector3D = ({ modo, abierto, onCerrar, onElegir, actual, libros = [], ca
                       type="button"
                       aria-current={esActual ? "true" : undefined}
                       onClick={() => onElegir(numero)}
-                      className={`aspect-square w-full rounded-lg text-sm transition-colors hover:bg-black/5 dark:hover:bg-white/10 ${
-                        esActual ? "bg-[#a97109]/20 font-bold dark:bg-purple-500/30" : "bg-neutral-100 dark:bg-neutral-800"
+                      className={`aspect-square w-full rounded-lg text-sm transition-colors hover:bg-tinta/5 ${
+                        esActual ? "bg-acento-suave font-semibold text-acento" : "bg-superficie-2"
                       }`}
                     >
                       {numero}

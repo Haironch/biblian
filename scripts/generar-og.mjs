@@ -3,103 +3,107 @@
  * alguien pega un enlace de Biblian en WhatsApp, X, Facebook, Slack o Discord.
  *
  * Se ejecuta A MANO (`npm run og`) y el PNG se versiona, en vez de correr en
- * cada build. El motivo es que la única forma razonable de rasterizar texto sin
- * añadir una dependencia de 200 MB es pedírselo a un Chrome ya instalado, y en
- * el servidor de despliegue no hay ninguno garantizado: un build que dependa de
- * eso falla el día que cambie la imagen del CI. La imagen cambia una vez al
- * año; el build corre cada commit.
+ * cada build: la imagen cambia una vez al año y el build corre cada commit.
  *
  *   npm run og
- *   CHROME_PATH="/ruta/a/chrome" npm run og   (si no lo encuentra solo)
+ *
+ * La imagen se arma como SVG y la rasteriza `sharp` (la misma librería que usa
+ * la API). Antes se le pedía una captura a un Chrome instalado, y en una
+ * máquina sin Chrome —o en un CI— el script no tenía con qué dibujar. Con SVG
+ * no hace falta navegador, y la composición es de formas y texto, que es justo
+ * lo que SVG hace bien.
+ *
+ * Mismo lenguaje visual que la app: fondo claro, índigo de acento y el logo de
+ * las tres columnas. A la derecha, tres tarjetas de versión que se salen del
+ * borde: lo que hace la app, sin tener que leerlo.
  */
+import { Buffer } from "node:buffer";
 import fs from "node:fs";
-import os from "node:os";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
+import sharp from "sharp";
 import { SITE_NAME, TOTAL_VERSIONES } from "../src/config/sitio.js";
 
 const RAIZ = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const SALIDA = path.join(RAIZ, "public", "og-image.png");
 
-/* Rutas habituales del navegador en cada sistema. Se prueba en orden y se usa
-   el primero que exista; `CHROME_PATH` gana sobre todas. */
-const CANDIDATOS = [
-  process.env.CHROME_PATH,
-  "C:/Program Files/Google/Chrome/Application/chrome.exe",
-  "C:/Program Files (x86)/Google/Chrome/Application/chrome.exe",
-  "C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe",
-  "C:/Program Files/Microsoft/Edge/Application/msedge.exe",
-  "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-  "/usr/bin/google-chrome",
-  "/usr/bin/chromium",
-  "/usr/bin/chromium-browser",
-].filter(Boolean);
+// Los mismos valores que `index.css` (modo claro).
+const COLOR = {
+  fondo: "#F5F5F7",
+  superficie: "#FFFFFF",
+  linea: "#E5E5EA",
+  tinta: "#1C1C1E",
+  tinta2: "#54545A",
+  tinta3: "#8E8E93",
+  acento: "#3A4FD8",
+  acentoSuave: "#E8ECFF",
+};
 
-const navegador = CANDIDATOS.find((ruta) => fs.existsSync(ruta));
-if (!navegador) {
-  console.error("[og] No se encontró Chrome ni Edge. Define CHROME_PATH con la ruta al ejecutable.");
-  process.exit(1);
-}
+const LETRA = "-apple-system, 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif";
 
-/* El fondo va incrustado en base64: con `file://` el navegador aplica sus
-   reglas de origen y la imagen no siempre carga, y una miniatura sin fondo se
-   publica igual —el fallo no se ve hasta que alguien comparte el enlace—. */
-const fondo = fs.readFileSync(path.join(RAIZ, "public", "bibleBackground.webp")).toString("base64");
+/** Escapa lo poco que puede romper un SVG si alguien cambia los textos. */
+const xml = (texto) => String(texto).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
-const html = `<!DOCTYPE html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <style>
-      * { margin: 0; padding: 0; box-sizing: border-box; }
-      body {
-        width: 1200px; height: 630px; overflow: hidden;
-        font-family: Georgia, "Times New Roman", serif; color: #fff;
-        background: #100d08;
-      }
-      .fondo {
-        position: absolute; inset: 0;
-        background-image: url("data:image/webp;base64,${fondo}");
-        background-size: cover; background-position: center;
-        filter: saturate(0.85);
-      }
-      .velo { position: absolute; inset: 0; background: linear-gradient(105deg, rgba(8,6,3,0.94) 0%, rgba(8,6,3,0.86) 45%, rgba(8,6,3,0.45) 100%); }
-      .contenido { position: relative; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 84px; }
-      .marca { font-size: 108px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
-      .barra { width: 96px; height: 6px; background: #f5c461; border-radius: 3px; margin: 26px 0 24px; }
-      .titular { font-size: 42px; font-weight: 600; line-height: 1.2; max-width: 800px; }
-      .apoyo { font-size: 24px; line-height: 1.45; margin-top: 20px; max-width: 760px; color: #e9e2d4; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
-      .pie { position: absolute; bottom: 46px; left: 84px; right: 84px; display: flex; gap: 12px; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; }
-      .etiqueta { font-size: 19px; padding: 9px 18px; border: 1px solid rgba(245,196,97,0.5); border-radius: 999px; color: #f5c461; }
-    </style>
-  </head>
-  <body>
-    <div class="fondo"></div>
-    <div class="velo"></div>
-    <div class="contenido">
-      <div class="marca">${SITE_NAME}</div>
-      <div class="barra"></div>
-      <div class="titular">Biblia en línea: compara versiones lado a lado</div>
-      <div class="apoyo">${TOTAL_VERSIONES}+ versiones · Reina Valera, NVI, LBLA, Textual · interlineal griego y hebreo · diccionario Strong</div>
-      <div class="pie">
-        <span class="etiqueta">Gratis</span>
-        <span class="etiqueta">Sin registro</span>
-        <span class="etiqueta">Sin anuncios</span>
-        <span class="etiqueta">Funciona sin conexión</span>
-      </div>
-    </div>
-  </body>
-</html>`;
+const TITULAR = ["Biblia en línea:", "compara versiones lado a lado"];
+const APOYO = [`${TOTAL_VERSIONES}+ versiones · Reina Valera, NVI, LBLA, Textual`, "interlineal griego y hebreo · diccionario Strong"];
+const ETIQUETAS = ["Gratis", "Sin registro", "Sin anuncios", "Funciona sin conexión"];
 
-const temporal = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "biblian-og-")), "og.html");
-fs.writeFileSync(temporal, html, "utf8");
+/*
+ * Ancho de cada etiqueta: no hay forma de medir texto dentro de un SVG antes de
+ * rasterizarlo, así que se estima por número de caracteres. A 19px de una sans
+ * de sistema, ~10.4px por letra deja un margen cómodo para las palabras de aquí.
+ */
+const etiquetas = (() => {
+  let x = 84;
+  return ETIQUETAS.map((texto) => {
+    const ancho = Math.round(texto.length * 10.4 + 40);
+    const parte = `
+      <rect x="${x}" y="514" width="${ancho}" height="44" rx="22" fill="${COLOR.acentoSuave}"/>
+      <text x="${x + ancho / 2}" y="542" font-size="19" font-weight="500" fill="${COLOR.acento}" text-anchor="middle">${xml(texto)}</text>`;
+    x += ancho + 12;
+    return parte;
+  }).join("");
+})();
 
-execFileSync(
-  navegador,
-  ["--headless=new", "--disable-gpu", "--hide-scrollbars", "--force-device-scale-factor=1", "--window-size=1200,630", `--screenshot=${SALIDA}`, `file://${temporal.replace(/\\/g, "/")}`],
-  { stdio: "inherit" }
-);
+/** Una tarjeta de versión: cabecera con su sigla y renglones de "texto". */
+const tarjeta = (x, y, sigla, renglones) => `
+  <g>
+    <rect x="${x}" y="${y}" width="230" height="300" rx="18" fill="${COLOR.superficie}" stroke="${COLOR.linea}" stroke-width="2"/>
+    <text x="${x + 22}" y="${y + 40}" font-size="17" font-weight="500" fill="${COLOR.tinta3}">${sigla}</text>
+    <rect x="${x + 16}" y="${y + 62}" width="198" height="${renglones * 26 + 20}" rx="10" fill="${COLOR.acentoSuave}"/>
+    <rect x="${x + 16}" y="${y + 62}" width="4" height="${renglones * 26 + 20}" fill="${COLOR.acento}"/>
+    ${Array.from({ length: renglones }, (_, i) => `<rect x="${x + 32}" y="${y + 78 + i * 26}" width="${i === renglones - 1 ? 96 : 166}" height="9" rx="4.5" fill="${COLOR.acento}" fill-opacity=".35"/>`).join("")}
+    ${[0, 1, 2].map((i) => `<rect x="${x + 22}" y="${y + 112 + renglones * 26 + i * 26}" width="${i === 2 ? 110 : 180}" height="9" rx="4.5" fill="${COLOR.linea}"/>`).join("")}
+  </g>`;
+
+const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="${LETRA}">
+  <rect width="1200" height="630" fill="${COLOR.fondo}"/>
+
+  <!-- Tarjetas que se salen por la derecha: la comparación lado a lado. -->
+  ${tarjeta(890, 110, "RVR 1960", 4)}
+  ${tarjeta(1140, 150, "NVI 2015", 3)}
+
+  <!-- Logo: el mismo de public/bibleIcon.svg, a 72px. -->
+  <g transform="translate(84 78) scale(1.125)">
+    <rect width="64" height="64" rx="15" fill="${COLOR.acento}"/>
+    <rect x="14" y="16" width="10" height="32" rx="3" fill="#fff"/>
+    <rect x="27" y="16" width="10" height="32" rx="3" fill="#fff" fill-opacity=".7"/>
+    <rect x="40" y="16" width="10" height="32" rx="3" fill="#fff" fill-opacity=".45"/>
+  </g>
+  <text x="174" y="128" font-size="38" font-weight="600" fill="${COLOR.tinta}">${xml(SITE_NAME)}</text>
+
+  <text font-size="50" font-weight="600" fill="${COLOR.tinta}" letter-spacing="-1">
+    ${TITULAR.map((linea, i) => `<tspan x="84" y="${252 + i * 60}">${xml(linea)}</tspan>`).join("")}
+  </text>
+
+  <text font-size="24" fill="${COLOR.tinta2}">
+    ${APOYO.map((linea, i) => `<tspan x="84" y="${394 + i * 34}">${xml(linea)}</tspan>`).join("")}
+  </text>
+
+  ${etiquetas}
+</svg>`;
+
+await sharp(Buffer.from(svg)).png({ compressionLevel: 9 }).toFile(SALIDA);
 
 const bytes = fs.statSync(SALIDA).size;
 console.log(`[og] ${SALIDA} — ${(bytes / 1024).toFixed(0)} KB`);

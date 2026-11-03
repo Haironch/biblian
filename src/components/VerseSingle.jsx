@@ -9,8 +9,7 @@ import AnotacionesContext from "../context/AnotacionesContext";
 import { CLASES_COLOR } from "../utils/paletaAnotaciones";
 import { codigoDeVersion } from "../utils/versiones";
 import { marcarDiferencias } from "../utils/diffVersiones";
-import TRANSLATE from "/translation.png";
-import SHARE from "/share.png";
+import { Languages, Share } from "lucide-react";
 
 /**
  * Estilos de los números Strong incrustados en el versículo.
@@ -55,13 +54,11 @@ const CLASES_STRONG = [
   "[&_sup]:px-[3px]",
   "[&_sup]:mx-[-1px]",
   "[&_sup]:rounded",
-  "[&_sup]:font-semibold",
-  "[&_sup]:text-blue-600",
+  "[&_sup]:font-sans",
+  "[&_sup]:font-medium",
+  "[&_sup]:text-acento",
   "[&_sup]:transition-colors",
-  "[&_sup:hover]:bg-blue-100",
-  "[&_sup:hover]:underline",
-  "dark:[&_sup]:text-blue-400",
-  "dark:[&_sup:hover]:bg-blue-900",
+  "[&_sup:hover]:bg-acento-suave",
 ].join(" ");
 
 /**
@@ -69,7 +66,7 @@ const CLASES_STRONG = [
  * antes cada uno traía su propio margen suelto (`mt-3 mr-3`, `mt-1 mr-1`), así
  * que ninguno quedaba alineado con el de al lado.
  */
-const BOTON_ICONO = "relative grid h-8 w-8 shrink-0 place-items-center rounded-lg transition-colors hover:bg-black/5 disabled:opacity-40 dark:hover:bg-white/10";
+const BOTON_ICONO = "relative grid h-8 w-8 shrink-0 place-items-center rounded-lg text-tinta-3 transition-colors hover:bg-tinta/5 hover:text-tinta disabled:opacity-40";
 
 /** "034. Español - Biblia ccc" -> { idioma: "Español", version: "Biblia cc" } */
 const partirNombre = (nombre) => {
@@ -327,17 +324,14 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
       carpeta porque ese nombre lleva puntos, paréntesis y acentos, y como
       selector CSS habría que escaparlo entero.
 
-      El contraste de la tarjeta: en claro era blanca sobre un fondo blanco, con
-      un borde tan tenue que los paneles se fundían con la página y entre sí. El
-      texto se queda blanco —es papel, y es lo que se lee—, pero el borde sube a
-      `neutral-300` y la sombra a `shadow-md` para que el recorte se vea. En
-      oscuro pasa lo contrario: la tarjeta es más oscura que la página, así que
-      lo que separa es aclarar el borde.
+      La tarjeta es plana: borde de medio tono y sin sombra, como una ventana de
+      la Mac. El recorte lo da el borde, no la sombra, así una rejilla de seis
+      paneles no se ve como seis cosas flotando.
     */
     <article
       ref={articuloRef}
       data-panel={codigoDeVersion(nombre) ?? ""}
-      className={`flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-neutral-300 bg-white shadow-md transition-shadow hover:shadow-lg dark:border-neutral-700 dark:bg-[#0d0d10] ${
+      className={`flex h-full min-w-0 flex-col overflow-hidden rounded-xl border border-linea bg-superficie transition-colors hover:border-linea-fuerte ${
         destacado ? "panel-destacado" : ""
       }`}
     >
@@ -346,10 +340,10 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
         cada encabezado mediría distinto y las cabeceras de la rejilla dejarían
         de alinearse entre sí. El nombre completo queda en el `title`.
       */}
-      <header className="flex items-center justify-between gap-2 border-b border-neutral-500 bg-neutral-200 px-3 py-2 dark:border-neutral-700 dark:bg-[#191820]">
+      <header className="flex items-center justify-between gap-2 border-b border-linea px-4 py-2.5">
         <div className="min-w-0">
-          <p className="truncate text-[10px] font-medium uppercase tracking-wider text-neutral-500 dark:text-neutral-400">{idiomaEtiqueta}</p>
-          <h2 title={version} className="truncate text-sm font-semibold text-neutral-900 dark:text-neutral-100">
+          <p className="truncate text-[11px] text-tinta-3">{idiomaEtiqueta}</p>
+          <h2 title={version} className="truncate text-sm font-semibold text-tinta">
             {version}
           </h2>
         </div>
@@ -357,8 +351,8 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
         {esCapitulo && (
           <div className="flex shrink-0 items-center gap-0.5">
             <MarkupTab biblia={nombre} tieneMorfologia={marcado.morfologia} tieneGlosa={marcado.glosa} />
-            <button type="button" className={BOTON_ICONO} onClick={() => setCompartirVerse(texto, versiculoSeleccionadoNumero, nombre, traducciones[versiculoSeleccionadoNumero] ?? null)}>
-              <img className="h-[18px] w-[18px] dark:invert" src={SHARE} alt="Share verse from Biblian" />
+            <button type="button" className={BOTON_ICONO} title={t("CompartirTitulo")} aria-label={t("CompartirTitulo")} onClick={() => setCompartirVerse(texto, versiculoSeleccionadoNumero, nombre, traducciones[versiculoSeleccionadoNumero] ?? null)}>
+              <Share className="h-4 w-4" strokeWidth={1.8} aria-hidden="true" />
             </button>
             {/* El mismo botón traduce o revierte según el estado del versículo
                 actual, para no añadir un icono más al encabezado. */}
@@ -371,8 +365,8 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                 aria-label={estaTraducido ? t("VerOriginal") : t("Traducir")}
                 className={BOTON_ICONO}
               >
-                <img className={`h-[18px] w-[18px] dark:invert ${isTranslating ? "animate-pulse" : ""}`} src={TRANSLATE} alt="" />
-                {estaTraducido && <span className="absolute right-1 top-1 block h-2 w-2 rounded-full bg-emerald-500 ring-2 ring-neutral-100 dark:ring-neutral-900"></span>}
+                <Languages className={`h-4 w-4 ${isTranslating ? "animate-pulse" : ""}`} strokeWidth={1.8} aria-hidden="true" />
+                {estaTraducido && <span className="absolute right-1 top-1 block h-2 w-2 rounded-full bg-acento-solido ring-2 ring-superficie"></span>}
               </button>
             )}
           </div>
@@ -390,7 +384,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
         entero (miles de píxeles) en vez de quedarse en su alto fijo y hacer
         scroll dentro.
       */}
-      <div ref={containerRef} className={`no-scrollbarVerse relative overflow-y-auto px-3 py-3 ${claseTamanoTexto} ${esCapitulo ? tamanioVerseAlto : "h-fit"}`}>
+      <div ref={containerRef} className={`no-scrollbarVerse relative overflow-y-auto px-2 py-2 font-serif ${claseTamanoTexto} ${esCapitulo ? tamanioVerseAlto : "h-fit"}`}>
         {cargando && sinContenido ? (
           // Esqueleto mientras no hay nada que mostrar: primera carga y
           // cambio de capítulo (`VerseWindow` vacía el texto al empezar a
@@ -398,7 +392,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
           // el texto nunca se tapa con una capa gris al leer.
           <div className="flex flex-col gap-3 py-1" aria-hidden="true">
             {[90, 100, 96, 82, 94, 70].map((ancho, i) => (
-              <div key={i} className="h-3 animate-pulse rounded bg-gray-200 dark:bg-neutral-700" style={{ width: `${ancho}%`, animationDelay: `${i * 80}ms` }}></div>
+              <div key={i} className="h-3 animate-pulse rounded bg-superficie-2" style={{ width: `${ancho}%`, animationDelay: `${i * 80}ms` }}></div>
             ))}
           </div>
         ) : esCapitulo ? (
@@ -420,10 +414,10 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                * referencia que enseña la barra de arriba.
                */
               const fondo = seleccionado
-                ? "border-amber-500 bg-[#ffe4b3] text-black dark:border-purple-300 dark:bg-[#693BCC] dark:text-white"
+                ? "border-acento bg-acento-suave text-tinta"
                 : color
                   ? `border-transparent ${CLASES_COLOR[color] ?? ""}`
-                  : "border-transparent hover:bg-neutral-100 dark:hover:bg-neutral-800/60";
+                  : "border-transparent text-tinta hover:bg-superficie-2";
 
               return (
                 <p
@@ -433,7 +427,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                   // El borde izquierdo va siempre, transparente cuando no toca:
                   // si apareciera solo al seleccionar, el texto se correría 3px
                   // en cada clic.
-                  className={`animate-slide-in-bottom mb-1 cursor-pointer rounded-lg border-l-[3px] px-2 py-2 leading-relaxed transition-colors ${fondo}`}
+                  className={`animate-slide-in-bottom mb-0.5 cursor-pointer rounded-lg border-l-[3px] px-2.5 py-1.5 leading-relaxed transition-colors ${fondo}`}
                 >
                   {/*
                     El número va EN LÍNEA con el texto, sin columna propia: una
@@ -441,11 +435,11 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                     corrido hacia la derecha. Que la primera línea arranque al
                     lado del número lo resuelve el CSS del marcado, no el layout.
                   */}
-                  <span className={`mr-1.5 select-none text-xs font-bold tabular-nums ${seleccionado ? "opacity-70" : "text-amber-600 dark:text-purple-300"}`}>{versiculo}</span>
+                  <span className={`mr-1.5 select-none font-sans text-[11px] font-semibold tabular-nums ${seleccionado ? "text-acento" : "text-tinta-3"}`}>{versiculo}</span>
                   {tieneNota && (
                     // Un punto y no un icono: va dentro del renglón del texto y
                     // cualquier cosa más alta descuadraría la primera línea.
-                    <span title={t("NotasTiene")} aria-label={t("NotasTiene")} className="mr-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500 align-middle dark:bg-sky-400"></span>
+                    <span title={t("NotasTiene")} aria-label={t("NotasTiene")} className="mr-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-acento align-middle"></span>
                   )}
                   <span
                     className={`texto-biblico ${CLASES_STRONG} ${preferencia.morfologia ? "" : "sin-morfologia"} ${preferencia.glosa ? "" : "sin-glosa"} ${
@@ -464,14 +458,14 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
               );
             })
         ) : typeof textoVisible === "string" ? (
-          <div className="animate-slide-in-bottom rounded-lg bg-red-50 px-3 py-4 text-center text-sm font-semibold text-[#ff0000] dark:bg-red-950/40 dark:text-orange-400">{textoVisible}</div>
+          <div className="animate-slide-in-bottom rounded-lg bg-superficie-2 px-3 py-4 text-center font-sans text-sm text-tinta-2">{textoVisible}</div>
         ) : (
           <p>{t("NoObjetoNoString")}</p>
         )}
       </div>
 
       {errorTraduccion && !isTranslating && (
-        <div role="status" className="animate-fade-in border-t border-neutral-200 py-1 text-center text-xs text-red-600 dark:border-neutral-800 dark:text-red-400">
+        <div role="status" className="animate-fade-in border-t border-linea py-1 text-center text-xs text-red-600 dark:text-red-400">
           {t("TraduccionFallo")}
         </div>
       )}

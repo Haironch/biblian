@@ -168,33 +168,33 @@ const StrongPopup = () => {
           width: `${Math.min(typeof window !== "undefined" ? window.innerWidth - 24 : 310, 310)}px`,
           transformOrigin: `${coords.arrowLeft}px ${coords.placement === "bottom" ? "top" : "bottom"}`,
         }}
-        className="absolute z-10 rounded-2xl border-2 border-amber-300/90 dark:border-purple-600/90 bg-white/95 dark:bg-[#1a0f26]/95 p-3.5 shadow-2xl backdrop-blur-md text-neutral-900 dark:text-neutral-100 transition-all animate-pop animate-duration-150"
+        className="absolute z-10 rounded-2xl border border-linea bg-superficie p-3.5 shadow-2xl backdrop-blur-md text-tinta transition-all animate-pop animate-duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Puntero de burbuja (flecha anclada directamente al número Strong) */}
         <div
           style={{ left: `${coords.arrowLeft}px` }}
-          className={`absolute -translate-x-1/2 w-3.5 h-3.5 rotate-45 bg-white dark:bg-[#1a0f26] z-20 ${
+          className={`absolute -translate-x-1/2 w-3.5 h-3.5 rotate-45 bg-superficie z-20 ${
             coords.placement === "bottom"
-              ? "-top-[8px] border-t-2 border-l-2 border-amber-300/90 dark:border-purple-600/90"
-              : "-bottom-[8px] border-b-2 border-r-2 border-amber-300/90 dark:border-purple-600/90"
+              ? "-top-[8px] border-t border-l border-linea"
+              : "-bottom-[8px] border-b border-r border-linea"
           }`}
         />
 
         {/* Encabezado: Código + Idioma + Botón cerrar */}
-        <div className="relative z-30 flex items-center justify-between border-b border-gray-100 dark:border-purple-900/60 pb-2 mb-3">
+        <div className="relative z-30 flex items-center justify-between border-b border-linea pb-2 mb-3">
           <div className="flex items-center gap-2">
-            <span className="font-mono text-sm font-bold text-amber-700 dark:text-purple-300 bg-amber-100 dark:bg-purple-950/70 px-2 py-0.5 rounded-md">
+            <span className="font-mono text-sm font-bold text-acento bg-acento-suave px-2 py-0.5 rounded-md">
               {code}
             </span>
-            <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+            <span className="text-xs font-semibold text-tinta-3">
               {isHebrew ? t("Hebreo") : isGreek ? t("Griego") : "Strong"}
             </span>
           </div>
 
           <button
             onClick={cerrarStrongPopup}
-            className="flex h-6 w-6 items-center justify-center rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-purple-900/40 dark:hover:text-gray-200 transition"
+            className="flex h-6 w-6 items-center justify-center rounded-full text-tinta-3 hover:bg-tinta/5 hover:text-tinta-2 transition"
             title={t("Cerrar") || "Cerrar"}
           >
             &times;
@@ -205,7 +205,7 @@ const StrongPopup = () => {
         <div className="flex items-center justify-between gap-3 mb-3">
           <div className="min-w-0 flex-1">
             <div
-              className={`font-bold tracking-wide text-neutral-900 dark:text-white break-words ${
+              className={`font-bold tracking-wide text-tinta break-words ${
                 (entryData?.le || "").length > 22
                   ? "text-base leading-tight"
                   : (entryData?.le || "").length > 14
@@ -215,7 +215,7 @@ const StrongPopup = () => {
             >
               {entryData?.le || "—"}
             </div>
-            <div className="text-xs sm:text-sm font-medium italic text-gray-600 dark:text-gray-300 break-words mt-0.5">
+            <div className="text-xs sm:text-sm font-medium italic text-tinta-2 break-words mt-0.5">
               {entryData?.pl || ""}
             </div>
           </div>
@@ -224,7 +224,7 @@ const StrongPopup = () => {
           <div>
             {cargandoAudio ? (
               <div
-                className="relative flex h-10 w-10 items-center justify-center rounded-full bg-blue-500/80 text-white cursor-wait shadow-sm"
+                className="relative flex h-10 w-10 items-center justify-center rounded-full bg-acento-solido/70 text-white cursor-wait shadow-sm"
                 title={t("CargandoAudio")}
               >
                 <svg
@@ -248,7 +248,7 @@ const StrongPopup = () => {
             ) : audio ? (
               <button
                 onClick={toggleAudio}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 active:scale-95 text-white transition shadow-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-acento-solido hover:bg-acento-solido/90 active:scale-95 text-white transition shadow-md focus:outline-none focus:ring-2 focus:ring-acento/40"
                 title={isPlaying ? t("DetenerPronunciacion") : t("ReproducirPronunciacion")}
               >
                 {isPlaying ? (
@@ -278,7 +278,7 @@ const StrongPopup = () => {
               </button>
             ) : (
               <div
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800 text-gray-400 cursor-not-allowed"
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-superficie-2 text-tinta-3 cursor-not-allowed"
                 title={t("DefinicionNoDisponible")}
               >
                 <svg
@@ -305,7 +305,7 @@ const StrongPopup = () => {
         {/* Botón de acción: Ver definición completa */}
         <button
           onClick={() => abrirDefinicionStrong(code)}
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 dark:from-purple-600 dark:to-purple-700 py-2 px-3 text-xs font-bold text-white shadow-md hover:from-amber-600 hover:to-amber-700 dark:hover:from-purple-700 dark:hover:to-purple-800 active:scale-[0.98] transition focus:outline-none focus:ring-2 focus:ring-amber-400 dark:focus:ring-purple-400"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-acento-solido hover:bg-acento-solido/90 py-2 px-3 text-xs font-bold text-white shadow-md active:scale-[0.98] transition focus:outline-none focus:ring-2 focus:ring-acento/40"
         >
           <span>{t("VerDefinicionCompleta") || "Ver definición completa"}</span>
           <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -321,7 +321,7 @@ const StrongPopup = () => {
         */}
         <button
           onClick={() => abrirConcordancia(code)}
-          className="mt-1.5 flex w-full items-center justify-center gap-2 rounded-xl border border-amber-500/40 py-2 px-3 text-xs font-bold text-amber-700 transition hover:bg-amber-50 active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-amber-400 dark:border-purple-500/40 dark:text-purple-300 dark:hover:bg-purple-950/40 dark:focus:ring-purple-400"
+          className="mt-1.5 flex w-full items-center justify-center gap-2 rounded-xl border border-acento/40 py-2 px-3 text-xs font-bold text-acento transition hover:bg-acento-suave active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-acento/40"
         >
           <span>{t("ConcordanciaVerDonde")}</span>
         </button>

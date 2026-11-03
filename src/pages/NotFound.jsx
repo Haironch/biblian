@@ -18,16 +18,16 @@ const NotFound = () => {
   const { t } = useContext(LanguageContext);
 
   return (
-    <div className="min-h-[70vh] px-6 py-16 flex flex-col items-center dark:text-white">
+    <div className="min-h-[70vh] px-6 py-16 flex flex-col items-center">
       <p className="text-6xl font-bold opacity-30 mb-4">404</p>
       <h1 className="text-2xl sm:text-3xl font-bold text-center">{t("NoEncontradaTitulo")}</h1>
       <p className="mt-3 max-w-[520px] text-center text-sm opacity-80 text-balance">{t("NoEncontradaTexto")}</p>
 
       <div className="mt-6 flex flex-wrap gap-3 justify-center">
-        <Link to="/" className="px-4 py-2 rounded-md bg-[#a97109] hover:bg-[#634b1d] dark:bg-purple-500 dark:hover:bg-purple-700 text-white text-sm font-bold">
+        <Link to="/" className="px-4 py-2 rounded-md bg-acento-solido hover:bg-acento-solido/90 text-white text-sm font-bold">
           {t("NoEncontradaVolver")}
         </Link>
-        <Link to="/compare" className="px-4 py-2 rounded-md border border-gray-300 dark:border-neutral-600 text-sm font-bold hover:bg-gray-100 dark:hover:bg-neutral-800">
+        <Link to="/compare" className="px-4 py-2 rounded-md border border-linea-fuerte text-sm font-bold hover:bg-tinta/5">
           {t("NoEncontradaComparar")}
         </Link>
       </div>

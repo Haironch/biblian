@@ -1,12 +1,14 @@
 import { useState, useRef, useEffect, useContext } from "react";
 import ModalStrong from "../components/ModalStrong";
-import DICTIONARY from "/diccionario2.png";
+import { BookA } from "lucide-react";
 import "../styles/Animations.css";
 import { useHistoryBlocker } from "../hooks/useHistoryBlocker";
 import DataContext from "../context/DataContext";
+import LanguageContext from "../context/LanguageContext";
 
 const FloattingBubble = () => {
   const { modalStrong, strongFun } = useContext(DataContext);
+  const { t } = useContext(LanguageContext);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Al hacer clic en un número Strong dentro de un versículo, `strongFun` marca
@@ -153,14 +155,18 @@ const FloattingBubble = () => {
         ref={bubbleRef}
         style={{
           position: "fixed",
-          top: "22%",
-          right: -5,
-          width: 60,
-          height: 60,
+          // Abajo a la derecha, encima de la barra de estudio: arriba tapaba
+          // el botón de compartir del primer panel. Al arrastrarla se fija con
+          // `top`/`left`, que mandan sobre estos dos.
+          bottom: "calc(var(--alto-pestanas) + 5.5rem)",
+          right: 12,
+          width: 48,
+          height: 48,
           backgroundColor: "transparent",
           borderRadius: "50%",
           cursor: "pointer",
-          zIndex: 9999,
+          // Encima de la barra de estudio (z-20), debajo de la navegación (z-40).
+          zIndex: 30,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -172,9 +178,15 @@ const FloattingBubble = () => {
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
         onClick={handleClickBubble}
+        role="button"
+        aria-label={t("DiccionarioStrong")}
+        title={t("DiccionarioStrong")}
       >
-        <div className="bg-transparent absolute size-[60px] rounded-full" />
-        <img src={DICTIONARY} className="w-[45px] h-[45px]" />
+        {/* Mismo arrastre de antes; solo cambia la cara: un botón redondo del
+            tema en vez de la ilustración, que no encajaba con nada. */}
+        <span className="grid h-11 w-11 place-items-center rounded-full border border-linea bg-superficie text-acento shadow-lg transition-colors hover:border-acento/40">
+          <BookA className="h-5 w-5" strokeWidth={1.8} aria-hidden="true" />
+        </span>
       </div>
       {isModalOpen && (
         <div ref={modalRef} className="modal-background">

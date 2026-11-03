@@ -22,10 +22,10 @@
       verdad, y este bloque es su versión de la portada escrita a mano.
     -->
     <!-- SEO:INICIO -->
-    <title>Biblia en línea — Compara 150+ versiones lado a lado | Biblian</title>
+    <title>Biblia en línea — Compara 140+ versiones lado a lado | Biblian</title>
     <meta
       name="description"
-      content="Lee la Biblia gratis y compara 150+ versiones a la vez: Reina Valera 1960, NVI, LBLA, Textual, interlineal griego y hebreo, con diccionario Strong. Sin registro y sin anuncios."
+      content="Lee la Biblia gratis y compara 140+ versiones a la vez: Reina Valera 1960, NVI, LBLA, Textual, interlineal griego y hebreo, con diccionario Strong. Sin registro y sin anuncios."
       data-seo
     />
     <meta
@@ -43,10 +43,10 @@
 
     <meta property="og:type" content="website" data-seo />
     <meta property="og:site_name" content="Biblian" data-seo />
-    <meta property="og:title" content="Biblia en línea — Compara 150+ versiones lado a lado | Biblian" data-seo />
+    <meta property="og:title" content="Biblia en línea — Compara 140+ versiones lado a lado | Biblian" data-seo />
     <meta
       property="og:description"
-      content="Lee la Biblia gratis y compara 150+ versiones a la vez: Reina Valera 1960, NVI, LBLA, Textual, interlineal griego y hebreo, con diccionario Strong. Sin registro y sin anuncios."
+      content="Lee la Biblia gratis y compara 140+ versiones a la vez: Reina Valera 1960, NVI, LBLA, Textual, interlineal griego y hebreo, con diccionario Strong. Sin registro y sin anuncios."
       data-seo
     />
     <meta property="og:url" content="https://biblian.netlify.app/" data-seo />
@@ -58,8 +58,8 @@
     <meta property="og:locale:alternate" content="en_US" data-seo />
 
     <meta name="twitter:card" content="summary_large_image" data-seo />
-    <meta name="twitter:title" content="Biblia en línea — Compara 150+ versiones lado a lado | Biblian" data-seo />
-    <meta name="twitter:description" content="Compara 150+ versiones de la Biblia lado a lado, con diccionario Strong e interlineal griego y hebreo. Gratis, sin registro." data-seo />
+    <meta name="twitter:title" content="Biblia en línea — Compara 140+ versiones lado a lado | Biblian" data-seo />
+    <meta name="twitter:description" content="Compara 140+ versiones de la Biblia lado a lado, con diccionario Strong e interlineal griego y hebreo. Gratis, sin registro." data-seo />
     <meta name="twitter:image" content="https://biblian.netlify.app/og-image.png" data-seo />
     <meta name="twitter:image:alt" content="Biblia en línea: compara versiones lado a lado" data-seo />
     <!-- SEO:FIN -->
@@ -70,23 +70,24 @@
 
     <!-- PWA / iOS -->
     <link rel="icon" type="image/svg+xml" href="/bibleIcon.svg" />
-    <link rel="apple-touch-icon" href="/bibleIcon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Biblian" />
     <meta name="application-name" content="Biblian" />
-    <meta name="msapplication-TileImage" content="/bibleIcon.svg" />
-    <meta name="theme-color" id="theme-color" content="#FDD07A" />
+    <meta name="msapplication-TileImage" content="/icono-512.png" />
+    <meta name="theme-color" id="theme-color" content="#F5F5F7" />
 
-    <!-- Serifas del lector 3D. `preconnect` porque son dos dominios distintos
+    <!-- Serifas: Source Serif 4 para el texto bíblico, EB Garamond y
+         Cormorant para el lector 3D. `preconnect` porque son dos dominios distintos
          (el CSS y los .woff2) y sin el aviso previo el handshake del segundo
          no empieza hasta que termina de parsearse el primero.
          `display=swap`: el texto se pinta con la serifa del sistema y cambia al
          llegar la web; el paginador vuelve a medir con `document.fonts.ready`. -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..600;1,400&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400..600;1,8..60,400&family=EB+Garamond:ital,wght@0,400..600;1,400&family=Cormorant+Garamond:wght@500;600&display=swap" rel="stylesheet" />
 
     <!-- El JSON-LD también lo reescribe el prerenderizador por ruta; este es el
          grafo de la portada. -->
@@ -122,7 +123,7 @@
     </script>
     <!-- SEO:JSONLD:FIN -->
   </head>
-  <body class="bg-white dark:bg-neutral-700">
+  <body>
     <!-- SEO:CUERPO:INICIO -->
     <div id="root"></div>
     <!-- SEO:CUERPO:FIN -->

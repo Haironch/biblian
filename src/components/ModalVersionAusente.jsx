@@ -58,7 +58,7 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
   const nombreVersion = etiqueta(version);
 
   const botonSecundario =
-    "w-full rounded-xl border border-neutral-200 px-4 py-3 text-left text-sm font-semibold text-neutral-800 transition hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-neutral-700 dark:text-neutral-100 dark:hover:bg-white/10 dark:focus-visible:ring-purple-400";
+    "w-full rounded-xl border border-linea px-4 py-3 text-left text-sm font-semibold text-tinta transition hover:bg-tinta/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento";
 
   return (
     <div
@@ -72,12 +72,12 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
           la decisión es de una sola pulsación. En escritorio, tarjeta centrada. */}
       <div
         ref={cajaRef}
-        className="animate-slide-in-bottom w-full max-w-md rounded-t-2xl bg-white p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl dark:bg-neutral-900 sm:rounded-2xl sm:pb-5"
+        className="animate-slide-in-bottom w-full max-w-md rounded-t-2xl bg-superficie p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-2xl sm:rounded-2xl sm:pb-5"
       >
         {!eligiendoReemplazo ? (
           <>
-            <h2 className="text-base font-bold text-neutral-900 dark:text-white">{t("VersionAusenteTitulo")}</h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
+            <h2 className="text-base font-bold text-tinta">{t("VersionAusenteTitulo")}</h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-tinta-2">
               {t("VersionAusenteTexto", { version: nombreVersion })}
             </p>
 
@@ -86,7 +86,7 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
                 ref={primerBoton}
                 type="button"
                 onClick={() => (lleno ? setEligiendoReemplazo(true) : onAgregar(null))}
-                className="w-full rounded-xl bg-amber-500 px-4 py-3 text-left text-sm font-bold text-white shadow-lg shadow-amber-500/25 transition hover:bg-amber-600 focus:outline-none focus-visible:ring-4 focus-visible:ring-amber-500/30 dark:bg-purple-600 dark:shadow-purple-900/40 dark:hover:bg-purple-700"
+                className="w-full rounded-xl bg-acento-solido px-4 py-3 text-left text-sm font-bold text-white transition hover:bg-acento-solido/90 focus:outline-none focus-visible:ring-4 focus-visible:ring-acento/30"
               >
                 {t("VersionAusenteAgregar")}
                 <span className="mt-0.5 block text-xs font-medium opacity-80">
@@ -98,13 +98,13 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
 
               <button type="button" onClick={onSoloEsta} className={botonSecundario}>
                 {t("VersionAusenteSolo")}
-                <span className="mt-0.5 block text-xs font-normal text-neutral-500 dark:text-neutral-400">{t("VersionAusenteSoloAyuda")}</span>
+                <span className="mt-0.5 block text-xs font-normal text-tinta-3">{t("VersionAusenteSoloAyuda")}</span>
               </button>
 
               <button
                 type="button"
                 onClick={onCancelar}
-                className="mt-1 w-full rounded-xl px-4 py-2.5 text-sm font-semibold text-neutral-500 transition hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:text-neutral-400 dark:hover:bg-white/10"
+                className="mt-1 w-full rounded-xl px-4 py-2.5 text-sm font-semibold text-tinta-3 transition hover:bg-tinta/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400"
               >
                 {t("VersionAusenteCancelar")}
               </button>
@@ -112,8 +112,8 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
           </>
         ) : (
           <>
-            <h2 className="text-base font-bold text-neutral-900 dark:text-white">{t("VersionAusenteReemplazar")}</h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-neutral-600 dark:text-neutral-300">
+            <h2 className="text-base font-bold text-tinta">{t("VersionAusenteReemplazar")}</h2>
+            <p className="mt-1.5 text-sm leading-relaxed text-tinta-2">
               {t("VersionAusenteLleno", { max: MAX_VERSIONES_COMPARADAS })}
             </p>
 
@@ -126,10 +126,10 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
                     ref={indice === 0 ? primerBoton : undefined}
                     type="button"
                     onClick={() => onAgregar(ruta)}
-                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-neutral-800 transition hover:bg-amber-500/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:text-neutral-100 dark:hover:bg-purple-500/15 dark:focus-visible:ring-purple-400"
+                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2.5 text-left text-sm text-tinta transition hover:bg-acento-suave focus:outline-none focus-visible:ring-2 focus-visible:ring-acento"
                   >
                     <span className="min-w-0 flex-1 truncate">{etiqueta(ruta)}</span>
-                    <span className="shrink-0 text-xs font-bold text-amber-600 dark:text-purple-300">{t("VersionAusenteReemplazar")}</span>
+                    <span className="shrink-0 text-xs font-bold text-acento">{t("VersionAusenteReemplazar")}</span>
                   </button>
                 </li>
               ))}
@@ -138,7 +138,7 @@ const ModalVersionAusente = ({ version, seleccionadas, onCancelar, onSoloEsta, o
             <button
               type="button"
               onClick={() => setEligiendoReemplazo(false)}
-              className="mt-4 w-full rounded-xl px-4 py-2.5 text-sm font-semibold text-neutral-500 transition hover:bg-black/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400 dark:text-neutral-400 dark:hover:bg-white/10"
+              className="mt-4 w-full rounded-xl px-4 py-2.5 text-sm font-semibold text-tinta-3 transition hover:bg-tinta/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-neutral-400"
             >
               {t("VersionAusenteVolver")}
             </button>

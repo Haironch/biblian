@@ -21,20 +21,20 @@ const PreguntasFrecuentes = () => {
 
   return (
     <section className="mt-10" aria-labelledby="faq-titulo">
-      <h2 id="faq-titulo" className="text-2xl font-bold dark:text-white border-b border-gray-200 dark:border-gray-700 pb-3">
+      <h2 id="faq-titulo" className="text-2xl font-bold border-b border-linea pb-3">
         {t("PreguntasFrecuentes")}
       </h2>
 
       <div className="mt-4 space-y-2">
         {lista.map(({ p, r }) => (
-          <details key={p} className="group rounded-xl border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-800/80 px-4 py-3 open:shadow-sm">
-            <summary className="cursor-pointer list-none font-semibold text-sm text-gray-900 dark:text-white flex items-center justify-between gap-3">
+          <details key={p} className="group rounded-xl border border-linea bg-superficie px-4 py-3 open:shadow-sm">
+            <summary className="cursor-pointer list-none font-semibold text-sm text-tinta flex items-center justify-between gap-3">
               <span>{p}</span>
-              <span aria-hidden="true" className="text-gray-400 transition-transform group-open:rotate-45">
+              <span aria-hidden="true" className="text-tinta-3 transition-transform group-open:rotate-45">
                 +
               </span>
             </summary>
-            <p className="mt-2 text-xs leading-relaxed text-gray-700 dark:text-gray-300">{r}</p>
+            <p className="mt-2 text-xs leading-relaxed text-tinta-2">{r}</p>
           </details>
         ))}
       </div>

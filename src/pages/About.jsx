@@ -3,6 +3,12 @@ import LanguageContext from "../context/LanguageContext";
 import { BEBLIA_INFO, BIBLIAS_ATRIBUCION } from "../data/colaboradores";
 import { CARACTERISTICAS_POR_BIBLIA, MAPA_CARACTERISTICAS } from "../data/biblias";
 import PreguntasFrecuentes from "../components/PreguntasFrecuentes";
+import { ArrowUpRight, Github, Sprout, TriangleAlert } from "lucide-react";
+import { AUTOR, REPO_URL } from "../config/sitio";
+import LOGO from "/bibleIcon.svg";
+
+// El perfil del autor original: el repositorio cuelga de él.
+const URL_AUTOR = REPO_URL.split("/").slice(0, 4).join("/");
 
 const About = () => {
   const { t } = useContext(LanguageContext);
@@ -40,99 +46,83 @@ const About = () => {
     return resultado;
   }, [busqueda, idiomaSeleccionado]);
 
+  const enlaceExterno = "inline-flex items-center gap-1 font-medium text-acento hover:underline";
+
   return (
     <div className="w-full overflow-hidden pb-16">
-      <article className="animate-fade-in px-4 sm:px-6 py-3 justify-center w-[99%] sm:w-[850px] m-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold flex justify-center text-center mt-7 dark:text-white">
-          {t("SobreProyecto")}
-        </h1>
+      <article className="animate-fade-in m-auto w-full max-w-3xl px-4 py-8 sm:px-6">
+        <header>
+          <img src={LOGO} alt="" className="h-12 w-12" />
+          <h1 className="mt-4 text-2xl font-semibold text-tinta sm:text-3xl">{t("SobreProyecto")}</h1>
+          <p className="mt-2 text-[15px] leading-relaxed text-tinta-2">{t("InfoSobreProyecto")}</p>
+        </header>
 
-        <div className="mt-4 dark:text-white text-center text-sm sm:text-balance">
-          {t("InfoSobreProyecto")}:
-          <a
-            href="https://github.com/CristopherPaiz"
-            target="_blank"
-            rel="noreferrer"
-            style={{ fontWeight: "700", fontSize: 20 }}
-            className="text-emerald-500 dark:text-emerald-400 flex flex-row gap-1 items-center justify-center mt-2 hover:underline"
-          >
-            {t("CristopherPaiz")}
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M12 6h-6a2 2 0 0 0 -2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-6" />
-              <path d="M11 13l9 -9" />
-              <path d="M15 4h5v5" />
-            </svg>
-          </a>
-        </div>
-
-        <p className="mt-4 dark:text-white text-left sm:text-center text-sm sm:text-balance leading-relaxed">
-          {t("InfoSobreProyectoDos")}{" "}
-          <a
-            href="https://github.com/CristopherPaiz/multi-bible-compare"
-            className="text-blue-500 dark:text-blue-400 font-semibold hover:underline"
-            target="_blank"
-            rel="noreferrer"
-          >
-            Multi Bible Compare
-          </a>
-          . {t("InfoSobreProyectoTres")}
-        </p>
-        <p className="mt-3 dark:text-gray-300 text-left sm:text-center text-sm sm:text-balance">
-          {t("MasInfoSobreProyeto")}
-        </p>
-
-        {/* Disclaimer */}
-        <div className="w-full m-auto px-4 py-5 bg-amber-500/15 border border-amber-500/30 rounded-xl overflow-hidden mt-6 shadow-sm">
-          <h2 className="text-center text-lg font-bold mb-2 text-amber-900 dark:text-amber-300">DISCLAIMER</h2>
-          <p className="text-gray-800 dark:text-gray-200 text-justify text-xs leading-relaxed">
-            {t("DisclaimerBiblia")}
+        {/*
+          El crédito va arriba y con nombre propio: la idea y la primera versión
+          son de otra persona, y esta página es donde se dice. Esta versión es
+          una continuación, no una obra aparte.
+        */}
+        <section className="mt-8 rounded-xl border border-linea bg-superficie p-5">
+          <h2 className="flex items-center gap-2 text-base font-semibold text-tinta">
+            <Sprout className="h-4 w-4 text-acento" strokeWidth={1.8} aria-hidden="true" />
+            {t("OrigenTitulo")}
+          </h2>
+          <p className="mt-2 text-sm leading-relaxed text-tinta-2">
+            {t("OrigenParte1")}{" "}
+            <a href={URL_AUTOR} target="_blank" rel="noreferrer" className={enlaceExterno}>
+              {AUTOR}
+            </a>
+            {t("OrigenParte2")}{" "}
+            <a href={REPO_URL} target="_blank" rel="noreferrer" className={enlaceExterno}>
+              Multi Bible Compare
+            </a>
+            .
           </p>
-        </div>
+          <p className="mt-3 text-sm leading-relaxed text-tinta-2">{t("OrigenParte3")}</p>
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex h-9 items-center gap-2 rounded-lg border border-linea px-3.5 text-sm font-medium text-tinta transition-colors hover:border-linea-fuerte hover:bg-superficie-2"
+          >
+            <Github className="h-4 w-4" strokeWidth={1.8} aria-hidden="true" />
+            {t("VerRepositorioOriginal")}
+            <ArrowUpRight className="h-3.5 w-3.5 text-tinta-3" strokeWidth={2} aria-hidden="true" />
+          </a>
+        </section>
 
-        {/* Fuente Principal: Beblia */}
-        <div className="w-full mt-8 p-5 bg-blue-500/10 border border-blue-500/20 rounded-xl">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-              <h3 className="text-lg font-bold text-blue-900 dark:text-blue-300 flex items-center gap-2">
-                🏛️ {BEBLIA_INFO.nombre}
-              </h3>
-              <p className="text-xs text-gray-700 dark:text-gray-300 mt-1">
-                {BEBLIA_INFO.descripcion}
-              </p>
+        <section className="mt-8">
+          <h2 className="text-base font-semibold text-tinta">{t("TextosTitulo")}</h2>
+          <p className="mt-2 text-sm leading-relaxed text-tinta-2">{t("InfoSobreProyectoTres")}</p>
+          <p className="mt-2 text-sm leading-relaxed text-tinta-2">{t("MasInfoSobreProyeto")}</p>
+
+          <div className="mt-4 flex flex-col gap-3 rounded-xl border border-linea bg-superficie-2/60 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <h3 className="text-sm font-semibold text-tinta">{BEBLIA_INFO.nombre}</h3>
+              <p className="mt-1 text-xs leading-relaxed text-tinta-2">{BEBLIA_INFO.descripcion}</p>
             </div>
-            <a
-              href={BEBLIA_INFO.url}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center justify-center gap-1 text-xs font-semibold px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition whitespace-nowrap self-start sm:self-center shadow"
-            >
+            <a href={BEBLIA_INFO.url} target="_blank" rel="noreferrer" className={`${enlaceExterno} shrink-0 text-sm`}>
               {t("RepositorioBeblia")}
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                <polyline points="15 3 21 3 21 9"></polyline>
-                <line x1="10" y1="14" x2="21" y2="3"></line>
-              </svg>
+              <ArrowUpRight className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
             </a>
           </div>
-        </div>
+
+          {/* Aviso de derechos */}
+          <div className="mt-4 rounded-xl border border-acento/30 bg-acento-solido/10 p-4">
+            <h3 className="flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-300">
+              <TriangleAlert className="h-4 w-4" strokeWidth={1.8} aria-hidden="true" />
+              Disclaimer
+            </h3>
+            <p className="mt-1.5 text-xs leading-relaxed text-tinta-2">{t("DisclaimerBiblia")}</p>
+          </div>
+        </section>
 
         {/* Sección de Versiones Bíblicas */}
         <div className="mt-10">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-gray-200 dark:border-gray-700 pb-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-linea pb-3">
             <div>
-              <h2 className="text-2xl font-bold dark:text-white">{t("Colaboradores")}</h2>
-              <p className="text-xs text-gray-500 dark:text-gray-400">
+              <h2 className="text-2xl font-bold">{t("Colaboradores")}</h2>
+              <p className="text-xs text-tinta-3">
                 {t("VersionesRegistradasDesc", { count: totalVersiones })}
               </p>
             </div>
@@ -144,10 +134,10 @@ const About = () => {
                 placeholder={t("BuscarVersionPlaceholder")}
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
-                className="w-full text-xs px-3 py-2 pl-8 rounded-lg bg-gray-100 dark:bg-neutral-800 dark:text-white border border-gray-300 dark:border-neutral-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-xs px-3 py-2 pl-8 rounded-lg bg-superficie-2 border border-linea-fuerte focus:outline-none focus:ring-2 focus:ring-acento/30"
               />
               <svg
-                className="w-4 h-4 absolute left-2.5 top-2.5 text-gray-400"
+                className="w-4 h-4 absolute left-2.5 top-2.5 text-tinta-3"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -170,8 +160,8 @@ const About = () => {
                 onClick={() => setIdiomaSeleccionado(idioma)}
                 className={`text-xs px-3 py-1 rounded-full transition font-medium ${
                   idiomaSeleccionado === idioma
-                    ? "bg-blue-600 text-white shadow-sm"
-                    : "bg-gray-200 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-neutral-700"
+                    ? "bg-acento-solido text-white shadow-sm"
+                    : "bg-superficie-2 text-tinta-2 hover:bg-tinta/10"
                 }`}
               >
                 {idioma === "Todos" ? t("TodosLosIdiomas") : idioma}
@@ -182,17 +172,17 @@ const About = () => {
           {/* Lista de Versiones Agrupadas */}
           <div className="mt-6 space-y-6">
             {Object.keys(versionesFiltradas).length === 0 ? (
-              <p className="text-center py-8 text-sm text-gray-500 dark:text-gray-400">
+              <p className="text-center py-8 text-sm text-tinta-3">
                 {t("NoVersionesEncontradas")}
               </p>
             ) : (
               Object.entries(versionesFiltradas).map(([idioma, lista]) => (
                 <div key={idioma} className="space-y-3">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-bold text-base text-gray-900 dark:text-gray-100">
+                    <h3 className="font-bold text-base text-tinta">
                       {idioma}
                     </h3>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-gray-200 dark:bg-neutral-800 text-gray-600 dark:text-gray-400">
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-superficie-2 text-tinta-2">
                       {lista.length}
                     </span>
                   </div>
@@ -204,19 +194,19 @@ const About = () => {
                       return (
                         <div
                           key={item.rawDir}
-                          className="p-3.5 rounded-xl bg-white dark:bg-neutral-800/80 border border-gray-200 dark:border-neutral-700/80 shadow-xs hover:border-gray-300 dark:hover:border-neutral-600 transition flex flex-col justify-between"
+                          className="p-3.5 rounded-xl bg-superficie border border-linea shadow-xs hover:border-linea-fuerte transition flex flex-col justify-between"
                         >
                           <div>
                             <div className="flex items-start justify-between gap-2 mb-1">
-                              <h4 className="font-semibold text-sm text-gray-900 dark:text-white leading-snug">
+                              <h4 className="font-semibold text-sm text-tinta leading-snug">
                                 {item.title}
                               </h4>
                               {item.tipo && (
                                 <span
                                   className={`text-[10px] px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${
                                     item.tipo.includes("Dominio Público") || item.tipo.includes("Public Domain")
-                                      ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300"
-                                      : "bg-blue-100 text-blue-800 dark:bg-blue-950/80 dark:text-blue-300"
+                                      ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                      : "bg-acento-suave text-acento"
                                   }`}
                                 >
                                   {item.tipo}
@@ -224,11 +214,11 @@ const About = () => {
                               )}
                             </div>
                             {item.editorial && (
-                              <p className="text-[11px] font-medium text-emerald-600 dark:text-emerald-400">
+                              <p className="text-[11px] font-medium text-tinta-3">
                                 {item.editorial}
                               </p>
                             )}
-                            <p className="text-xs text-gray-600 dark:text-gray-300 mt-1.5 leading-relaxed">
+                            <p className="text-xs text-tinta-2 mt-1.5 leading-relaxed">
                               {item.info}
                             </p>
 
@@ -253,12 +243,12 @@ const About = () => {
                           </div>
 
                           {item.link && (
-                            <div className="mt-2 pt-2 border-t border-gray-100 dark:border-neutral-700/50">
+                            <div className="mt-2 pt-2 border-t border-linea">
                               <a
                                 href={item.link}
                                 target="_blank"
                                 rel="noreferrer"
-                                className="text-[11px] text-blue-500 hover:text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1"
+                                className="flex items-center gap-1 text-[11px] text-acento hover:underline"
                               >
                                 {t("VerFuenteLicencia")}
                                 <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

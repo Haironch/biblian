@@ -2,11 +2,6 @@ import { useState, useEffect, useRef, useContext, useMemo, useCallback } from "r
 import PropTypes from "prop-types";
 import LanguageContext from "../context/LanguageContext";
 import DataContext from "../context/DataContext";
-import A from "../assets/badges/A.webp";
-import AN from "../assets/badges/AN.webp";
-import N from "../assets/badges/N.webp";
-import O from "../assets/badges/O.webp";
-import ON from "../assets/badges/ON.webp";
 import ReadMore from "./ReadMore";
 import { useHistoryBlocker } from "../hooks/useHistoryBlocker";
 import { useBloquearScroll } from "../hooks/useBloquearScroll";
@@ -256,28 +251,30 @@ const ListBooks = () => {
     }, 150);
   };
 
-  const imagenesBadge = useMemo(
-    () => ({
-      AN: idiomaNavegador === "es" ? AN : ON,
-      N,
-      A: idiomaNavegador === "es" ? A : O,
-    }),
-    [idiomaNavegador]
-  );
-
+  /*
+   * Qué testamentos trae la versión y su año. Eran imágenes de colores (rojo el
+   * AT, azul el NT); ahora son letras con los colores del tema, que además se
+   * leen bien en oscuro sin tener que invertir nada.
+   */
   const insignia = useCallback(
     (libro) => {
-      const icono = libro.new && libro.old ? imagenesBadge.AN : libro.new ? imagenesBadge.N : libro.old ? imagenesBadge.A : null;
-      if (!icono) return null;
+      if (!libro.new && !libro.old) return null;
+      const letras = [libro.old && t("AntiguoTestamentoInicial"), libro.new && t("NuevoTestamentoInicial")].filter(Boolean);
 
       return (
-        <span className="flex w-11 shrink-0 flex-col items-center gap-0.5 select-none">
-          <img src={icono} className="size-7 object-contain" alt="" loading="eager" decoding="sync" />
-          <span className="text-xs font-bold leading-none opacity-70">{libro.year}</span>
+        <span className="flex w-11 shrink-0 select-none flex-col items-center gap-1">
+          <span className="flex gap-0.5">
+            {letras.map((letra) => (
+              <span key={letra} className="grid h-4 w-4 place-items-center rounded bg-tinta/10 text-[10px] font-semibold text-tinta-2">
+                {letra}
+              </span>
+            ))}
+          </span>
+          <span className="text-[11px] font-medium leading-none tabular-nums text-tinta-3">{libro.year}</span>
         </span>
       );
     },
-    [imagenesBadge]
+    [t]
   );
 
   const traducirIdioma = useCallback(
@@ -356,31 +353,31 @@ const ListBooks = () => {
   const claseChip = (activo) =>
     `shrink-0 rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
       activo
-        ? "bg-[#693BCC] text-white dark:bg-[#FDD07A] dark:text-neutral-900"
-        : "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-gray-200"
+        ? "bg-acento-solido text-white"
+        : "bg-superficie-2 text-tinta-2"
     }`;
 
   const claseAccion =
-    "shrink-0 rounded-full border border-gray-300 px-3 py-1.5 text-xs font-medium text-gray-700 dark:border-neutral-700 dark:text-gray-200";
+    "shrink-0 rounded-full border border-linea-fuerte px-3 py-1.5 text-xs font-medium text-tinta-2";
 
   return (
     <>
-      <div className="flex w-full justify-center mt-9">
+      <div className="mx-auto mt-5 flex w-11/12 max-w-[1800px] justify-start">
         <ReadMore openModal={openModal} />
       </div>
 
       {isModalOpen && (
-        <div className="fixed inset-0 z-[9999999] flex items-end justify-center bg-gray-900/60 backdrop-blur-[2px] sm:items-center sm:p-4">
+        <div className="fixed inset-0 z-[9999999] flex items-end justify-center bg-black/40 backdrop-blur-[2px] sm:items-center sm:p-4">
           <div
             ref={modalRef}
             role="dialog"
             aria-modal="true"
             aria-labelledby="titulo-seleccionar-biblias"
-            className="flex h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-white shadow-2xl dark:bg-neutral-950 dark:text-white sm:h-[88vh] sm:max-w-xl sm:rounded-2xl"
+            className="flex h-[92dvh] w-full flex-col overflow-hidden rounded-t-2xl bg-superficie shadow-2xl sm:h-[88vh] sm:max-w-xl sm:rounded-2xl"
           >
             {/* CABECERA */}
-            <div className="shrink-0 border-b border-gray-200 px-4 pb-3 pt-3 dark:border-neutral-800">
-              <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300 dark:bg-neutral-700 sm:hidden" />
+            <div className="shrink-0 border-b border-linea px-4 pb-3 pt-3">
+              <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-linea-fuerte sm:hidden" />
 
               <div className="flex items-start justify-between gap-2">
                 <div className="min-w-0">
@@ -390,7 +387,7 @@ const ListBooks = () => {
                   <h2 id="titulo-seleccionar-biblias" className="text-lg font-bold leading-tight sm:text-xl">
                     {t("SeleccionarBiblias")}
                   </h2>
-                  <p className="mt-0.5 text-xs text-gray-600 dark:text-gray-400">
+                  <p className="mt-0.5 text-xs text-tinta-2">
                     {t("BibliasSeleccionadasContador", { n: selectedBooks.length, max: MAX_SELECTIONS })}
                   </p>
                 </div>
@@ -402,7 +399,7 @@ const ListBooks = () => {
                     aria-expanded={infoAbierta}
                     aria-label={t("Ayuda")}
                     className={`grid h-10 w-10 place-items-center rounded-full ${
-                      infoAbierta ? "bg-gray-200 dark:bg-neutral-800" : ""
+                      infoAbierta ? "bg-superficie-2" : ""
                     }`}
                   >
                     <svg
@@ -425,7 +422,7 @@ const ListBooks = () => {
                     type="button"
                     onClick={closeModal}
                     aria-label={t("Cerrar")}
-                    className="grid h-10 w-10 place-items-center rounded-full hover:bg-gray-100 dark:hover:bg-neutral-800"
+                    className="grid h-10 w-10 place-items-center rounded-full hover:bg-tinta/5"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -452,7 +449,7 @@ const ListBooks = () => {
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                  className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-tinta-3"
                   aria-hidden="true"
                 >
                   <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
@@ -463,7 +460,7 @@ const ListBooks = () => {
                   inputMode="search"
                   placeholder={t("BuscarLibros")}
                   aria-label={t("BuscarLibros")}
-                  className="h-11 w-full rounded-xl border border-gray-300 bg-gray-50 pl-10 pr-10 text-sm outline-none focus:border-[#693BCC] focus:ring-2 focus:ring-[#693BCC]/30 dark:border-neutral-700 dark:bg-neutral-900 dark:text-white"
+                  className="h-11 w-full rounded-xl border border-linea-fuerte bg-superficie-2 pl-10 pr-10 text-sm outline-none focus:border-acento focus:ring-2 focus:ring-acento/30"
                   value={searchTerm}
                   onChange={(evento) => setSearchTerm(evento.target.value)}
                 />
@@ -472,7 +469,7 @@ const ListBooks = () => {
                     type="button"
                     onClick={() => setSearchTerm("")}
                     aria-label={t("LimpiarBusqueda")}
-                    className="absolute right-1.5 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-gray-500 hover:bg-gray-200 dark:hover:bg-neutral-800"
+                    className="absolute right-1.5 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full text-tinta-3 hover:bg-tinta/10"
                   >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -502,7 +499,7 @@ const ListBooks = () => {
                   </button>
                 ))}
 
-                <span aria-hidden="true" className="h-6 w-px shrink-0 bg-gray-300 dark:bg-neutral-700" />
+                <span aria-hidden="true" className="h-6 w-px shrink-0 bg-linea-fuerte" />
 
                 <button type="button" className={claseAccion} onClick={() => setSelectedBooks([])}>
                   {t("DesmarcarTodo")}
@@ -518,15 +515,15 @@ const ListBooks = () => {
 
               {/* SUB-FILTROS DE RECOMENDADAS Y SELECCIÓN RÁPIDA POR TIPO */}
               {filtro === "recomendadas" && (
-                <div className="mt-2.5 pt-2.5 border-t border-gray-100 dark:border-neutral-800/80">
+                <div className="mt-2.5 pt-2.5 border-t border-linea">
                   <div className="-mx-4 flex items-center gap-1.5 overflow-x-auto px-4 pb-1 no-scrollbar">
                     <button
                       type="button"
                       onClick={() => setSubFiltroRecomendada("todas")}
                       className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-semibold transition ${
                         subFiltroRecomendada === "todas"
-                          ? "bg-blue-600 text-white shadow-xs"
-                          : "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
+                          ? "bg-acento-solido text-white shadow-xs"
+                          : "bg-superficie-2 text-tinta-2 hover:bg-tinta/10"
                       }`}
                     >
                       🌟 {t("TodasLasRecomendadas")} ({RECOMENDADAS.length})
@@ -541,8 +538,8 @@ const ListBooks = () => {
                           onClick={() => setSubFiltroRecomendada(cat.id)}
                           className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition flex items-center gap-1 ${
                             activo
-                              ? "bg-blue-600 text-white font-semibold shadow-xs"
-                              : "bg-gray-100 text-gray-700 dark:bg-neutral-800 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-neutral-700"
+                              ? "bg-acento-solido text-white font-semibold shadow-xs"
+                              : "bg-superficie-2 text-tinta-2 hover:bg-tinta/10"
                           }`}
                         >
                           <span>{cat.icono}</span>
@@ -568,8 +565,8 @@ const ListBooks = () => {
                     };
 
                     return (
-                      <div className="mt-2 flex items-center justify-between gap-2 bg-blue-50/80 dark:bg-blue-950/40 border border-blue-100 dark:border-blue-900/40 rounded-xl px-3 py-1.5">
-                        <p className="text-[11px] text-blue-900 dark:text-blue-200 leading-snug line-clamp-1">
+                      <div className="mt-2 flex items-center justify-between gap-2 rounded-xl bg-acento-suave px-3 py-1.5">
+                        <p className="line-clamp-1 text-[11px] leading-snug text-tinta-2">
                           {catActiva ? t(catActiva.descripcionKey) : t("Desc_todas")}
                         </p>
                         <button
@@ -577,8 +574,8 @@ const ListBooks = () => {
                           onClick={toggleGrupo}
                           className={`shrink-0 text-xs px-2.5 py-1 rounded-lg font-semibold transition ${
                             todasSeleccionadas
-                              ? "bg-green-600 text-white hover:bg-green-700"
-                              : "bg-blue-600 text-white hover:bg-blue-700 shadow-xs"
+                              ? "bg-superficie text-tinta-2 hover:bg-tinta/5"
+                              : "bg-acento-solido text-white hover:bg-acento-solido/90 shadow-xs"
                           }`}
                         >
                           {todasSeleccionadas ? t("QuitarGrupo") : `+ ${t("SeleccionarGrupo")} (${listaRutas.length})`}
@@ -590,7 +587,7 @@ const ListBooks = () => {
               )}
 
               {aviso && (
-                <p role="status" className="mt-2 rounded-lg bg-red-100 px-3 py-2 text-xs font-medium text-red-800 dark:bg-red-950 dark:text-red-200">
+                <p role="status" className="mt-2 rounded-lg bg-red-500/10 px-3 py-2 text-xs font-medium text-red-700 dark:text-red-300">
                   {aviso}
                 </p>
               )}
@@ -598,26 +595,26 @@ const ListBooks = () => {
 
             {/* AYUDA Y PRESETS DE ESTUDIO */}
             {infoAbierta && (
-              <div className="max-h-[50%] shrink-0 overflow-y-auto border-b border-gray-200 bg-gray-50 px-4 py-3 dark:border-neutral-800 dark:bg-neutral-900 space-y-4">
+              <div className="max-h-[50%] shrink-0 overflow-y-auto border-b border-linea bg-superficie-2 px-4 py-3 space-y-4">
                 <div>
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100">{t("ANSignificado")}</h3>
+                  <h3 className="text-sm font-bold text-tinta">{t("ANSignificado")}</h3>
                   <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2">
-                    <span className="rounded bg-red-600 px-2 py-1 text-xs font-bold text-white">{t("AntiguoTestamentoInicial")}</span>
-                    <span className="text-sm text-gray-800 dark:text-gray-200">{t("AntiguoTestamento")}</span>
-                    <span className="rounded bg-blue-600 px-2 py-1 text-xs font-bold text-white">{t("NuevoTestamentoInicial")}</span>
-                    <span className="text-sm text-gray-800 dark:text-gray-200">{t("NuevoTestamento")}</span>
+                    <span className="grid h-5 w-5 place-items-center rounded bg-tinta/10 text-xs font-semibold text-tinta-2">{t("AntiguoTestamentoInicial")}</span>
+                    <span className="text-sm text-tinta">{t("AntiguoTestamento")}</span>
+                    <span className="grid h-5 w-5 place-items-center rounded bg-tinta/10 text-xs font-semibold text-tinta-2">{t("NuevoTestamentoInicial")}</span>
+                    <span className="text-sm text-tinta">{t("NuevoTestamento")}</span>
                   </div>
-                  <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">{t("ANExplicacion")}</p>
+                  <p className="mt-2 text-xs text-tinta-2">{t("ANExplicacion")}</p>
                 </div>
 
-                <div className="pt-2 border-t border-gray-200 dark:border-neutral-800">
+                <div className="pt-2 border-t border-linea">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div>
-                      <h3 className="text-sm font-bold text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
+                      <h3 className="text-sm font-bold text-tinta flex items-center gap-1.5">
                         <span>✨</span>
                         <span>{t("PresetsEstudio")}</span>
                       </h3>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">
+                      <p className="text-xs text-tinta-3">
                         {t("GuiasEstudio")}
                       </p>
                     </div>
@@ -630,15 +627,15 @@ const ListBooks = () => {
                       return (
                         <div
                           key={cat.id}
-                          className="p-3 rounded-xl border border-gray-200 dark:border-neutral-700/80 bg-white dark:bg-neutral-800/80 shadow-xs space-y-2.5"
+                          className="p-3 rounded-xl border border-linea bg-superficie shadow-xs space-y-2.5"
                         >
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
-                              <h4 className="font-bold text-xs sm:text-sm text-gray-900 dark:text-gray-100 flex items-center gap-1.5">
+                              <h4 className="font-bold text-xs sm:text-sm text-tinta flex items-center gap-1.5">
                                 <span>{cat.icono}</span>
                                 <span>{t(cat.tituloKey)}</span>
                               </h4>
-                              <p className="text-[11px] text-gray-600 dark:text-gray-300 mt-0.5 leading-relaxed">
+                              <p className="text-[11px] text-tinta-2 mt-0.5 leading-relaxed">
                                 {t(cat.descripcionKey)}
                               </p>
                             </div>
@@ -647,8 +644,8 @@ const ListBooks = () => {
                               onClick={() => anadirSeleccion(cat.versiones.map((v) => v.ruta))}
                               className={`shrink-0 text-xs px-2.5 py-1 rounded-lg font-medium transition self-start sm:self-center ${
                                 todasSeleccionadas
-                                  ? "bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-300 border border-green-300 dark:border-green-800"
-                                  : "bg-blue-600 hover:bg-blue-700 text-white shadow-xs"
+                                  ? "border border-linea bg-superficie-2 text-tinta-2"
+                                  : "bg-acento-solido hover:bg-acento-solido/90 text-white shadow-xs"
                               }`}
                             >
                               {todasSeleccionadas ? `✓ ${t("PresetActivo")}` : t("AplicarPreset")}
@@ -667,8 +664,8 @@ const ListBooks = () => {
                                   title={`${ver.titulo} — ${t(ver.tagKey)}`}
                                   className={`text-[11px] px-2.5 py-1 rounded-lg border transition text-left flex items-center gap-1.5 ${
                                     activa
-                                      ? "border-green-500 bg-green-50 text-green-900 dark:border-green-600 dark:bg-green-950/70 dark:text-green-200 font-semibold"
-                                      : "border-gray-200 bg-gray-50 text-gray-700 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-300 hover:border-gray-400 dark:hover:border-neutral-500"
+                                      ? "border-acento/40 bg-acento-suave font-medium text-acento"
+                                      : "border-linea bg-superficie-2 text-tinta-2 hover:border-linea-fuerte"
                                   }`}
                                 >
                                   <span>{activa ? "✓" : "+"}</span>
@@ -693,7 +690,7 @@ const ListBooks = () => {
               pone ahora el propio título con su `py`.
             */}
             <div className="flex-1 overflow-y-auto overscroll-contain px-4 pb-2 no-scrollbar">
-              {totalVisible === 0 && <p className="py-10 text-center text-sm text-gray-600 dark:text-gray-400">{t("NoResultados")}</p>}
+              {totalVisible === 0 && <p className="py-10 text-center text-sm text-tinta-2">{t("NoResultados")}</p>}
 
               {secciones.map(({ idioma, nombre, libros }) => {
                 const abierta = estaAbierta(idioma);
@@ -723,7 +720,7 @@ const ListBooks = () => {
                       la banda llegue de lado a lado; sin eso quedaban dos
                       columnas de 16 px por donde asomaba la lista.
                     */}
-                    <h3 className="sticky top-0 z-10 -mx-4 bg-white px-4 dark:bg-neutral-950">
+                    <h3 className="sticky top-0 z-10 -mx-4 bg-superficie px-4">
                       <button
                         type="button"
                         onClick={() => alternarSeccion(idioma)}
@@ -732,7 +729,7 @@ const ListBooks = () => {
                       >
                         <Chevron abierta={abierta} />
                         <span className="flex-1 text-sm font-bold uppercase tracking-wide">{nombre}</span>
-                        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-xs font-semibold text-gray-700 dark:bg-neutral-800 dark:text-gray-300">
+                        <span className="rounded-full bg-superficie-2 px-2 py-0.5 text-xs font-semibold text-tinta-2">
                           {libros.length}
                         </span>
                       </button>
@@ -751,8 +748,8 @@ const ListBooks = () => {
                               <div
                                 className={`flex items-stretch overflow-hidden rounded-xl border ${
                                   seleccionada
-                                    ? "border-green-500 bg-green-100 dark:border-green-700 dark:bg-green-900/40"
-                                    : "border-gray-200 bg-gray-50 dark:border-neutral-800 dark:bg-neutral-900"
+                                    ? "border-acento/40 bg-acento-suave"
+                                    : "border-linea bg-superficie-2"
                                 }`}
                               >
                                 <button
@@ -764,7 +761,7 @@ const ListBooks = () => {
                                   <span
                                     aria-hidden="true"
                                     className={`grid h-5 w-5 shrink-0 place-items-center rounded border ${
-                                      seleccionada ? "border-green-600 bg-green-600 text-white" : "border-gray-400"
+                                      seleccionada ? "border-acento-solido bg-acento-solido text-white" : "border-linea-fuerte"
                                     }`}
                                   >
                                     {seleccionada && (
@@ -788,7 +785,7 @@ const ListBooks = () => {
                                         {recInfo && (
                                           <span
                                             title={t(recInfo.categoriaKey)}
-                                            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-blue-100 text-blue-900 dark:bg-blue-950/90 dark:text-blue-300 px-2 py-0.5 text-[10px] font-medium"
+                                            className="inline-flex items-center gap-1 whitespace-nowrap rounded-full bg-acento-suave px-2 py-0.5 text-[10px] font-medium text-acento"
                                           >
                                             <span>{recInfo.icono}</span>
                                             <span>{t(recInfo.tagKey)}</span>
@@ -819,11 +816,11 @@ const ListBooks = () => {
                                   onClick={() => handleFavoriteToggle(libro.ruta)}
                                   aria-pressed={favorita}
                                   aria-label={`${t("Favorita")}: ${titulo}`}
-                                  className="grid w-12 shrink-0 place-items-center border-l border-black/5 dark:border-white/10"
+                                  className="grid w-12 shrink-0 place-items-center border-l border-linea"
                                 >
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
-                                    className={`h-6 w-6 ${favorita ? "text-yellow-500" : "text-gray-400"}`}
+                                    className={`h-5 w-5 ${favorita ? "text-amber-400" : "text-linea-fuerte"}`}
                                     fill="currentColor"
                                     viewBox="0 0 24 24"
                                     aria-hidden="true"
@@ -847,18 +844,18 @@ const ListBooks = () => {
             </div>
 
             {/* PIE */}
-            <div className="shrink-0 border-t border-gray-200 bg-white px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] dark:border-neutral-800 dark:bg-neutral-950">
+            <div className="shrink-0 border-t border-linea bg-superficie px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
               <div className="flex gap-2">
                 <button
                   type="button"
-                  className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-xl border border-gray-300 px-3 text-sm font-medium text-gray-700 dark:border-neutral-700 dark:text-gray-200"
+                  className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-xl border border-linea-fuerte px-3 text-sm font-medium text-tinta-2"
                   onClick={closeModal}
                 >
                   {t("Cancelar")}
                 </button>
                 <button
                   type="button"
-                  className="flex min-h-11 flex-[2] items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-3 text-sm font-semibold text-white disabled:opacity-50"
+                  className="flex min-h-11 flex-[2] items-center justify-center gap-1.5 rounded-xl bg-acento-solido px-3 text-sm font-semibold text-white disabled:opacity-50"
                   onClick={handleConfirm}
                   disabled={selectedBooks.length === 0}
                 >

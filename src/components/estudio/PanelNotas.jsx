@@ -58,7 +58,7 @@ const PanelNotas = ({ bookId, capitulo, versiculo, referencia }) => {
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{referencia}</p>
+      <p className="text-xs font-semibold uppercase tracking-wide text-tinta-3">{referencia}</p>
 
       {/* El color va primero: es de un toque y no hace falta escribir nada.
           Lo lento —redactar la nota— queda debajo. */}
@@ -72,7 +72,7 @@ const PanelNotas = ({ bookId, capitulo, versiculo, referencia }) => {
             aria-label={t(`Color_${color}`)}
             aria-pressed={colorActual === color}
             className={`h-8 w-8 rounded-full transition-transform hover:scale-110 ${PUNTOS_COLOR[color]} ${
-              colorActual === color ? "ring-2 ring-neutral-900 ring-offset-2 dark:ring-white dark:ring-offset-[#161519]" : ""
+              colorActual === color ? "ring-2 ring-tinta ring-offset-2 ring-offset-superficie" : ""
             }`}
           ></button>
         ))}
@@ -80,7 +80,7 @@ const PanelNotas = ({ bookId, capitulo, versiculo, referencia }) => {
           <button
             type="button"
             onClick={() => quitarResaltado(bookId, capitulo, versiculo)}
-            className="rounded-lg px-2 py-1.5 text-xs font-medium text-neutral-600 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10"
+            className="rounded-lg px-2 py-1.5 text-xs font-medium text-tinta-2 hover:bg-tinta/5"
           >
             {t("ResaltarQuitar")}
           </button>
@@ -103,16 +103,16 @@ const PanelNotas = ({ bookId, capitulo, versiculo, referencia }) => {
           rows={3}
           maxLength={4000}
           placeholder={t("NotasPlaceholder")}
-          className="w-full resize-y rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 outline-none focus:border-amber-500 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-purple-400"
+          className="w-full resize-y rounded-lg border border-linea-fuerte bg-superficie px-3 py-2 text-sm text-tinta outline-none focus:border-acento"
         />
         <div className="flex items-center justify-between gap-2">
-          <span className="text-[11px] text-neutral-400">{t("NotasAtajoGuardar")}</span>
+          <span className="text-[11px] text-tinta-3">{t("NotasAtajoGuardar")}</span>
           <div className="flex gap-2">
             {editando && (
               <button
                 type="button"
                 onClick={() => escribir("", null)}
-                className="rounded-lg px-3 py-1.5 text-xs font-medium text-neutral-600 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10"
+                className="rounded-lg px-3 py-1.5 text-xs font-medium text-tinta-2 hover:bg-tinta/5"
               >
                 {t("Cancelar")}
               </button>
@@ -121,7 +121,7 @@ const PanelNotas = ({ bookId, capitulo, versiculo, referencia }) => {
               type="button"
               onClick={guardar}
               disabled={!borrador.trim()}
-              className="rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-amber-600 disabled:opacity-40 dark:bg-purple-600 dark:hover:bg-purple-700"
+              className="rounded-lg bg-acento-solido px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-acento-solido/90 disabled:opacity-40"
             >
               {editando ? t("NotasActualizar") : t("NotasGuardar")}
             </button>
@@ -132,15 +132,15 @@ const PanelNotas = ({ bookId, capitulo, versiculo, referencia }) => {
       {notas.length > 0 && (
         <ul className="flex flex-col gap-2">
           {notas.map((nota) => (
-            <li key={nota.id} className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 dark:border-neutral-800 dark:bg-neutral-900/60">
-              <p className="whitespace-pre-wrap break-words text-sm text-neutral-800 dark:text-neutral-200">{nota.texto}</p>
+            <li key={nota.id} className="rounded-lg border border-linea bg-superficie-2 px-3 py-2">
+              <p className="whitespace-pre-wrap break-words text-sm text-tinta">{nota.texto}</p>
               <div className="mt-2 flex items-center justify-between gap-2">
-                <span className="text-[11px] text-neutral-400">{(nota.editadoEn ?? nota.creadoEn ?? "").slice(0, 10)}</span>
+                <span className="text-[11px] text-tinta-3">{(nota.editadoEn ?? nota.creadoEn ?? "").slice(0, 10)}</span>
                 <div className="flex gap-1">
                   <button
                     type="button"
                     onClick={() => empezarEdicion(nota)}
-                    className="rounded px-2 py-1 text-[11px] font-medium text-neutral-600 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10"
+                    className="rounded px-2 py-1 text-[11px] font-medium text-tinta-2 hover:bg-tinta/5"
                   >
                     {t("NotasEditar")}
                   </button>

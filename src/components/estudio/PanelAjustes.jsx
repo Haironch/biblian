@@ -45,15 +45,15 @@ const PanelAjustes = () => {
 
   const opcion = (activo) =>
     `flex-1 rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors ${
-      activo ? "bg-amber-500 text-white dark:bg-purple-600" : "bg-black/5 text-neutral-700 hover:bg-black/10 dark:bg-white/10 dark:text-neutral-200 dark:hover:bg-white/20"
+      activo ? "bg-acento-solido text-white" : "bg-tinta/5 text-tinta-2 hover:bg-tinta/10"
     }`;
 
   const paso =
-    "grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-black/5 text-neutral-700 transition-colors hover:bg-black/10 disabled:opacity-40 dark:bg-white/10 dark:text-neutral-200 dark:hover:bg-white/20";
+    "grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-tinta/5 text-tinta-2 transition-colors hover:bg-tinta/10 disabled:opacity-40";
 
   const grupo = (titulo, contenido) => (
     <div className="flex flex-col gap-1.5">
-      <span className="text-[11px] font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">{titulo}</span>
+      <span className="text-[11px] font-semibold uppercase tracking-wide text-tinta-3">{titulo}</span>
       {contenido}
     </div>
   );
@@ -73,7 +73,7 @@ const PanelAjustes = () => {
             {Array.from({ length: TAMANOS_TEXTO_MAX }, (_, i) => (
               <span
                 key={i}
-                className={`h-1.5 flex-1 rounded-full ${i < Number(tamanoTexto) ? "bg-amber-500 dark:bg-purple-500" : "bg-black/10 dark:bg-white/15"}`}
+                className={`h-1.5 flex-1 rounded-full ${i < Number(tamanoTexto) ? "bg-acento-solido" : "bg-tinta/10"}`}
               ></span>
             ))}
           </div>
@@ -116,8 +116,8 @@ const PanelAjustes = () => {
         t("MostrarEnElTexto"),
         <div className="flex flex-col gap-1.5">
           {["glosa", "morfologia"].map((tipo) => (
-            <label key={tipo} className="flex cursor-pointer items-center justify-between gap-3 rounded-lg bg-black/5 px-3 py-2 dark:bg-white/10">
-              <span className="text-xs font-medium text-neutral-800 dark:text-neutral-200">{t(tipo === "glosa" ? "Glosa" : "Morfologia")}</span>
+            <label key={tipo} className="flex cursor-pointer items-center justify-between gap-3 rounded-lg bg-tinta/5 px-3 py-2">
+              <span className="text-xs font-medium text-tinta">{t(tipo === "glosa" ? "Glosa" : "Morfologia")}</span>
               <input type="checkbox" checked={Boolean(marcadoGlobal[tipo])} onChange={() => alternarMarcadoGlobal(tipo)} className="peer sr-only" />
               {/*
                 La bolita es un `::after` del propio riel y no un elemento
@@ -125,17 +125,17 @@ const PanelAjustes = () => {
                 que solo alcanza a HERMANOS del input. Un span anidado dentro
                 del riel no es hermano y se quedaría quieto al marcar.
               */}
-              <div className="relative h-5 w-9 shrink-0 rounded-full bg-neutral-300 transition-colors after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-white after:transition-transform after:content-[''] peer-checked:bg-amber-500 peer-checked:after:translate-x-4 dark:bg-neutral-600 dark:peer-checked:bg-purple-500"></div>
+              <div className="relative h-5 w-9 shrink-0 rounded-full bg-linea-fuerte transition-colors after:absolute after:left-0.5 after:top-0.5 after:h-4 after:w-4 after:rounded-full after:bg-superficie after:transition-transform after:content-[''] peer-checked:bg-acento-solido peer-checked:after:translate-x-4"></div>
             </label>
           ))}
 
-          <p className="text-[11px] text-neutral-500 dark:text-neutral-400">{t("AjustesMarcadoAyuda")}</p>
+          <p className="text-[11px] text-tinta-3">{t("AjustesMarcadoAyuda")}</p>
 
           {versionesConMarcadoPropio > 0 && (
             <button
               type="button"
               onClick={restablecerMarcado}
-              className="self-start rounded-lg px-2 py-1 text-[11px] font-semibold text-amber-700 transition-colors hover:bg-amber-100 dark:text-purple-300 dark:hover:bg-purple-900/40"
+              className="self-start rounded-lg px-2 py-1 text-[11px] font-semibold text-acento transition-colors hover:bg-acento-suave"
             >
               {t("AjustesRestablecerMarcado", { total: versionesConMarcadoPropio })}
             </button>

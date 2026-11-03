@@ -116,30 +116,30 @@ const Atlas = () => {
   const ficha = (activo) =>
     `shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold transition-colors ${
       activo
-        ? "bg-amber-500 text-white dark:bg-purple-600"
-        : "bg-black/5 text-neutral-700 hover:bg-black/10 dark:bg-white/10 dark:text-neutral-200 dark:hover:bg-white/20"
+        ? "bg-acento-solido text-white"
+        : "bg-tinta/5 text-tinta-2 hover:bg-tinta/10"
     }`;
 
   const pestanaClase = (activa) =>
     `flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
       activa
-        ? "bg-white text-neutral-900 shadow-sm dark:bg-neutral-800 dark:text-white"
-        : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200"
+        ? "bg-superficie text-tinta shadow-sm"
+        : "text-tinta-3 hover:text-tinta"
     }`;
 
   const botonMapa =
-    "grid h-9 w-9 place-items-center rounded-lg border border-black/10 bg-white/90 text-neutral-700 shadow-sm backdrop-blur transition-colors hover:bg-white disabled:opacity-40 dark:border-white/10 dark:bg-neutral-900/90 dark:text-neutral-200 dark:hover:bg-neutral-900";
+    "grid h-9 w-9 place-items-center rounded-lg border border-linea bg-superficie/90 text-tinta-2 shadow-sm backdrop-blur transition-colors hover:bg-superficie disabled:opacity-40";
 
   const lugarActivo = seleccionado ? porId.get(seleccionado) : null;
 
   return (
-    <div className="mx-auto w-11/12 max-w-5xl pb-16 dark:text-white">
+    <div className="mx-auto w-11/12 max-w-5xl pb-16">
       <h1 className="animate-fade-in mt-6 text-center text-xl font-bold">{t("AtlasTitulo")}</h1>
-      <p className="mx-auto mt-1.5 max-w-xl text-center text-xs text-neutral-600 dark:text-neutral-400">{t("AtlasIntro")}</p>
+      <p className="mx-auto mt-1.5 max-w-xl text-center text-xs text-tinta-2">{t("AtlasIntro")}</p>
 
       {/* Las pestañas van arriba del todo: así se ve desde el principio que hay
           dos vistas, y no una página que no se acaba. */}
-      <div role="tablist" className="mx-auto mt-4 flex max-w-sm gap-1 rounded-xl bg-black/5 p-1 dark:bg-white/10">
+      <div role="tablist" className="mx-auto mt-4 flex max-w-sm gap-1 rounded-xl bg-tinta/5 p-1">
         <button type="button" role="tab" aria-selected={pestana === "mapa"} onClick={() => setPestana("mapa")} className={pestanaClase(pestana === "mapa")}>
           {t("AtlasPestanaMapa")}
         </button>
@@ -192,7 +192,7 @@ const Atlas = () => {
                 className={`shrink-0 whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                   itinerario === ruta.id
                     ? "border-sky-500 bg-sky-500 text-white"
-                    : "border-neutral-300 text-neutral-600 hover:bg-black/5 dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-white/10"
+                    : "border-linea-fuerte text-tinta-2 hover:bg-tinta/5"
                 }`}
               >
                 {nombreDe(ruta)}
@@ -200,7 +200,7 @@ const Atlas = () => {
             ))}
           </div>
 
-          <div className="relative mt-3 overflow-hidden rounded-2xl border border-neutral-200 dark:border-neutral-800">
+          <div className="relative mt-3 overflow-hidden rounded-2xl border border-linea">
             {/*
               `touch-none` es obligatorio: sin él, el navegador se queda el
               gesto para desplazar la página y el arrastre del mapa nunca llega.
@@ -223,7 +223,7 @@ const Atlas = () => {
               */}
               <path d={LAGOS} className="fill-[#cfe3ee] dark:fill-[#0b1a26]" />
 
-              <g stroke="currentColor" className="text-neutral-400 dark:text-neutral-600" strokeWidth={escala} opacity="0.3">
+              <g stroke="currentColor" className="text-tinta-3" strokeWidth={escala} opacity="0.3">
                 {Array.from({ length: Math.floor((VISTA.lonMax - VISTA.lonMin) / 5) + 1 }, (_, i) => {
                   const lon = VISTA.lonMin + i * 5;
                   const { x } = proyectar({ lat: 0, lon });
@@ -325,7 +325,7 @@ const Atlas = () => {
 
           {/* Leyenda y aviso en letra pequeña: son datos de servicio y no deben
               competir con el mapa por la atención. */}
-          <div className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-neutral-500 dark:text-neutral-400">
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-tinta-3">
             {Object.entries(COLOR_TIPO).map(([tipo, color]) => (
               <span key={tipo} className="flex items-center gap-1">
                 <span className="h-2 w-2 rounded-full" style={{ backgroundColor: color }}></span>
@@ -333,21 +333,21 @@ const Atlas = () => {
               </span>
             ))}
           </div>
-          <p className="mt-1.5 text-center text-[11px] text-neutral-500 dark:text-neutral-400">{t("AtlasNotaMapa")}</p>
+          <p className="mt-1.5 text-center text-[11px] text-tinta-3">{t("AtlasNotaMapa")}</p>
 
           {lugarActivo && (
-            <div className="animate-fade-in mx-auto mt-3 max-w-md rounded-xl border border-neutral-200 bg-white p-3 text-center dark:border-neutral-800 dark:bg-neutral-900">
+            <div className="animate-fade-in mx-auto mt-3 max-w-md rounded-xl border border-linea bg-superficie p-3 text-center">
               <p className="text-sm font-bold">{nombreDe(lugarActivo)}</p>
-              <p className="text-xs text-neutral-500 dark:text-neutral-400">
+              <p className="text-xs text-tinta-3">
                 {lugarActivo.lat.toFixed(3)}°, {lugarActivo.lon.toFixed(3)}°
               </p>
-              {lugarActivo.incierto && <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">{t("AtlasUbicacionIncierta")}</p>}
+              {lugarActivo.incierto && <p className="mt-1 text-xs text-acento">{t("AtlasUbicacionIncierta")}</p>}
             </div>
           )}
         </>
       ) : (
         <>
-          <p className="mx-auto mt-3 max-w-xl text-center text-[11px] text-neutral-500 dark:text-neutral-400">{t("AtlasNotaFechas")}</p>
+          <p className="mx-auto mt-3 max-w-xl text-center text-[11px] text-tinta-3">{t("AtlasNotaFechas")}</p>
 
           <ol className="mx-auto mt-4 flex max-w-2xl flex-col">
             {eventosVisibles.map((evento) => (
@@ -359,19 +359,19 @@ const Atlas = () => {
                   etiqueta encima del texto.
                 */}
                 <div className="hidden w-24 shrink-0 justify-end pt-0.5 sm:flex">
-                  <span className="text-xs font-bold tabular-nums text-neutral-700 dark:text-neutral-200">
+                  <span className="text-xs font-bold tabular-nums text-tinta-2">
                     {evento.aproximada ? "c. " : ""}
                     {formatearAnio(evento.anio, idioma)}
                   </span>
                 </div>
 
                 <div className="relative flex w-4 shrink-0 justify-center">
-                  <span className="absolute inset-y-0 w-px bg-neutral-300 dark:bg-neutral-700"></span>
-                  <span className="relative mt-1.5 h-2.5 w-2.5 rounded-full bg-amber-500 ring-2 ring-white dark:bg-purple-400 dark:ring-[#161519]"></span>
+                  <span className="absolute inset-y-0 w-px bg-linea-fuerte"></span>
+                  <span className="relative mt-1.5 h-2.5 w-2.5 rounded-full bg-acento-solido ring-2 ring-superficie"></span>
                 </div>
 
                 <div className="min-w-0 flex-1 pb-5">
-                  <span className="mb-0.5 block text-[11px] font-bold tabular-nums text-amber-700 dark:text-purple-300 sm:hidden">
+                  <span className="mb-0.5 block text-[11px] font-bold tabular-nums text-acento sm:hidden">
                     {evento.aproximada ? "c. " : ""}
                     {formatearAnio(evento.anio, idioma)}
                   </span>
@@ -383,7 +383,7 @@ const Atlas = () => {
                           key={ref}
                           type="button"
                           onClick={() => irAReferencia(ref)}
-                          className="rounded bg-black/5 px-1.5 py-0.5 text-[11px] font-medium text-amber-700 transition-colors hover:bg-amber-100 dark:bg-white/10 dark:text-purple-300 dark:hover:bg-purple-900/50"
+                          className="rounded bg-tinta/5 px-1.5 py-0.5 text-[11px] font-medium text-acento transition-colors hover:bg-acento-suave"
                         >
                           {ref}
                         </button>

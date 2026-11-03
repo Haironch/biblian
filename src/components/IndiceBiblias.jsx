@@ -282,7 +282,7 @@ const IndiceBiblias = () => {
         El desplazamiento lateral acompaña al desvanecido: entra desde el borde,
         que es de donde viene.
       */
-      className={`fixed right-3 top-1/2 z-30 flex -translate-y-1/2 touch-none select-none items-center rounded-full border border-black/10 bg-white/85 py-2 shadow-lg backdrop-blur transition-[opacity,transform] duration-200 dark:border-white/10 dark:bg-neutral-900/85 sm:hidden ${
+      className={`fixed right-3 top-1/2 z-30 flex -translate-y-1/2 touch-none select-none items-center rounded-full border border-linea bg-superficie/85 py-2 shadow-lg backdrop-blur transition-[opacity,transform] duration-200 sm:hidden ${
         asomado ? "translate-x-0 opacity-100" : "pointer-events-none translate-x-4 opacity-0"
       }`}
     >
@@ -296,7 +296,7 @@ const IndiceBiblias = () => {
           <span key={biblia} aria-hidden="true" className="flex h-6 items-center justify-center">
             <span
               className={`block rounded-full transition-all ${
-                indice === activo ? "h-2.5 w-6 bg-amber-500 dark:bg-purple-400" : "h-1.5 w-4 bg-neutral-400/70 dark:bg-neutral-500/70"
+                indice === activo ? "h-2.5 w-6 bg-acento-solido" : "h-1.5 w-4 bg-tinta-3/60"
               }`}
             ></span>
           </span>

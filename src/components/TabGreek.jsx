@@ -107,10 +107,10 @@ const TabGreek = () => {
 
   return (
     <>
-      <div className="sticky top-[41px] bg-yellow-50 dark:bg-[#1c0330] -mx-4 sm:-mx-5 px-4 sm:px-5 pt-3 pb-3 flex justify-center items-center z-20 mb-3 border-b border-gray-200/60 dark:border-purple-900/40">
-        <div className="relative rounded-lg w-full max-w-sm overflow-hidden before:absolute before:w-12 before:h-12 before:content[''] before:right-0 before:bg-yellow-100 dark:before:bg-yellow-900 before:rounded-full before:blur-lg after:absolute after:-z-10 after:w-20 after:h-20 after:content[''] after:bg-purple-100 dark:after:bg-purple-900 after:right-12 after:top-3 after:rounded-full after:blur-lg">
+      <div className="sticky top-[41px] z-20 -mx-4 mb-3 flex items-center justify-center border-b border-linea bg-superficie px-4 pb-3 pt-1 sm:-mx-5 sm:px-5">
+        <div className="relative w-full max-w-sm">
           <input
-            className="relative bg-transparent ring-0 outline-none border border-yellow-700 dark:border-purple-300 text-neutral-900 dark:text-neutral-100 placeholder-yellow-700 dark:placeholder-violet-300 text-sm rounded-lg focus:ring-yellow-500 dark:focus:ring-purple-500 placeholder-opacity-60 focus:border-yellow-500 dark:focus:border-purple-500 block w-full p-3.5 checked:bg-emerald-500"
+            className="block w-full rounded-lg border border-linea-fuerte bg-superficie-2 p-3 text-sm text-tinta outline-none placeholder:text-tinta-3 focus:border-acento focus:ring-2 focus:ring-acento/20"
             type="text"
             value={searchTerm}
             onChange={handleSearchTermChange}
@@ -126,28 +126,23 @@ const TabGreek = () => {
         <>
           {filteredResults.map((result) => (
             <button
-              className="w-full relative my-[10px] hover:scale-110 sm:hover:scale-105 transition-transform"
+              type="button"
+              className="my-1.5 flex w-full items-center gap-3 rounded-lg border border-linea bg-superficie px-3 py-2.5 text-left transition-colors hover:border-acento/40 hover:bg-acento-suave"
               key={result.id}
               onClick={() => strongFun(result.id)}
             >
-              <div className="relative flex justify-center">
-                <div className="w-full h-[46px] rounded-2xl flex justify-between px-2 items-center bg-slate-100 bg-gradient-to-r from-yellow-300 to-violet-200 dark:bg-gradient-to-r dark:from-yellow-800 dark:to-purple-800">
-                  <span className="text-center w-[50px] font-medium">{result.id}</span>
-                  <span className="w-[70px] min-w-[50px] text-center text-sm pl-1 truncate dark:text-pink-200" title={result.le}>
-                    {result.le}
-                  </span>
-                </div>
-                <div className="absolute flex px-2 items-center top-0 h-[50px] -my-[2px] rounded-2xl mr-[5px] sm:mr-[20px] bg-white border border-neutral-400 dark:border-white dark:bg-[#1c0330] w-[calc(100%-120px)] sm:w-[calc(100%-150px)]">
-                  <span className="flex-1 overflow-hidden text-ellipsis whitespace-nowrap">{result.pl} </span>
-                </div>
-              </div>
+              <span className="w-14 shrink-0 font-mono text-xs font-semibold text-acento">{result.id}</span>
+              <span className="min-w-0 flex-1 truncate text-tinta">{result.pl}</span>
+              <span className="w-20 shrink-0 truncate text-right text-sm text-tinta-3" title={result.le}>
+                {result.le}
+              </span>
             </button>
           ))}
           {filteredResults.length < INITIAL_RESULTS ? null : (
             <div className="flex justify-center m-auto mt-4">
               {showLoadMoreButton && (
                 <button
-                  className="text-center bg-yellow-400 dark:bg-purple-600 px-10 py-2 rounded-xl"
+                  className="rounded-lg bg-acento-solido px-6 py-2 text-center text-sm font-medium text-white transition-colors hover:bg-acento-solido/90 disabled:opacity-60"
                   onClick={handleLoadMore}
                   disabled={isLoading}
                 >

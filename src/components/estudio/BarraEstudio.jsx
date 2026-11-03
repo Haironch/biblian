@@ -206,17 +206,15 @@ const BarraEstudio = () => {
       aria-label={etiqueta}
       aria-expanded={panel === id}
       className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
-        panel === id || activo
-          ? "bg-amber-500 text-white dark:bg-purple-600"
-          : "text-neutral-700 hover:bg-black/10 dark:text-neutral-200 dark:hover:bg-white/10"
+        panel === id || activo ? "bg-acento-suave text-acento" : "text-tinta-2 hover:bg-tinta/5 hover:text-tinta"
       }`}
     >
       <Icono className="h-5 w-5 shrink-0" />
       {/* `truncate` y no un texto más corto: en una pantalla estrecha se
           recorta el final, que sigue siendo más informativo que nada. */}
-      <span className="w-full truncate text-center text-[9px] font-semibold leading-none sm:text-xs">{etiqueta}</span>
+      <span className="w-full truncate text-center text-[10px] font-medium leading-none sm:text-xs">{etiqueta}</span>
       {insignia !== null && insignia > 0 && (
-        <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-sky-500 px-1 text-[10px] font-bold text-white">{insignia}</span>
+        <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-acento-solido px-1 text-[10px] font-semibold text-white">{insignia}</span>
       )}
     </button>
   );
@@ -226,15 +224,20 @@ const BarraEstudio = () => {
       {/*
         Reserva el sitio que la barra ya no ocupa en el flujo.
 
+        Sin `safe-area`: en móvil la barra ya no toca el borde (debajo van las
+        pestañas, que son las que se apartan de la muesca).
+
         La barra era `sticky bottom-0`, y un elemento pegajoso solo se ancla
         cuando HAY algo que desplazar: con una sola versión abierta la página es
         más corta que la pantalla, no hay scroll, y la barra se quedaba flotando
         a media altura. `fixed` la ancla siempre, pero la saca del flujo, así
         que hace falta este hueco para que el último versículo no quede debajo.
       */}
-      <div className="h-[calc(4rem+env(safe-area-inset-bottom))]" aria-hidden="true"></div>
+      <div className="h-16" aria-hidden="true"></div>
 
-      <div ref={contenedorRef} className="fixed inset-x-0 bottom-0 z-20">
+      {/* Se aparta de la lateral y de las pestañas con las variables del
+          esqueleto: `fixed` mide contra la ventana, no contra el contenido. */}
+      <div ref={contenedorRef} className="fixed bottom-pestanas left-lateral right-0 z-20">
       {/*
         En móvil, panel y barra van de borde a borde y sin esquinas
         redondeadas: pegados a los lados se leen como parte de la pantalla. Con
@@ -257,7 +260,7 @@ const BarraEstudio = () => {
       {montado && (
         <div
           hidden={!panel}
-          className={`mx-auto w-full border-t border-neutral-200 bg-white p-4 shadow-lg dark:border-neutral-800 dark:bg-[#161519] sm:w-11/12 sm:max-w-3xl sm:rounded-t-2xl sm:border sm:border-b-0 ${
+          className={`mx-auto w-full border-t border-linea bg-superficie p-4 shadow-xl sm:w-11/12 sm:max-w-3xl sm:rounded-t-2xl sm:border sm:border-b-0 ${
             panel ? "animate-slide-in-bottom" : ""
           }`}
         >
@@ -268,14 +271,14 @@ const BarraEstudio = () => {
               los tres segundos ya no se sabe qué se está mirando. Los demás
               paneles hablan del versículo abierto, que está en la miga de pan.
             */}
-            <h2 className="min-w-0 truncate text-sm font-bold text-neutral-900 dark:text-neutral-100">
+            <h2 className="min-w-0 truncate text-sm font-semibold text-tinta">
               {montado === "referencias" ? t("Panel_referencias_de", { ref: referencia }) : t(`Panel_${montado}`)}
             </h2>
             <button
               type="button"
               onClick={() => setPanel(null)}
               aria-label={t("Cerrar")}
-              className="grid h-8 w-8 place-items-center rounded-lg text-neutral-500 hover:bg-black/5 dark:hover:bg-white/10"
+              className="grid h-8 w-8 place-items-center rounded-lg text-tinta-3 hover:bg-tinta/5 hover:text-tinta"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="h-5 w-5" aria-hidden="true">
                 <path d="M6 6l12 12M18 6L6 18" />
@@ -300,25 +303,18 @@ const BarraEstudio = () => {
       )}
 
       {/*
-        `max(0.5rem, safe-area-inset-bottom)`, igual que el selector 3D y el
-        modal de libros. Ahora que la barra llega al borde, en un iPhone
-        quedaría bajo la raya del gesto de inicio y los botones serían difíciles
-        de tocar. Con `max` y no `calc` el relleno normal NO se suma al de la
-        muesca: donde no hay muesca vale 0.5rem, y donde la hay vale lo que pida
-        el sistema, no las dos cosas.
+        En escritorio es una tarjeta flotante centrada sobre el contenido; en
+        móvil va de borde a borde, apoyada encima de las pestañas.
       */}
-      <div className="mx-auto flex w-full items-center gap-1 border-t border-black/10 bg-[#fbefda] px-2 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] shadow-lg dark:border-white/10 dark:bg-[#20123A] sm:w-11/12 sm:max-w-3xl sm:gap-2 sm:rounded-t-2xl sm:border sm:border-b-0 sm:px-3 sm:pb-2">
+      <div className="mx-auto flex w-full items-center gap-1 border-t border-linea bg-superficie/95 px-2 py-1.5 backdrop-blur sm:w-11/12 sm:max-w-3xl sm:gap-2 sm:rounded-t-2xl sm:border sm:border-b-0 sm:px-3 sm:py-2 sm:shadow-lg">
         {/* La referencia no cabe en móvil junto a seis botones, y ya está en la
             miga de pan de arriba: aquí solo aparece cuando sobra sitio. */}
-        <span className="hidden min-w-0 flex-1 truncate text-xs font-semibold text-neutral-700 dark:text-neutral-200 lg:block">{referencia}</span>
+        <span className="hidden min-w-0 flex-1 truncate text-xs font-medium text-tinta-2 lg:block">{referencia}</span>
 
         {/* `items-stretch` y cada botón con `flex-1`: en móvil los seis se
             reparten el ancho a partes iguales, así que el área de toque no
             depende de lo larga que sea la palabra. */}
         <div className="flex flex-1 items-stretch gap-0.5 lg:flex-none lg:justify-end lg:gap-2">
-          {/* Resaltar y anotar eran dos botones. Son la misma accion —marcar
-              este versiculo— y separarlas obligaba a abrir un panel, cerrarlo y
-              abrir otro para hacer lo normal: resaltar y escribir por que. */}
           {/* Resaltar y anotar eran dos botones. Son la misma accion —marcar
               este versiculo— y separarlas obligaba a abrir un panel, cerrarlo y
               abrir otro para hacer lo normal: resaltar y escribir por que. */}
@@ -336,11 +332,11 @@ const BarraEstudio = () => {
             aria-label={t("DiferenciasTitulo")}
             aria-pressed={modoDiferencias}
             className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0.5 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
-              modoDiferencias ? "bg-amber-500 text-white dark:bg-purple-600" : "text-neutral-700 hover:bg-black/10 dark:text-neutral-200 dark:hover:bg-white/10"
+              modoDiferencias ? "bg-acento-suave text-acento" : "text-tinta-2 hover:bg-tinta/5 hover:text-tinta"
             }`}
           >
             <IconoDiferencias className="h-5 w-5 shrink-0" />
-            <span className="w-full truncate text-center text-[9px] font-semibold leading-none sm:text-xs">{t("DiferenciasTitulo")}</span>
+            <span className="w-full truncate text-center text-[10px] font-medium leading-none sm:text-xs">{t("DiferenciasTitulo")}</span>
           </button>
 
           {boton("exportar", IconoExportar, t("ExportarTitulo"))}

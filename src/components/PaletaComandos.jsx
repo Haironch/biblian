@@ -176,9 +176,9 @@ const PaletaComandos = () => {
       }}
       className="animate-fade-in fixed inset-0 z-50 flex items-start justify-center bg-black/50 px-4 pt-[12vh] backdrop-blur-sm"
     >
-      <div role="dialog" aria-modal="true" aria-label={t("PaletaTitulo")} className="w-full max-w-lg overflow-hidden rounded-2xl border border-black/10 bg-white shadow-2xl dark:border-white/10 dark:bg-[#161519]">
-        <div className="flex items-center gap-2 border-b border-neutral-200 px-4 dark:border-neutral-800">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="h-5 w-5 shrink-0 text-neutral-400" aria-hidden="true">
+      <div role="dialog" aria-modal="true" aria-label={t("PaletaTitulo")} className="w-full max-w-lg overflow-hidden rounded-2xl border border-linea bg-superficie shadow-2xl">
+        <div className="flex items-center gap-2 border-b border-linea px-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.8} stroke="currentColor" className="h-5 w-5 shrink-0 text-tinta-3" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
           <input
@@ -188,14 +188,14 @@ const PaletaComandos = () => {
             onKeyDown={alTeclear}
             placeholder={t("PaletaPlaceholder")}
             aria-label={t("PaletaPlaceholder")}
-            className="w-full bg-transparent py-4 text-base text-neutral-900 outline-none placeholder:text-neutral-400 dark:text-neutral-100"
+            className="w-full bg-transparent py-4 text-base text-tinta outline-none placeholder:text-tinta-3"
           />
-          <kbd className="hidden shrink-0 rounded border border-neutral-300 px-1.5 py-0.5 text-[10px] font-semibold text-neutral-500 dark:border-neutral-700 dark:text-neutral-400 sm:block">ESC</kbd>
+          <kbd className="hidden shrink-0 rounded border border-linea-fuerte px-1.5 py-0.5 text-[10px] font-semibold text-tinta-3 sm:block">ESC</kbd>
         </div>
 
         <ul ref={listaRef} role="listbox" className="max-h-80 overflow-y-auto py-1">
           {opciones.length === 0 ? (
-            <li className="px-4 py-6 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("PaletaSinResultados")}</li>
+            <li className="px-4 py-6 text-center text-sm text-tinta-3">{t("PaletaSinResultados")}</li>
           ) : (
             opciones.map((opcion, i) => (
               <li key={opcion.id} data-indice={i} role="option" aria-selected={i === indice}>
@@ -209,18 +209,18 @@ const PaletaComandos = () => {
                   }}
                   onMouseEnter={() => setIndice(i)}
                   className={`flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors ${
-                    i === indice ? "bg-amber-100 dark:bg-purple-900/60" : "hover:bg-neutral-100 dark:hover:bg-neutral-800/60"
+                    i === indice ? "bg-acento-suave" : "hover:bg-tinta/5"
                   }`}
                 >
-                  <span className="shrink-0 rounded bg-black/5 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-neutral-500 dark:bg-white/10 dark:text-neutral-400">{opcion.tipo}</span>
-                  <span className="truncate text-sm text-neutral-900 dark:text-neutral-100">{opcion.etiqueta}</span>
+                  <span className="shrink-0 rounded bg-tinta/5 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-tinta-3">{opcion.tipo}</span>
+                  <span className="truncate text-sm text-tinta">{opcion.etiqueta}</span>
                 </button>
               </li>
             ))
           )}
         </ul>
 
-        <p className="border-t border-neutral-200 px-4 py-2 text-[11px] text-neutral-500 dark:border-neutral-800 dark:text-neutral-400">{t("PaletaAyuda")}</p>
+        <p className="border-t border-linea px-4 py-2 text-[11px] text-tinta-3">{t("PaletaAyuda")}</p>
       </div>
     </div>
   );

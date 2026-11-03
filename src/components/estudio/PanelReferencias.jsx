@@ -134,25 +134,25 @@ const PanelReferencias = ({ bookId, capitulo, versiculo }) => {
   };
 
   if (!estaDisponible()) {
-    return <p className="py-4 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("ReferenciasNecesitaApi")}</p>;
+    return <p className="py-4 text-center text-sm text-tinta-3">{t("ReferenciasNecesitaApi")}</p>;
   }
 
   if (error) {
-    return <p className="py-4 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("ReferenciasError")}</p>;
+    return <p className="py-4 text-center text-sm text-tinta-3">{t("ReferenciasError")}</p>;
   }
 
   if (refs === null) {
     return (
       <div className="flex flex-col gap-2 py-2" aria-hidden="true">
         {[92, 78, 85].map((ancho, i) => (
-          <div key={i} className="h-3 animate-pulse rounded bg-neutral-200 dark:bg-neutral-700" style={{ width: `${ancho}%` }}></div>
+          <div key={i} className="h-3 animate-pulse rounded bg-superficie-2" style={{ width: `${ancho}%` }}></div>
         ))}
       </div>
     );
   }
 
   if (refs.length === 0) {
-    return <p className="py-4 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("ReferenciasVacio")}</p>;
+    return <p className="py-4 text-center text-sm text-tinta-3">{t("ReferenciasVacio")}</p>;
   }
 
   const visibles = expandido ? refs : refs.slice(0, VISIBLES);
@@ -176,10 +176,10 @@ const PanelReferencias = ({ bookId, capitulo, versiculo }) => {
               <button
                 type="button"
                 onClick={() => irA(ref)}
-                className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-left transition-colors hover:border-amber-400 hover:bg-amber-50 dark:border-neutral-800 dark:hover:border-purple-500 dark:hover:bg-purple-950/30"
+                className="w-full rounded-lg border border-linea px-3 py-2 text-left transition-colors hover:border-acento hover:bg-acento-suave"
               >
-                <span className="text-xs font-semibold text-amber-700 dark:text-purple-300">{etiqueta}</span>
-                {texto && <span className="mt-0.5 block line-clamp-2 text-sm text-neutral-700 dark:text-neutral-300">{aTextoPlano(texto)}</span>}
+                <span className="text-xs font-semibold text-acento">{etiqueta}</span>
+                {texto && <span className="mt-0.5 block line-clamp-2 text-sm text-tinta-2">{aTextoPlano(texto)}</span>}
               </button>
             </li>
           );
@@ -190,7 +190,7 @@ const PanelReferencias = ({ bookId, capitulo, versiculo }) => {
         <button
           type="button"
           onClick={() => setExpandido((previo) => !previo)}
-          className="self-center rounded-lg px-3 py-1.5 text-xs font-medium text-neutral-600 hover:bg-black/5 dark:text-neutral-300 dark:hover:bg-white/10"
+          className="self-center rounded-lg px-3 py-1.5 text-xs font-medium text-tinta-2 hover:bg-tinta/5"
         >
           {expandido ? t("ContraerTodo") : `${t("CargarMas")} (${refs.length - VISIBLES})`}
         </button>

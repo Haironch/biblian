@@ -17,8 +17,8 @@
 .escena-libro {
   --papel: #f7f0e2;
   --papel-borde: #e6d9be;
-  --tinta: #2c2218;
-  --tinta-tenue: #6d604e;
+  --tinta-libro: #2c2218;
+  --tinta-libro-tenue: #6d604e;
   --oro: #a97109;
   --cuero: #4a2418;
   --cuero-alto: #6b3826;
@@ -40,8 +40,8 @@
 :is(.dark) .escena-libro {
   --papel: #1e1b16;
   --papel-borde: #35302a;
-  --tinta: #ddd2bd;
-  --tinta-tenue: #9a8f7c;
+  --tinta-libro: #ddd2bd;
+  --tinta-libro-tenue: #9a8f7c;
   --oro: #d8a33c;
   --cuero: #241611;
   --cuero-alto: #3d2418;
@@ -80,7 +80,7 @@
 /* --- La hoja ----------------------------------------------------------- */
 .hoja {
   background-color: var(--papel);
-  color: var(--tinta);
+  color: var(--tinta-libro);
   overflow: hidden;
   /* El grano del papel. Es una turbulencia SVG en línea, no una imagen: pesa
      ~300 bytes y escala a cualquier tamaño sin pixelarse. */
@@ -115,7 +115,7 @@
 
 /* --- Titulillo y folio -------------------------------------------------
    Convención editorial: libro y capítulo arriba en versalitas, número de
-   página abajo. Ambos en `--tinta-tenue` para que no compitan con el texto. */
+   página abajo. Ambos en `--tinta-libro-tenue` para que no compitan con el texto. */
 .hoja__titulillo {
   display: flex;
   align-items: baseline;
@@ -124,8 +124,8 @@
   font-size: 0.66rem;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--tinta-tenue);
-  border-bottom: 1px solid color-mix(in srgb, var(--tinta-tenue) 25%, transparent);
+  color: var(--tinta-libro-tenue);
+  border-bottom: 1px solid color-mix(in srgb, var(--tinta-libro-tenue) 25%, transparent);
   padding-bottom: 0.5em;
   flex-shrink: 0;
 }
@@ -135,7 +135,7 @@
   padding-top: 0.6em;
   text-align: center;
   font-size: 0.7rem;
-  color: var(--tinta-tenue);
+  color: var(--tinta-libro-tenue);
   flex-shrink: 0;
 }
 

@@ -80,7 +80,7 @@ const ModalStrong = ({ isOpen, onClose, anchorRect }) => {
           ref={modalRef}
           style={{ transformOrigin }}
           onClick={(e) => e.stopPropagation()}
-          className={`pointer-events-auto relative bg-yellow-50 w-[90%] min-w-[200px] sm:min-w-[300px] sm:w-[500px] h-[85%] sm:h-[85%] p-2 rounded-2xl shadow-2xl dark:bg-[#1c0330] dark:text-white overflow-y-scroll overscroll-contain no-scrollbar transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+          className={`pointer-events-auto relative bg-superficie border border-linea w-[90%] min-w-[200px] sm:min-w-[300px] sm:w-[500px] h-[85%] sm:h-[85%] p-2 rounded-2xl shadow-2xl overflow-y-scroll overscroll-contain no-scrollbar transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
             isAnimating
               ? "opacity-100 scale-100 translate-y-0 pointer-events-auto"
               : "opacity-0 scale-[0.08] translate-y-[-10px] pointer-events-none"
@@ -89,7 +89,7 @@ const ModalStrong = ({ isOpen, onClose, anchorRect }) => {
           <div className="absolute top-0 right-0 z-40">
             <button
               onClick={handleCerrarConAnimacion}
-              className="bg-gray-200 text-gray-600 rounded-full w-8 h-8 mt-3 mr-3 flex items-center justify-center hover:bg-gray-300 focus:outline-none focus:ring focus:ring-gray-400 dark:bg-neutral-800 dark:text-gray-300 transition"
+              className="bg-superficie-2 text-tinta-2 rounded-full w-8 h-8 mt-3 mr-3 flex items-center justify-center hover:bg-tinta/10 focus:outline-none focus:ring focus:ring-gray-400 transition"
             >
               &times;
             </button>
@@ -97,11 +97,11 @@ const ModalStrong = ({ isOpen, onClose, anchorRect }) => {
           <div className="min-w-full w-full pl-4 pr-3">
             <div className="mb-3 mt-2">
               <h2 className="text-xl font-bold">{t("DiccionarioStrong")}</h2>
-              <p className="text-xs text-gray-600 dark:text-gray-400">{t("DiccionarioStrongSubtitulo")}</p>
+              <p className="text-xs text-tinta-2">{t("DiccionarioStrongSubtitulo")}</p>
             </div>
             <Tabs />
           </div>
-          <div className="bg-yellow-50 h-6 dark:bg-[#1c0330] dark:text-white sticky ml-4 -bottom-4 w-[92%] sm:w-[95%] sm:ml-[14px] border-1 border-t m-auto border-gray-300 dark:border-gray-600 "></div>
+          <div className="bg-superficie h-6 sticky ml-4 -bottom-4 w-[92%] sm:w-[95%] sm:ml-[14px] border-1 border-t m-auto border-linea-fuerte"></div>
         </div>
       </div>
       {/* OTRO MODAL */}

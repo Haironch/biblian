@@ -1,28 +1,29 @@
+/*
+ * Marcado de las definiciones del diccionario Strong.
+ *
+ * Antes había dos hojas, una clara y otra oscura, pero la oscura no la
+ * importaba nadie: en modo oscuro se veían los colores pensados para fondo
+ * blanco. Ahora van juntas y la oscura cuelga de `.dark`, como el resto del
+ * tema.
+ */
+
+/* Enlace a otro número Strong: la pastilla del acento del tema. */
 .Slink {
-  background: linear-gradient(120deg, #fae100 30%, #ffffff 38%, #ffffff 40%, #fae100 48%);
-  background-size: 200% 100%;
-  background-position: 100% 0;
-  color: black !important;
+  background: rgb(var(--acento-suave));
+  color: rgb(var(--acento)) !important;
   padding: 2px 7px !important;
   border-radius: 7px;
   font-weight: 600;
   margin: 5px 1px;
-  animation: load89234 2s 2;
-}
-
-@keyframes load89234 {
-  100% {
-    background-position: -100% 0;
-  }
 }
 
 [color="%COLOR_PURPLE%"] {
-  color: #b300ff;
+  color: #7e22ce;
   font-weight: 900;
 }
 
 [color="%COLOR_RED%"] {
-  color: #bb00ff;
+  color: #a21caf;
   font-weight: 900;
 }
 
@@ -36,10 +37,36 @@
   font-weight: 900;
 }
 
+/* Naranja y amarillo eran #ffbb00 y #f2ff00: sobre blanco no se leían. */
 [color="%COLOR_ORANGE%"] {
-  color: #ffbb00;
+  color: #b45309;
 }
 
 [color="%COLOR_YELLOW%"] {
-  color: #f2ff00;
+  color: #a16207;
+}
+
+.dark [color="%COLOR_PURPLE%"] {
+  color: #a6b3ff;
+}
+
+.dark [color="%COLOR_RED%"] {
+  color: #9096ff;
+}
+
+.dark [color="%COLOR_BLUE%"] {
+  color: #ff7d7d;
+  font-weight: 700;
+}
+
+.dark [color="%COLOR_GREEN%"] {
+  color: #4ade80;
+}
+
+.dark [color="%COLOR_ORANGE%"] {
+  color: #ffdf87;
+}
+
+.dark [color="%COLOR_YELLOW%"] {
+  color: #f9ff8e;
 }

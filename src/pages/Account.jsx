@@ -119,11 +119,11 @@ IconoOjo.propTypes = { ...propsIcono, abierto: PropTypes.bool };
  */
 const Campo = ({ id, etiqueta, icono: Icono, error, ayuda, children }) => (
   <div>
-    <label htmlFor={id} className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+    <label htmlFor={id} className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-tinta-3">
       {etiqueta}
     </label>
     <div className="relative">
-      <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-neutral-400 dark:text-neutral-500">
+      <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-tinta-3">
         <Icono className="h-[18px] w-[18px]" />
       </span>
       {children}
@@ -136,7 +136,7 @@ const Campo = ({ id, etiqueta, icono: Icono, error, ayuda, children }) => (
         </p>
       ) : (
         ayuda && (
-          <p id={`${id}-ayuda`} className="text-xs text-neutral-500 dark:text-neutral-400">
+          <p id={`${id}-ayuda`} className="text-xs text-tinta-3">
             {ayuda}
           </p>
         )
@@ -156,10 +156,10 @@ Campo.propTypes = {
 
 const Beneficio = ({ texto }) => (
   <li className="flex items-start gap-2.5">
-    <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-[#a97109]/15 text-[#8a5c07] dark:bg-purple-400/20 dark:text-purple-300">
+    <span className="mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded-full bg-acento-suave text-acento">
       <IconoCheck className="h-2.5 w-2.5" />
     </span>
-    <span className="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">{texto}</span>
+    <span className="text-xs leading-relaxed text-tinta-2">{texto}</span>
   </li>
 );
 
@@ -172,11 +172,11 @@ Beneficio.propTypes = { texto: PropTypes.string.isRequired };
  */
 const Cabecera = ({ titulo, subtitulo }) => (
   <div className="mb-6 flex flex-col items-center text-center">
-    <div className="mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-[#FDD07A] shadow-md shadow-[#a97109]/20 dark:bg-[#20123A] dark:shadow-black/40">
+    <div className="mb-3 grid h-14 w-14 place-items-center rounded-2xl bg-acento-solido">
       <img src={LOGO} alt="" className="h-8 w-8" />
     </div>
-    <h1 className="font-['EB_Garamond',_Georgia,_serif] text-2xl font-bold text-neutral-900 dark:text-white">{titulo}</h1>
-    {subtitulo && <p className="mt-1 max-w-[16rem] text-xs leading-relaxed text-neutral-500 dark:text-neutral-400">{subtitulo}</p>}
+    <h1 className="text-2xl font-bold text-tinta">{titulo}</h1>
+    {subtitulo && <p className="mt-1 max-w-[16rem] text-xs leading-relaxed text-tinta-3">{subtitulo}</p>}
   </div>
 );
 
@@ -292,23 +292,23 @@ const Account = () => {
   const pantalla = "animate-fade-in mx-auto flex w-11/12 max-w-md flex-col justify-center px-1 pb-16 pt-8";
 
   const tarjeta =
-    "overflow-hidden rounded-3xl border border-black/5 bg-white/95 shadow-xl shadow-black/5 backdrop-blur-sm dark:border-white/10 dark:bg-neutral-900/95 dark:shadow-black/40";
+    "overflow-hidden rounded-3xl border border-linea bg-superficie/95";
 
   const campo = (conError) =>
     [
-      "w-full rounded-xl border bg-white py-3 pl-11 pr-3 text-sm text-neutral-900 outline-none transition",
-      "placeholder:text-neutral-400 dark:bg-neutral-950 dark:text-white dark:placeholder:text-neutral-500",
+      "w-full rounded-xl border bg-superficie py-3 pl-11 pr-3 text-sm text-tinta outline-none transition",
+      "placeholder:text-tinta-3",
       "focus:ring-4",
       // Deshabilitado tiene que VERSE deshabilitado; si no, el usuario cree que
       // puede escribir mientras la petición está en vuelo.
-      "disabled:cursor-not-allowed disabled:bg-neutral-100 disabled:text-neutral-400 dark:disabled:bg-neutral-800/60",
+      "disabled:cursor-not-allowed disabled:bg-superficie-2 disabled:text-tinta-3",
       conError
         ? "border-red-400 focus:border-red-500 focus:ring-red-500/15 dark:border-red-500/70"
-        : "border-neutral-200 focus:border-[#a97109] focus:ring-[#a97109]/15 dark:border-neutral-700 dark:focus:border-purple-400 dark:focus:ring-purple-400/20",
+        : "border-linea focus:border-acento focus:ring-acento/30",
     ].join(" ");
 
   const botonPrincipal =
-    "flex w-full items-center justify-center gap-2 rounded-xl bg-[#a97109] px-4 py-3 text-sm font-bold text-white shadow-lg shadow-[#a97109]/25 transition hover:bg-[#8a5c07] active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-[#a97109]/30 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none dark:bg-purple-600 dark:shadow-purple-900/40 dark:hover:bg-purple-700 dark:focus-visible:ring-purple-400/30";
+    "flex w-full items-center justify-center gap-2 rounded-xl bg-acento-solido px-4 py-3 text-sm font-bold text-white transition hover:bg-acento-solido/90 active:scale-[0.98] focus:outline-none focus-visible:ring-4 focus-visible:ring-acento/30 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none";
 
   // --- Estados que no son el formulario ------------------------------------
 
@@ -317,7 +317,7 @@ const Account = () => {
       <div className={pantalla}>
         <Cabecera titulo={t("Cuenta")} />
         <div className={`${tarjeta} p-6`}>
-          <p className="text-center text-sm leading-relaxed text-neutral-700 dark:text-neutral-300">{t("CuentaNoDisponible")}</p>
+          <p className="text-center text-sm leading-relaxed text-tinta-2">{t("CuentaNoDisponible")}</p>
           <button onClick={() => setDataSource(SOURCES.TURSO)} className={`${botonPrincipal} mt-5`}>
             {t("BuscarActivarApi")}
           </button>
@@ -331,11 +331,11 @@ const Account = () => {
       <div className={pantalla} aria-busy="true">
         <Cabecera titulo={t("Cuenta")} subtitulo={t("CuentaComprobando")} />
         <div className={`${tarjeta} space-y-4 p-6`}>
-          <div className="h-3 w-20 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
-          <div className="h-11 animate-pulse rounded-xl bg-neutral-200 dark:bg-neutral-800" />
-          <div className="h-3 w-24 animate-pulse rounded bg-neutral-200 dark:bg-neutral-800" />
-          <div className="h-11 animate-pulse rounded-xl bg-neutral-200 dark:bg-neutral-800" />
-          <div className="h-12 animate-pulse rounded-xl bg-neutral-300 dark:bg-neutral-700" />
+          <div className="h-3 w-20 animate-pulse rounded bg-superficie-2" />
+          <div className="h-11 animate-pulse rounded-xl bg-superficie-2" />
+          <div className="h-3 w-24 animate-pulse rounded bg-superficie-2" />
+          <div className="h-11 animate-pulse rounded-xl bg-superficie-2" />
+          <div className="h-12 animate-pulse rounded-xl bg-linea-fuerte" />
         </div>
       </div>
     );
@@ -355,13 +355,13 @@ const Account = () => {
           <div className="flex items-center gap-4">
             {/* La inicial en un disco con el oro de la marca: da identidad sin
                 pedir una foto de perfil que nadie va a subir. */}
-            <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-gradient-to-br from-[#FDD07A] to-[#a97109] font-['EB_Garamond',_Georgia,_serif] text-2xl font-bold text-white shadow-inner dark:from-purple-500 dark:to-purple-800">
+            <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-acento-solido text-2xl font-bold text-white">
               {usuario.username.slice(0, 1).toUpperCase()}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-lg font-bold text-neutral-900 dark:text-white">{usuario.username}</p>
-              {usuario.email && <p className="truncate text-xs text-neutral-500 dark:text-neutral-400">{usuario.email}</p>}
-              {desde && <p className="mt-0.5 text-[11px] text-neutral-400 dark:text-neutral-500">{t("CuentaMiembroDesde", { fecha: desde })}</p>}
+              <p className="truncate text-lg font-bold text-tinta">{usuario.username}</p>
+              {usuario.email && <p className="truncate text-xs text-tinta-3">{usuario.email}</p>}
+              {desde && <p className="mt-0.5 text-[11px] text-tinta-3">{t("CuentaMiembroDesde", { fecha: desde })}</p>}
             </div>
           </div>
 
@@ -376,7 +376,7 @@ const Account = () => {
               <button
                 type="button"
                 onClick={revalidar}
-                className="mt-2 rounded text-xs font-bold text-amber-900 underline underline-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:text-amber-200"
+                className="mt-2 rounded text-xs font-bold text-amber-900 underline underline-offset-2 focus:outline-none focus-visible:ring-2 focus-visible:ring-acento dark:text-amber-200"
               >
                 {t("CuentaReintentar")}
               </button>
@@ -412,8 +412,8 @@ const Account = () => {
 
   const pestana = (activa) =>
     [
-      "relative z-10 flex-1 rounded-lg py-2 text-center text-xs font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#a97109]/40 dark:focus-visible:ring-purple-400/40",
-      activa ? "text-neutral-900 dark:text-white" : "text-neutral-500 hover:text-neutral-800 dark:text-neutral-400 dark:hover:text-neutral-200",
+      "relative z-10 flex-1 rounded-lg py-2 text-center text-xs font-bold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-acento/30",
+      activa ? "text-tinta" : "text-tinta-3 hover:text-tinta",
     ].join(" ");
 
   return (
@@ -432,13 +432,13 @@ const Account = () => {
               Antes había que leer todo el formulario para descubrir que existía
               la otra opción. */}
           <div
-            className="relative mb-6 flex rounded-xl bg-neutral-100 p-1 dark:bg-neutral-800"
+            className="relative mb-6 flex rounded-xl bg-superficie-2 p-1"
             role="group"
             aria-label={t("Cuenta")}
           >
             <span
               aria-hidden="true"
-              className={`absolute inset-y-1 left-1 z-0 w-[calc(50%-0.25rem)] rounded-lg bg-white shadow-sm transition-transform duration-200 ease-out dark:bg-neutral-700 ${
+              className={`absolute inset-y-1 left-1 z-0 w-[calc(50%-0.25rem)] rounded-lg bg-superficie transition-transform duration-200 ease-out ${
                 modoRegistro ? "translate-x-full" : "translate-x-0"
               }`}
             />
@@ -513,7 +513,7 @@ const Account = () => {
             <button
               type="button"
               onClick={() => setVerClave((v) => !v)}
-              className="absolute inset-y-0 right-0 flex items-center px-3.5 text-neutral-400 transition hover:text-neutral-700 disabled:opacity-40 dark:text-neutral-500 dark:hover:text-neutral-200"
+              className="absolute inset-y-0 right-0 flex items-center px-3.5 text-tinta-3 transition hover:text-tinta-2 disabled:opacity-40"
               aria-label={verClave ? t("CuentaOcultarContrasena") : t("CuentaVerContrasena")}
               aria-pressed={verClave}
               tabIndex={-1}
@@ -552,7 +552,7 @@ const Account = () => {
 
       {/* La cuenta es opcional. La salida se deja a la vista, no escondida. */}
       <div className="mt-6 px-2">
-        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-neutral-400 dark:text-neutral-500">{t("CuentaBeneficios")}</p>
+        <p className="mb-2.5 text-[11px] font-bold uppercase tracking-wider text-tinta-3">{t("CuentaBeneficios")}</p>
         <ul className="space-y-2">
           <Beneficio texto={t("CuentaBeneficioVersiones")} />
           <Beneficio texto={t("CuentaBeneficioNotas")} />
@@ -560,7 +560,7 @@ const Account = () => {
         </ul>
         <Link
           to="/compare"
-          className="mt-5 block rounded-lg py-2 text-center text-xs font-semibold text-neutral-500 underline underline-offset-4 transition hover:text-neutral-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#a97109]/40 dark:text-neutral-400 dark:hover:text-neutral-200"
+          className="mt-5 block rounded-lg py-2 text-center text-xs font-semibold text-tinta-3 underline underline-offset-4 transition hover:text-tinta focus:outline-none focus-visible:ring-2 focus-visible:ring-acento/30"
         >
           {t("CuentaSeguirSinCuenta")}
         </Link>

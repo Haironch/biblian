@@ -2,15 +2,73 @@
 @tailwind components;
 @tailwind utilities;
 
+/*
+ * Paleta de la interfaz.
+ *
+ * Canales RGB sueltos y no `#hex`: Tailwind los envuelve en `rgb(... / alfa)`
+ * y así `bg-acento/10` sigue funcionando. Los nombres están en
+ * `tailwind.config.js`.
+ *
+ * Inspirada en las apps de macOS: lateral gris claro, contenido blanco, líneas
+ * de medio tono y un único acento índigo. En oscuro el acento se aclara para
+ * leerse sobre gris carbón, y el SÓLIDO (el de los botones con texto blanco)
+ * se queda más profundo para no perder contraste.
+ */
 @layer base {
-  ::-webkit-scrollbar-thumb {
-    @apply bg-transparent shadow-sm;
+  :root {
+    --fondo: 255 255 255;
+    --lateral: 245 245 247;
+    --superficie: 255 255 255;
+    --superficie-2: 242 242 247;
+    --linea: 229 229 234;
+    --linea-fuerte: 209 209 214;
+    --tinta: 28 28 30;
+    --tinta-2: 84 84 90;
+    --tinta-3: 142 142 147;
+    --acento: 58 79 216;
+    --acento-solido: 58 79 216;
+    --acento-suave: 232 236 255;
+
+    /*
+     * Lo que ocupan la lateral y las pestañas. Viven aquí y no en cada
+     * componente porque los elementos `fixed` (la barra de estudio, por
+     * ejemplo) tienen que esquivarlas y no tienen otra forma de saber cuánto.
+     */
+    --ancho-lateral: 0px;
+    --alto-pestanas: calc(3.5rem + env(safe-area-inset-bottom));
   }
+
+  .dark {
+    --fondo: 22 22 24;
+    --lateral: 28 28 30;
+    --superficie: 30 30 32;
+    --superficie-2: 44 44 46;
+    --linea: 56 56 60;
+    --linea-fuerte: 72 72 76;
+    --tinta: 242 242 247;
+    --tinta-2: 174 174 178;
+    --tinta-3: 118 118 124;
+    --acento: 145 160 255;
+    --acento-solido: 88 104 240;
+    --acento-suave: 42 47 84;
+  }
+
+  @media (min-width: 768px) {
+    :root {
+      --ancho-lateral: 232px;
+      --alto-pestanas: 0px;
+    }
+  }
+
+  body {
+    @apply bg-fondo font-sans text-tinta antialiased;
+  }
+
   ::-webkit-scrollbar {
-    @apply w-1 bg-transparent;
+    @apply w-1.5 bg-transparent;
   }
   ::-webkit-scrollbar-thumb {
-    @apply rounded bg-yellow-600 dark:bg-purple-400;
+    @apply rounded-full bg-linea-fuerte;
   }
 }
 

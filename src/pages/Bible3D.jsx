@@ -117,7 +117,7 @@ const Boton = ({ children, onClick, titulo, activo = false, clase = "" }) => (
     onClick={onClick}
     title={titulo}
     className={`shrink-0 rounded-lg px-2.5 py-1.5 text-xs font-semibold transition-colors sm:px-3 sm:text-sm ${
-      activo ? "bg-[#a97109] text-white dark:bg-purple-500" : "bg-black/5 text-neutral-800 hover:bg-black/10 dark:bg-white/10 dark:text-neutral-100 dark:hover:bg-white/20"
+      activo ? "bg-acento-solido text-white" : "bg-tinta/5 text-tinta hover:bg-tinta/10"
     } ${clase}`}
   >
     {children}
@@ -141,7 +141,7 @@ const BotonIcono = ({ children, onClick, etiqueta, activo = false }) => (
     title={etiqueta}
     aria-pressed={activo}
     className={`grid h-8 w-8 shrink-0 place-items-center rounded-lg transition-colors ${
-      activo ? "bg-[#a97109] text-white dark:bg-purple-500" : "bg-black/5 hover:bg-black/10 dark:bg-white/10 dark:hover:bg-white/20"
+      activo ? "bg-acento-solido text-white" : "bg-tinta/5 hover:bg-tinta/10"
     }`}
   >
     {children}
@@ -158,7 +158,7 @@ const BotonBarra = ({ hacia, onClick, disabled, etiqueta }) => (
     disabled={disabled}
     aria-label={etiqueta}
     title={etiqueta}
-    className="grid h-11 w-11 place-items-center rounded-full bg-black/5 transition-colors hover:bg-black/10 disabled:pointer-events-none disabled:opacity-25 dark:bg-white/10 dark:hover:bg-white/20"
+    className="grid h-11 w-11 place-items-center rounded-full bg-tinta/5 transition-colors hover:bg-tinta/10 disabled:pointer-events-none disabled:opacity-25"
   >
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
       <path d={hacia === "atras" ? "M15 19 8 12l7-7" : "m9 5 7 7-7 7"} />
@@ -596,13 +596,13 @@ const Bible3D = () => {
   const puedeRetroceder = hoja.total > 0 && !(hoja.enPortada && !saltoAnterior);
 
   return (
-    <div className="fixed inset-0 z-[500] flex flex-col bg-white dark:bg-[#0b0a09]">
-      <header className="flex shrink-0 items-center gap-1.5 border-b border-black/10 bg-[#FDD07A] px-2 py-2 pt-[max(0.5rem,env(safe-area-inset-top))] dark:border-white/10 dark:bg-[#20123A] dark:text-white">
+    <div className="fixed inset-0 z-[500] flex flex-col bg-superficie">
+      <header className="flex shrink-0 items-center gap-1.5 border-b border-linea bg-lateral px-2 py-2 pt-[max(0.5rem,env(safe-area-inset-top))]">
         <button
           type="button"
           onClick={() => navigate("/")}
           aria-label={t("Cerrar")}
-          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg transition-colors hover:bg-black/10 dark:hover:bg-white/15"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-lg transition-colors hover:bg-tinta/10"
         >
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5" aria-hidden="true">
             <path d="M15 19 8 12l7-7" />
@@ -652,14 +652,14 @@ const Bible3D = () => {
             <div
               role="group"
               aria-label={t("Libro3D_TamanoTexto")}
-              className="absolute right-0 top-full z-10 mt-2 flex items-center gap-2 rounded-xl border border-black/10 bg-white p-2 shadow-xl dark:border-white/15 dark:bg-neutral-900"
+              className="absolute right-0 top-full z-10 mt-2 flex items-center gap-2 rounded-xl border border-linea bg-superficie p-2 shadow-xl"
             >
               <button
                 type="button"
                 onClick={() => setEscala((previo) => Math.max(ESCALA.minimo, previo - ESCALA.paso))}
                 disabled={escala <= ESCALA.minimo}
                 aria-label={t("Libro3D_TextoMenor")}
-                className="grid h-9 w-9 place-items-center rounded-lg bg-black/5 text-sm transition-colors hover:bg-black/10 disabled:opacity-30 dark:bg-white/10 dark:hover:bg-white/20"
+                className="grid h-9 w-9 place-items-center rounded-lg bg-tinta/5 text-sm transition-colors hover:bg-tinta/10 disabled:opacity-30"
               >
                 A−
               </button>
@@ -669,7 +669,7 @@ const Bible3D = () => {
                 onClick={() => setEscala((previo) => Math.min(ESCALA.maximo, previo + ESCALA.paso))}
                 disabled={escala >= ESCALA.maximo}
                 aria-label={t("Libro3D_TextoMayor")}
-                className="grid h-9 w-9 place-items-center rounded-lg bg-black/5 text-base transition-colors hover:bg-black/10 disabled:opacity-30 dark:bg-white/10 dark:hover:bg-white/20"
+                className="grid h-9 w-9 place-items-center rounded-lg bg-tinta/5 text-base transition-colors hover:bg-tinta/10 disabled:opacity-30"
               >
                 A+
               </button>
@@ -679,8 +679,8 @@ const Bible3D = () => {
       </header>
 
       <main className="relative flex flex-1 flex-col overflow-hidden">
-        {cargando && <p className="m-auto text-sm opacity-70 dark:text-white">{t("Cargando")}</p>}
-        {!cargando && error && <p className="m-auto max-w-sm px-6 text-center text-sm opacity-80 dark:text-white">{error}</p>}
+        {cargando && <p className="m-auto text-sm opacity-70">{t("Cargando")}</p>}
+        {!cargando && error && <p className="m-auto max-w-sm px-6 text-center text-sm opacity-80">{error}</p>}
         {!cargando && !error && piezas.length > 0 && (
           <Book3D
             piezas={piezas}
@@ -708,7 +708,7 @@ const Bible3D = () => {
 
           El relleno de abajo respeta `safe-area-inset-bottom`: sin él, en un
           iPhone los dos botones caen debajo de la barra de gestos. */}
-      <footer className="flex shrink-0 items-center justify-center gap-5 border-t border-black/10 bg-[#fbefda] px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] dark:border-white/10 dark:bg-[#20123A] dark:text-white">
+      <footer className="flex shrink-0 items-center justify-center gap-5 border-t border-linea bg-lateral px-3 py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
         <BotonBarra hacia="atras" etiqueta={t("Libro3D_HojaAnterior")} disabled={!puedeRetroceder} onClick={() => pasarRef.current?.("atras")} />
 
         <span className="flex min-w-[13ch] items-center justify-center gap-1.5 text-center text-xs tabular-nums opacity-70">

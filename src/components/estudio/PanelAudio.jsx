@@ -37,11 +37,11 @@ const PanelAudio = ({ biblia, iso }) => {
   }, [versiculoActual, versiculoSeleccionadoNumero, setVersiculoSeleccionadoNumero]);
 
   if (!disponible) {
-    return <p className="py-4 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("AudioNoDisponible")}</p>;
+    return <p className="py-4 text-center text-sm text-tinta-3">{t("AudioNoDisponible")}</p>;
   }
 
   if (!capitulo || typeof capitulo !== "object") {
-    return <p className="py-4 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("Cargando")}</p>;
+    return <p className="py-4 text-center text-sm text-tinta-3">{t("Cargando")}</p>;
   }
 
   return (
@@ -54,7 +54,7 @@ const PanelAudio = ({ biblia, iso }) => {
         <button
           type="button"
           onClick={() => (leyendo ? pausar() : window.speechSynthesis?.paused ? reanudar() : reproducir())}
-          className="flex items-center gap-2 rounded-lg bg-amber-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-amber-600 dark:bg-purple-600 dark:hover:bg-purple-700"
+          className="flex items-center gap-2 rounded-lg bg-acento-solido px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-acento-solido/90"
         >
           {leyendo ? (
             <svg viewBox="0 0 24 24" fill="currentColor" className="h-4 w-4" aria-hidden="true">
@@ -71,20 +71,20 @@ const PanelAudio = ({ biblia, iso }) => {
         <button
           type="button"
           onClick={detener}
-          className="rounded-lg border border-neutral-300 px-3 py-2 text-sm font-medium text-neutral-700 transition-colors hover:bg-black/5 dark:border-neutral-700 dark:text-neutral-200 dark:hover:bg-white/10"
+          className="rounded-lg border border-linea-fuerte px-3 py-2 text-sm font-medium text-tinta-2 transition-colors hover:bg-tinta/5"
         >
           {t("AudioDetener")}
         </button>
 
-        {versiculoActual && <span className="ml-auto text-xs font-semibold tabular-nums text-neutral-500 dark:text-neutral-400">v. {versiculoActual}</span>}
+        {versiculoActual && <span className="ml-auto text-xs font-semibold tabular-nums text-tinta-3">v. {versiculoActual}</span>}
       </div>
 
-      <label className="flex flex-col gap-1 text-xs font-medium text-neutral-600 dark:text-neutral-300">
+      <label className="flex flex-col gap-1 text-xs font-medium text-tinta-2">
         {t("AudioVoz")}
         <select
           value={vozElegida}
           onChange={(evento) => setVozElegida(evento.target.value)}
-          className="rounded-lg border border-neutral-300 bg-white px-2 py-1.5 text-sm text-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
+          className="rounded-lg border border-linea-fuerte bg-superficie px-2 py-1.5 text-sm text-tinta"
         >
           <option value="">{t("AudioVozSistema")}</option>
           {voces.map((voz) => (
@@ -96,7 +96,7 @@ const PanelAudio = ({ biblia, iso }) => {
       </label>
 
       <div className="flex flex-col gap-1">
-        <span className="text-xs font-medium text-neutral-600 dark:text-neutral-300">{t("AudioVelocidad")}</span>
+        <span className="text-xs font-medium text-tinta-2">{t("AudioVelocidad")}</span>
         <div className="flex flex-wrap gap-1.5">
           {VELOCIDADES.map((valor) => (
             <button
@@ -105,8 +105,8 @@ const PanelAudio = ({ biblia, iso }) => {
               onClick={() => setVelocidad(valor)}
               className={`rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors ${
                 velocidad === valor
-                  ? "bg-amber-500 text-white dark:bg-purple-600"
-                  : "bg-black/5 text-neutral-700 hover:bg-black/10 dark:bg-white/10 dark:text-neutral-200 dark:hover:bg-white/20"
+                  ? "bg-acento-solido text-white"
+                  : "bg-tinta/5 text-tinta-2 hover:bg-tinta/10"
               }`}
             >
               {valor}×
@@ -119,7 +119,7 @@ const PanelAudio = ({ biblia, iso }) => {
           curso con los ajustes nuevos: la Web Speech API no deja cambiárselos a
           un enunciado que ya está sonando, así que la única forma de que 2×
           suene a 2× es volver a empezar ese versículo. Ver `reiniciarActual`. */}
-      <p className="text-[11px] text-neutral-400">{t("AudioAviso")}</p>
+      <p className="text-[11px] text-tinta-3">{t("AudioAviso")}</p>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { getStrongAudioUrl } from "../services/bibleSource";
 import ThemeContext from "../context/ThemeContext";
 import LanguageContext from "../context/LanguageContext";
 import { useHistoryBlocker } from "../hooks/useHistoryBlocker";
+import { Loader2, Pause, Volume2, X } from "lucide-react";
 
 const processText = (html, strongFun) => {
   const doc = new DOMParser().parseFromString(html, "text/html");
@@ -55,31 +56,6 @@ const StrongSingle = () => {
   const [audio, setAudio] = useState(null);
   const [cargandoAudio, setCargandoAudio] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const currentImage = theme === "dark" ? "/dark.webp" : "/light.webp";
-  const [imagenCargada, setImagenCargada] = useState(false);
-
-  // Asegurar que la imagen del pergamino esté 100% cargada antes de mostrar el contenido
-  useEffect(() => {
-    let cancelado = false;
-    const img = new Image();
-    img.src = currentImage;
-
-    if (img.complete) {
-      setImagenCargada(true);
-    } else {
-      setImagenCargada(false);
-      img.onload = () => {
-        if (!cancelado) setImagenCargada(true);
-      };
-      img.onerror = () => {
-        if (!cancelado) setImagenCargada(true);
-      };
-    }
-
-    return () => {
-      cancelado = true;
-    };
-  }, [currentImage]);
 
   // Hook para bloquear la navegación hacia atrás cuando el modal está abierto
   useHistoryBlocker(strongIndividual, () => setModalStrong(false));
@@ -171,35 +147,34 @@ const StrongSingle = () => {
 
   const styles = {
     light: {
+      // Enlace a otro número Strong: la pastilla del acento, igual en los dos
+      // temas porque las variables ya cambian solas.
       slink: {
-        background: "linear-gradient(120deg, #fae100 30%, #ffffff 38%, #ffffff 40%, #fae100 48%)",
-        backgroundSize: "200% 100%",
-        backgroundPosition: "100% 0",
-        color: "black !important",
+        background: "rgb(var(--acento-suave))",
+        color: "rgb(var(--acento)) !important",
         padding: "2px 7px !important",
         borderRadius: "7px",
         fontWeight: 600,
         margin: "5px 1px",
-        animation: "load89234 2s 4",
       },
       purple: { color: "#9a00db", fontSize: "1.2em" },
       red: { color: "#bb00ff" },
       blue: { color: "#091cb0", fontWeight: 900 },
       green: { color: "#60ab49", fontSize: "1.5em" },
-      orange: { color: "#ffbb00" },
-      yellow: { color: "#f2ff00" },
+      // Eran #ffbb00 y #f2ff00: sobre fondo claro no se leían.
+      orange: { color: "#b45309" },
+      yellow: { color: "#a16207" },
     },
     dark: {
+      // Enlace a otro número Strong: la pastilla del acento, igual en los dos
+      // temas porque las variables ya cambian solas.
       slink: {
-        background: "linear-gradient(120deg, #dd57ff 30%, #eea8ff 38%, #eea8ff 40%, #dd57ff 48%)",
-        backgroundSize: "200% 100%",
-        backgroundPosition: "100% 0",
-        color: "white !important",
+        background: "rgb(var(--acento-suave))",
+        color: "rgb(var(--acento)) !important",
         padding: "2px 7px !important",
         borderRadius: "7px",
         fontWeight: 600,
-        margin: "5px 2px",
-        animation: "load89234 2s 4",
+        margin: "5px 1px",
       },
       purple: { color: "#b3e5fc", fontSize: "1.2em" },
       red: { color: "#e58080" },
@@ -215,149 +190,108 @@ const StrongSingle = () => {
   const renderLoadingState = () => (
     <div className="fixed inset-0 z-[999999999] flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
       <div
-        className="relative flex flex-col items-center justify-center rounded-2xl border border-white/10 bg-neutral-900/95 px-8 py-7 shadow-2xl text-center"
+        className="relative flex flex-col items-center justify-center rounded-2xl border border-linea bg-superficie px-8 py-7 text-center shadow-2xl"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative mb-3 flex h-14 w-14 items-center justify-center">
-          <div className="absolute inset-0 rounded-full border-4 border-amber-500/20 dark:border-purple-500/20"></div>
-          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-amber-500 dark:border-t-purple-400 animate-spin"></div>
-          <span className="font-mono text-xs font-bold text-amber-400 dark:text-purple-300">
+          <div className="absolute inset-0 rounded-full border-4 border-acento/20"></div>
+          <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-acento animate-spin"></div>
+          <span className="font-mono text-xs font-bold text-acento">
             {strong || "..."}
           </span>
         </div>
 
-        <p className="text-base font-semibold text-white tracking-wide">{t("StrongCargandoDefinicion")}</p>
-        <p className="mt-1 text-xs text-gray-400">{t("StrongConsultando")}</p>
+        <p className="text-base font-semibold text-tinta">{t("StrongCargandoDefinicion")}</p>
+        <p className="mt-1 text-xs text-tinta-3">{t("StrongConsultando")}</p>
       </div>
     </div>
   );
 
+  const cerrarFicha = () => {
+    setModalStrong(false);
+    strongFun("");
+  };
+
+  /*
+   * La ficha era un pergamino ilustrado con el texto encima en posiciones
+   * fijas y un sello de lacre como botón de cerrar. Ahora es una tarjeta del
+   * tema: el texto ya no depende de calzar dentro de un dibujo, así que una
+   * definición larga hace scroll en vez de salirse del papel.
+   */
   const renderContent = () => (
     <>
-      <style>
-        {`
-          @keyframes load89234 {
-            100% { background-position: -100% 0; }
-          }
-        `}
-      </style>
-      <div className="z-[9999999] h-[530px] w-[350px] sm:w-[500px] sm:h-[680px] text-black dark:text-white " onClick={(e) => e.stopPropagation()}>
-        <div className="animate-pop animate-duration-100 h-[530px] w-[350px] sm:w-[500px] sm:h-[680px] justify-center items-center relative ">
-          <img src={currentImage} className="h-[530px] w-[350px] sm:w-[500px] sm:h-[680px] -z-10 fixed" alt="Background" />
-          <div className="fixed m-14 sm:ml-16 h-[315px] w-[260px] sm:h-[410px] sm:w-[380px] mt-24 sm:mt-28 overflow-y-scroll no-scrollbar px-2">
-            <div className="text-left mr-2">
-              <h1
-                className={`animate-slide-in-top animate-duration-100 animate-delay-0 text-balance px-2 text-center justify-center font-bold mb-2 break-words ${
-                  (strongIndividual.le || "").length > 22
-                    ? "text-lg leading-tight"
-                    : (strongIndividual.le || "").length > 12
-                    ? "text-xl leading-snug"
-                    : "text-2xl"
-                }`}
-              >
-                {strongIndividual.id} - {strongIndividual.le}
-              </h1>
-              <h2
-                className={`animate-slide-in-top animate-duration-100 animate-delay-100 text-balance px-2 text-center justify-center font-semibold break-words ${
-                  (strongIndividual.pl || "").length > 22
-                    ? "text-sm leading-tight text-gray-700 dark:text-gray-300"
-                    : "text-base sm:text-lg text-gray-800 dark:text-gray-200"
-                }`}
-              >
-                {strongIndividual.pl} {strongIndividual.ti ? `(${strongIndividual.ti})` : ""}
-              </h2>
-              <p className="font-base text-lg mt-2 animate-slide-in-top animate-duration-100 animate-delay-200 flex items-center">{t("StrongPronunciacion")}:</p>
-              <p className="font-thin text-lg mb-2 animate-slide-in-top animate-duration-100 animate-delay-200 flex items-center">
-                <strong className="font-bold text-xl mt-1">{strongIndividual.ps}</strong>
-                {cargandoAudio ? (
-                  <span
-                    className="relative ml-2 inline-flex h-6 w-6 items-center justify-center rounded-full bg-blue-500/80 text-white select-none shadow-sm cursor-wait"
-                    title={t("CargandoAudio")}
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="13"
-                      height="13"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      className="opacity-50"
-                    >
-                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                      <path d="M15 8a5 5 0 0 1 0 8" />
-                      <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
-                    </svg>
-                    <span className="absolute inset-[-2px] rounded-full border-2 border-white/20 border-t-white animate-spin"></span>
-                  </span>
-                ) : audio ? (
-                  <button
-                    onClick={toggleAudio}
-                    className="ml-2 w-6 h-6 text-center flex items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 active:scale-95 text-white outline-none transition shadow-sm select-none"
-                    title={isPlaying ? t("DetenerPronunciacion") : t("ReproducirPronunciacion")}
-                  >
-                    {isPlaying ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M9 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" />
-                        <path d="M17 4h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h2a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2z" />
-                      </svg>
-                    ) : (
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="16"
-                        height="16"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                        <path d="M15 8a5 5 0 0 1 0 8" />
-                        <path d="M17.7 5a9 9 0 0 1 0 14" />
-                        <path d="M6 15h-2a1 1 0 0 1 -1 -1v-4a1 1 0 0 1 1 -1h2l3.5 -4.5a.8 .8 0 0 1 1.5 .5v14a.8 .8 0 0 1 -1.5 .5l-3.5 -4.5" />
-                      </svg>
-                    )}
-                  </button>
-                ) : null}
-              </p>
-              <p className="font-base text-lg animate-slide-in-top animate-duration-100 animate-delay-200 flex items-center">{t("StrongDefinicion")}:</p>
-              {/*
-                21 entradas del diccionario original no traen texto en inglés.
-                El backend las sirve en español y lo dice en `dfLang`; sin este
-                aviso el lector en inglés vería un párrafo en otro idioma sin
-                explicación y lo tomaría por un fallo.
-              */}
-              {strongIndividual.dfLang && strongIndividual.dfLang !== idiomaNavegador && (
-                <p className="mb-1 text-xs italic opacity-70">{t("StrongSinTraducir")}</p>
-              )}
-              <div className="mb-8">
-                {React.Children.map(processedHtml, (child) => {
-                  if (child.props.className === "Slink") {
-                    return React.cloneElement(child, { style: { ...child.props.style, ...currentStyles.slink } });
-                  }
-                  if (child.props.color) {
-                    const colorStyle = currentStyles[child.props.color.toLowerCase().replace("%color_", "").replace("%", "")];
-                    return React.cloneElement(child, { style: { ...child.props.style, ...colorStyle } });
-                  }
-                  return child;
-                })}
-              </div>
-            </div>
+      <div
+        className="animate-pop animate-duration-100 z-[9999999] flex max-h-[85vh] w-[min(92vw,520px)] flex-col overflow-hidden rounded-2xl border border-linea bg-superficie text-tinta shadow-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${strongIndividual.id} ${strongIndividual.le ?? ""}`}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <header className="flex items-start gap-3 border-b border-linea px-5 py-4">
+          <div className="min-w-0 flex-1">
+            <p className="font-mono text-xs font-semibold text-acento">{strongIndividual.id}</p>
+            <h1 className="mt-1 break-words text-2xl font-semibold leading-tight">{strongIndividual.le}</h1>
+            <p className="mt-0.5 break-words text-sm text-tinta-2">
+              {strongIndividual.pl} {strongIndividual.ti ? `(${strongIndividual.ti})` : ""}
+            </p>
           </div>
           <button
-            className="px-5 py-2 bg-red-500 text-white m-auto text-2xl size-14 sm:size-16 bottom-[55px] left-[153px] sm:left-[230px] sm:bottom-[60px] text-center absolute rounded-full"
-            onClick={() => {
-              setModalStrong(false);
-              strongFun("");
-            }}
+            type="button"
+            onClick={cerrarFicha}
+            aria-label={t("Cerrar")}
+            title={t("Cerrar")}
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-tinta-3 transition-colors hover:bg-tinta/5 hover:text-tinta"
           >
-            X
+            <X className="h-5 w-5" strokeWidth={2} aria-hidden="true" />
           </button>
+        </header>
+
+        <div className="overflow-y-auto px-5 py-4">
+          <p className="text-xs font-medium text-tinta-3">{t("StrongPronunciacion")}</p>
+          <div className="mt-1 flex items-center gap-2">
+            <strong className="text-lg font-semibold">{strongIndividual.ps}</strong>
+            {cargandoAudio ? (
+              <span
+                className="grid h-7 w-7 cursor-wait place-items-center rounded-full bg-acento-suave text-acento"
+                title={t("CargandoAudio")}
+              >
+                <Loader2 className="h-3.5 w-3.5 animate-spin" strokeWidth={2} aria-hidden="true" />
+              </span>
+            ) : audio ? (
+              <button
+                type="button"
+                onClick={toggleAudio}
+                className="grid h-7 w-7 place-items-center rounded-full bg-acento-solido text-white transition hover:bg-acento-solido/90 active:scale-95"
+                title={isPlaying ? t("DetenerPronunciacion") : t("ReproducirPronunciacion")}
+                aria-label={isPlaying ? t("DetenerPronunciacion") : t("ReproducirPronunciacion")}
+              >
+                {isPlaying ? <Pause className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden="true" /> : <Volume2 className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden="true" />}
+              </button>
+            ) : null}
+          </div>
+
+          <p className="mt-5 text-xs font-medium text-tinta-3">{t("StrongDefinicion")}</p>
+          {/*
+            21 entradas del diccionario original no traen texto en inglés.
+            El backend las sirve en español y lo dice en `dfLang`; sin este
+            aviso el lector en inglés vería un párrafo en otro idioma sin
+            explicación y lo tomaría por un fallo.
+          */}
+          {strongIndividual.dfLang && strongIndividual.dfLang !== idiomaNavegador && (
+            <p className="mt-1 text-xs italic text-tinta-3">{t("StrongSinTraducir")}</p>
+          )}
+          <div className="mt-1.5 text-[15px] leading-relaxed text-tinta">
+            {React.Children.map(processedHtml, (child) => {
+              if (child.props.className === "Slink") {
+                return React.cloneElement(child, { style: { ...child.props.style, ...currentStyles.slink } });
+              }
+              if (child.props.color) {
+                const colorStyle = currentStyles[child.props.color.toLowerCase().replace("%color_", "").replace("%", "")];
+                return React.cloneElement(child, { style: { ...child.props.style, ...colorStyle } });
+              }
+              return child;
+            })}
+          </div>
         </div>
       </div>
       <div className="fixed w-full h-full bg-black/40 z-[999999] modal-overlay" onClick={handleOutsideClick}></div>
@@ -366,17 +300,17 @@ const StrongSingle = () => {
 
   const renderNotFound = () => (
     <div
-      className="z-[9999999] h-auto max-w-[90%] w-[380px] rounded-2xl border border-gray-200 bg-white p-6 text-center shadow-2xl dark:border-neutral-800 dark:bg-neutral-900 dark:text-white"
+      className="z-[9999999] h-auto max-w-[90%] w-[380px] rounded-2xl border border-linea bg-superficie p-6 text-center shadow-2xl"
       onClick={(e) => e.stopPropagation()}
     >
-      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400">
+      <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-acento-suave text-acento">
         <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
         </svg>
       </div>
       <h3 className="text-lg font-bold">{t("DefinicionNoDisponible")}</h3>
-      <p className="mt-1 font-mono text-sm font-semibold text-amber-600 dark:text-amber-400">{strong}</p>
-      <p className="mt-2 text-xs text-gray-600 dark:text-gray-400">
+      <p className="mt-1 font-mono text-sm font-semibold text-acento">{strong}</p>
+      <p className="mt-2 text-xs text-tinta-2">
         {t("StrongFueraDeIndice")}
       </p>
       <button
@@ -384,14 +318,14 @@ const StrongSingle = () => {
           setModalStrong(false);
           strongFun("");
         }}
-        className="mt-5 rounded-lg bg-amber-600 px-5 py-2 text-xs font-semibold text-white shadow transition hover:bg-amber-700"
+        className="mt-5 rounded-lg bg-acento-solido px-5 py-2 text-xs font-medium text-white transition hover:bg-acento-solido/90"
       >
-        Cerrar
+        {t("Cerrar")}
       </button>
     </div>
   );
 
-  if (cargandoStrong || !imagenCargada) {
+  if (cargandoStrong) {
     return renderLoadingState();
   }
 

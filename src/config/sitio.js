@@ -51,7 +51,7 @@ export const LOCALES_OG = { es: "es_ES", en: "en_US" };
  * Es un número redondo a propósito: el catálogo crece y no tiene sentido que
  * cada versión nueva obligue a reescribir 1200 páginas prerenderizadas.
  */
-export const TOTAL_VERSIONES = 150;
+export const TOTAL_VERSIONES = 140;
 
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 

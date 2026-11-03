@@ -442,17 +442,17 @@ const Search = () => {
   // --- La búsqueda no existe en el CDN: se explica en vez de fallar ---
   if (!disponible) {
     return (
-      <div className="animate-fade-in mx-auto mt-12 w-11/12 max-w-lg rounded-xl border border-amber-200 bg-amber-50 p-6 text-center shadow-md dark:border-amber-900/50 dark:bg-neutral-900">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-amber-100 dark:bg-amber-900/40">
-          <svg className="h-7 w-7 text-amber-600 dark:text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div className="animate-fade-in mx-auto mt-12 w-11/12 max-w-lg rounded-xl border border-linea bg-superficie p-6 text-center">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-acento-suave">
+          <svg className="h-7 w-7 text-acento" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
         </div>
-        <h1 className="mb-2 text-xl font-bold text-gray-900 dark:text-white">{t("Buscar")}</h1>
-        <p className="text-sm leading-relaxed text-gray-700 dark:text-gray-300">{t("BuscarNoDisponible")}</p>
+        <h1 className="mb-2 text-xl font-bold text-tinta">{t("Buscar")}</h1>
+        <p className="text-sm leading-relaxed text-tinta-2">{t("BuscarNoDisponible")}</p>
         <button
           onClick={() => setDataSource(SOURCES.TURSO)}
-          className="mt-5 inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
+          className="mt-5 inline-flex items-center gap-2 rounded-lg bg-acento-solido px-5 py-2.5 text-sm font-medium text-white transition hover:bg-acento-solido/90 focus:outline-none focus:ring-2 focus:ring-acento/30 focus:ring-offset-2"
         >
           <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -482,7 +482,7 @@ const Search = () => {
 
       {/* Qué se busca. Va lo primero porque decide qué significa todo lo demás
           de la pantalla: en modo diccionario no hay versión ni libro. */}
-      <div role="tablist" className="mx-auto mb-4 flex max-w-sm gap-1 rounded-xl bg-black/5 p-1 dark:bg-white/10">
+      <div role="tablist" className="mx-auto mb-4 flex max-w-sm gap-1 rounded-xl bg-tinta/5 p-1">
         {[
           ["biblia", "BuscarModoBiblia"],
           ["strong", "BuscarModoStrong"],
@@ -495,8 +495,8 @@ const Search = () => {
             onClick={() => setModo(valor)}
             className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
               modo === valor
-                ? "bg-white text-gray-900 shadow-sm dark:bg-neutral-800 dark:text-white"
-                : "text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200"
+                ? "bg-superficie text-tinta"
+                : "text-tinta-3 hover:text-tinta"
             }`}
           >
             {t(clave)}
@@ -505,13 +505,13 @@ const Search = () => {
       </div>
 
       {/* Encabezado y configuración de versión bíblica */}
-      <div className={`mb-6 rounded-2xl border border-gray-200 bg-gradient-to-r from-amber-500/10 via-amber-500/5 to-transparent p-5 shadow-sm dark:border-neutral-800 dark:bg-neutral-900/70 ${modo === "strong" ? "hidden" : ""}`}>
+      <div className={`mb-6 rounded-xl border border-linea bg-superficie p-5 ${modo === "strong" ? "hidden" : ""}`}>
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <span className="text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-400">
+            <span className="text-xs font-semibold uppercase tracking-wider text-acento">
               {t("BuscarVersionActual")}
             </span>
-            <h2 className="mt-0.5 text-lg font-bold text-gray-900 dark:text-white">
+            <h2 className="mt-0.5 text-lg font-bold text-tinta">
               {nombreBiblia || t("BuscarSeleccionarBiblia")}
             </h2>
           </div>
@@ -525,7 +525,7 @@ const Search = () => {
               value={bibliaId ?? ""}
               onChange={(e) => handleCambiarBiblia(e.target.value)}
               aria-label={t("BuscarSeleccionarBiblia")}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm font-medium text-gray-800 shadow-sm transition focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 sm:w-auto sm:max-w-xs dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-100"
+              className="w-full rounded-lg border border-linea-fuerte bg-superficie px-3 py-2 text-sm font-medium text-tinta transition focus:border-acento focus:outline-none focus:ring-1 focus:ring-acento sm:w-auto sm:max-w-xs"
             >
               {catalogo.length === 0 ? (
                 <option value="">{t("Cargando")}</option>
@@ -546,11 +546,11 @@ const Search = () => {
       </div>
 
       {/* Barra de búsqueda principal y filtros */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
+      <div className="rounded-2xl border border-linea bg-superficie p-4">
         <div className="flex flex-col gap-3 md:flex-row">
           {/* Campo de búsqueda con icono y botón de limpieza */}
           <div className="relative min-w-0 flex-1">
-            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400 dark:text-gray-500">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-tinta-3">
               <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   strokeLinecap="round"
@@ -567,13 +567,13 @@ const Search = () => {
               onChange={(e) => setTexto(e.target.value)}
               placeholder={t("BuscarPlaceholder")}
               aria-label={t("Buscar")}
-              className="w-full rounded-xl border border-gray-300 bg-gray-50/50 py-2.5 pl-10 pr-10 text-sm text-gray-900 transition placeholder:text-gray-400 focus:border-amber-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-amber-500/20 dark:border-neutral-700 dark:bg-neutral-800/80 dark:text-white dark:placeholder:text-gray-500 dark:focus:border-amber-400 dark:focus:bg-neutral-800"
+              className="w-full rounded-xl border border-linea-fuerte bg-superficie-2/50 py-2.5 pl-10 pr-10 text-sm text-tinta transition placeholder:text-tinta-3 focus:border-acento focus:bg-superficie focus:outline-none focus:ring-2 focus:ring-acento/20"
             />
             {texto && (
               <button
                 type="button"
                 onClick={limpiarBusqueda}
-                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-tinta-3 hover:text-tinta-2"
                 title={t("BuscarLimpiarFiltros")}
               >
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -595,7 +595,7 @@ const Search = () => {
                 setLibroFiltro(e.target.value);
                 setPagina(1);
               }}
-              className="w-full rounded-xl border border-gray-300 bg-gray-50/50 px-3 py-2.5 text-sm text-gray-800 shadow-sm transition focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-neutral-700 dark:bg-neutral-800/80 dark:text-gray-200"
+              className="w-full rounded-xl border border-linea-fuerte bg-superficie-2/50 px-3 py-2.5 text-sm text-tinta transition focus:border-acento focus:outline-none focus:ring-1 focus:ring-acento"
             >
               <option value="">{t("BuscarTodosLosLibros")}</option>
               {Array.from({ length: 66 }).map((_, i) => {
@@ -614,7 +614,7 @@ const Search = () => {
 
         {/* Indicador de longitud mínima */}
         {texto.trim().length > 0 && texto.trim().length < LARGO_MINIMO && (
-          <p className="mt-2.5 text-xs text-amber-600 dark:text-amber-400">
+          <p className="mt-2.5 text-xs text-acento">
             {t("BuscarMinimo", { min: LARGO_MINIMO })}
           </p>
         )}
@@ -622,7 +622,7 @@ const Search = () => {
 
       {/* Estado de error */}
       {error && (
-        <div className="mt-4 flex items-center gap-3 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800 dark:border-red-900/40 dark:bg-red-950/40 dark:text-red-300">
+        <div className="mt-4 flex items-center gap-3 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-700 dark:text-red-300">
           <svg className="h-5 w-5 flex-shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -632,21 +632,21 @@ const Search = () => {
 
       {/* Estado inicial / sugerencias cuando no hay búsqueda activa */}
       {!cargando && ((modo === "biblia" && !resultados) || (modo === "strong" && !resultadosStrong) || termino.length < LARGO_MINIMO) && (
-        <div className="mt-8 rounded-2xl border border-dashed border-gray-300 bg-gray-50/50 p-8 text-center dark:border-neutral-800 dark:bg-neutral-900/40">
-          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-900/30 dark:text-amber-400">
+        <div className="mt-8 rounded-2xl border border-dashed border-linea-fuerte bg-superficie-2/50 p-8 text-center">
+          <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-acento-suave text-acento">
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
             </svg>
           </div>
-          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">{t("BuscarTipsTitulo")}</h3>
-          <p className="mx-auto mt-1 max-w-md text-xs text-gray-600 dark:text-gray-400">{t("BuscarTip1")}</p>
+          <h3 className="text-base font-semibold text-tinta">{t("BuscarTipsTitulo")}</h3>
+          <p className="mx-auto mt-1 max-w-md text-xs text-tinta-2">{t("BuscarTip1")}</p>
 
           <div className="mt-5 flex flex-wrap justify-center gap-2">
             {sugerencias.map((sug) => (
               <button
                 key={sug}
                 onClick={() => setTexto(sug)}
-                className="rounded-full border border-gray-300 bg-white px-3.5 py-1 text-xs font-medium text-gray-700 shadow-sm transition hover:border-amber-400 hover:bg-amber-50 hover:text-amber-800 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-300 dark:hover:border-amber-500 dark:hover:bg-neutral-700"
+                className="rounded-full border border-linea-fuerte bg-superficie px-3.5 py-1 text-xs font-medium text-tinta-2 transition hover:border-acento/40 hover:bg-acento-suave hover:text-acento"
               >
                 {sug}
               </button>
@@ -659,16 +659,16 @@ const Search = () => {
       {cargando && (
         <div className="mt-6 flex flex-col gap-3">
           <div className="flex items-center justify-between px-1">
-            <div className="h-4 w-48 animate-pulse rounded bg-gray-200 dark:bg-neutral-800"></div>
+            <div className="h-4 w-48 animate-pulse rounded bg-superficie-2"></div>
           </div>
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className="flex flex-col gap-2 rounded-xl border border-gray-200 bg-white p-4 shadow-sm dark:border-neutral-800 dark:bg-neutral-900"
+              className="flex flex-col gap-2 rounded-xl border border-linea bg-superficie p-4"
             >
-              <div className="h-4 w-28 animate-pulse rounded bg-amber-200/60 dark:bg-amber-900/40"></div>
-              <div className="h-4 w-full animate-pulse rounded bg-gray-200 dark:bg-neutral-800"></div>
-              <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-neutral-800"></div>
+              <div className="h-4 w-28 animate-pulse rounded bg-superficie-2"></div>
+              <div className="h-4 w-full animate-pulse rounded bg-superficie-2"></div>
+              <div className="h-4 w-3/4 animate-pulse rounded bg-superficie-2"></div>
             </div>
           ))}
         </div>
@@ -683,19 +683,19 @@ const Search = () => {
       {!cargando && modo === "strong" && resultadosStrong && (
         <div className="mt-6">
           <div className="mb-3 flex items-center justify-between px-1">
-            <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <p className="text-xs font-medium text-tinta-2">
               {t("BuscarResultadosStrong", { total: resultadosStrong.pagination.total })}
             </p>
             {resultadosStrong.pagination.total > 0 && (
-              <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+              <span className="rounded-full bg-acento-suave px-2.5 py-0.5 text-xs font-medium text-acento">
                 {pagina} / {Math.max(1, resultadosStrong.pagination.totalPages)}
               </span>
             )}
           </div>
 
           {resultadosStrong.data.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-gray-300 p-8 text-center dark:border-neutral-800">
-              <p className="text-sm text-gray-600 dark:text-gray-400">{t("BuscarSinResultados", { termino })}</p>
+            <div className="rounded-2xl border border-dashed border-linea-fuerte p-8 text-center">
+              <p className="text-sm text-tinta-2">{t("BuscarSinResultados", { termino })}</p>
             </div>
           ) : (
             <ul className="flex flex-col gap-2">
@@ -704,15 +704,15 @@ const Search = () => {
                   <button
                     type="button"
                     onClick={() => strongFun(entrada.code)}
-                    className="w-full rounded-xl border border-gray-200 bg-white p-3 text-left transition hover:border-amber-400 hover:bg-amber-50 dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-amber-500/60 dark:hover:bg-amber-950/20"
+                    className="w-full rounded-xl border border-linea bg-superficie p-3 text-left transition hover:border-acento hover:bg-acento-suave"
                   >
                     <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                      <span className="rounded bg-amber-100 px-1.5 py-0.5 text-xs font-bold text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">{entrada.code}</span>
-                      <span className="text-base font-semibold text-gray-900 dark:text-white">{entrada.lemma}</span>
-                      {entrada.transliteration && <span className="text-sm italic text-gray-500 dark:text-gray-400">{entrada.transliteration}</span>}
+                      <span className="rounded bg-acento-suave px-1.5 py-0.5 text-xs font-semibold text-acento">{entrada.code}</span>
+                      <span className="text-base font-semibold text-tinta">{entrada.lemma}</span>
+                      {entrada.transliteration && <span className="text-sm italic text-tinta-3">{entrada.transliteration}</span>}
                     </div>
                     {entrada.definition && (
-                      <p className="mt-1 line-clamp-2 text-sm text-gray-700 dark:text-gray-300">{aTextoPlano(entrada.definition)}</p>
+                      <p className="mt-1 line-clamp-2 text-sm text-tinta-2">{aTextoPlano(entrada.definition)}</p>
                     )}
                   </button>
                 </li>
@@ -726,7 +726,7 @@ const Search = () => {
                 type="button"
                 onClick={() => setPagina((previo) => Math.max(1, previo - 1))}
                 disabled={pagina <= 1}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 disabled:opacity-40 dark:border-neutral-700 dark:text-gray-200"
+                className="rounded-lg border border-linea-fuerte px-4 py-2 text-sm font-medium text-tinta-2 disabled:opacity-40"
               >
                 {t("BuscarAnterior")}
               </button>
@@ -734,7 +734,7 @@ const Search = () => {
                 type="button"
                 onClick={() => setPagina((previo) => Math.min(resultadosStrong.pagination.totalPages, previo + 1))}
                 disabled={pagina >= resultadosStrong.pagination.totalPages}
-                className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 disabled:opacity-40 dark:border-neutral-700 dark:text-gray-200"
+                className="rounded-lg border border-linea-fuerte px-4 py-2 text-sm font-medium text-tinta-2 disabled:opacity-40"
               >
                 {t("BuscarSiguiente")}
               </button>
@@ -747,11 +747,11 @@ const Search = () => {
       {!cargando && modo === "biblia" && resultados && (
         <div className="mt-6">
           <div className="mb-3 flex items-center justify-between px-1">
-            <p className="text-xs font-medium text-gray-600 dark:text-gray-400">
+            <p className="text-xs font-medium text-tinta-2">
               {t("BuscarResultados", { total, biblia: nombreBiblia })}
             </p>
             {total > 0 && (
-              <span className="rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-semibold text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">
+              <span className="rounded-full bg-acento-suave px-2.5 py-0.5 text-xs font-medium text-acento">
                 {pagina} / {Math.max(1, totalPaginas)}
               </span>
             )}
@@ -767,10 +767,10 @@ const Search = () => {
                 <li
                   key={hitKey}
                   onClick={() => irAlVersiculo(hit)}
-                  className="group relative cursor-pointer rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition hover:border-amber-400 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900 dark:hover:border-amber-600"
+                  className="group relative cursor-pointer rounded-xl border border-linea bg-superficie p-4 transition hover:border-acento hover:shadow-md"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-amber-700 dark:text-amber-400">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-bold text-acento">
                       <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path
                           strokeLinecap="round"
@@ -788,10 +788,10 @@ const Search = () => {
                         type="button"
                         onClick={(e) => copiarVersiculo(e, hit)}
                         title={t("BuscarCopiarVersiculo")}
-                        className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-neutral-800 dark:hover:text-gray-200"
+                        className="rounded-lg p-1.5 text-tinta-3 transition hover:bg-tinta/5 hover:text-tinta-2"
                       >
                         {estaCopiado ? (
-                          <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-600 dark:text-emerald-400">
+                          <span className="flex items-center gap-1 text-[11px] font-semibold text-acento">
                             <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                             </svg>
@@ -816,7 +816,7 @@ const Search = () => {
                           irAlVersiculo(hit);
                         }}
                         title={t("BuscarIrAlPasaje")}
-                        className="rounded-lg p-1.5 text-gray-400 transition hover:bg-gray-100 hover:text-amber-600 dark:hover:bg-neutral-800 dark:hover:text-amber-400"
+                        className="rounded-lg p-1.5 text-tinta-3 transition hover:bg-tinta/5 hover:text-acento"
                       >
                         <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
@@ -826,7 +826,7 @@ const Search = () => {
                   </div>
 
                   <p
-                    className="mt-2 text-sm leading-relaxed text-gray-800 dark:text-gray-200 [&_mark]:rounded-sm [&_mark]:bg-amber-200/90 [&_mark]:px-1 [&_mark]:py-0.5 [&_mark]:font-medium [&_mark]:text-amber-950 dark:[&_mark]:bg-amber-500/30 dark:[&_mark]:text-amber-200"
+                    className="mt-2 text-sm leading-relaxed text-tinta [&_mark]:rounded-sm [&_mark]:bg-amber-200/90 [&_mark]:px-1 [&_mark]:py-0.5 [&_mark]:font-medium [&_mark]:text-amber-950 dark:[&_mark]:bg-amber-500/30 dark:[&_mark]:text-amber-200"
                     dangerouslySetInnerHTML={{ __html: limpiarSnippet(hit.snippet) }}
                   ></p>
                 </li>
@@ -836,13 +836,13 @@ const Search = () => {
 
           {/* Estado sin resultados */}
           {total === 0 && (
-            <div className="mt-8 rounded-2xl border border-gray-200 bg-white p-8 text-center shadow-sm dark:border-neutral-800 dark:bg-neutral-900">
-              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-gray-100 text-gray-400 dark:bg-neutral-800">
+            <div className="mt-8 rounded-2xl border border-linea bg-superficie p-8 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-superficie-2 text-tinta-3">
                 <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
               </div>
-              <p className="text-sm font-medium text-gray-700 dark:text-gray-300">{t("BuscarSinResultados")}</p>
+              <p className="text-sm font-medium text-tinta-2">{t("BuscarSinResultados")}</p>
             </div>
           )}
 
@@ -852,7 +852,7 @@ const Search = () => {
               <button
                 onClick={() => setPagina((p) => Math.max(1, p - 1))}
                 disabled={pagina <= 1}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-linea-fuerte bg-superficie px-3.5 py-1.5 text-xs font-semibold text-tinta-2 transition hover:bg-tinta/5 disabled:opacity-40"
               >
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -860,14 +860,14 @@ const Search = () => {
                 {t("BuscarAnterior")}
               </button>
 
-              <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">
+              <span className="text-xs font-semibold text-tinta-2">
                 {pagina} / {totalPaginas}
               </span>
 
               <button
                 onClick={() => setPagina((p) => Math.min(totalPaginas, p + 1))}
                 disabled={pagina >= totalPaginas}
-                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-3.5 py-1.5 text-xs font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 disabled:opacity-40 dark:border-neutral-700 dark:bg-neutral-800 dark:text-gray-200 dark:hover:bg-neutral-700"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-linea-fuerte bg-superficie px-3.5 py-1.5 text-xs font-semibold text-tinta-2 transition hover:bg-tinta/5 disabled:opacity-40"
               >
                 {t("BuscarSiguiente")}
                 <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

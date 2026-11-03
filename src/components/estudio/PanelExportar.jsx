@@ -81,7 +81,7 @@ const PanelExportar = ({ bookId, capitulo, versiculo }) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400">
+      <p className="text-xs font-semibold uppercase tracking-wide text-tinta-3">
         {etiqueta}
         {principal && ` · ${nombreCortoVersion(principal)}`}
       </p>
@@ -91,7 +91,7 @@ const PanelExportar = ({ bookId, capitulo, versiculo }) => {
       <SelectorVersion etiqueta={t("ExportarDesde")} />
 
       {!hayTexto ? (
-        <p className="py-3 text-center text-sm text-neutral-500 dark:text-neutral-400">{t("Cargando")}</p>
+        <p className="py-3 text-center text-sm text-tinta-3">{t("Cargando")}</p>
       ) : (
         <ul className="flex flex-col gap-1.5">
           {acciones.map((accion) => (
@@ -99,10 +99,10 @@ const PanelExportar = ({ bookId, capitulo, versiculo }) => {
               <button
                 type="button"
                 onClick={accion.onClick}
-                className="w-full rounded-lg border border-neutral-200 px-3 py-2 text-left transition-colors hover:border-amber-400 hover:bg-amber-50 dark:border-neutral-800 dark:hover:border-purple-500 dark:hover:bg-purple-950/30"
+                className="w-full rounded-lg border border-linea px-3 py-2 text-left transition-colors hover:border-acento hover:bg-acento-suave"
               >
-                <span className="block text-sm font-medium text-neutral-900 dark:text-neutral-100">{accion.etiqueta}</span>
-                <span className="block text-xs text-neutral-500 dark:text-neutral-400">{accion.descripcion}</span>
+                <span className="block text-sm font-medium text-tinta">{accion.etiqueta}</span>
+                <span className="block text-xs text-tinta-3">{accion.descripcion}</span>
               </button>
             </li>
           ))}

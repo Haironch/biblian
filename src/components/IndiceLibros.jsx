@@ -6,15 +6,12 @@ import { LIBROS, nombreDeLibro } from "../data/libros";
 import { ULTIMO_LIBRO_AT, totalCapitulos } from "../data/canon";
 
 /*
- * Dos fondos, dos paletas. La portada pinta el indice sobre la foto oscura del
- * hero, donde el texto siempre es blanco pase lo que pase con el tema; el 404 y
- * cualquier otra pantalla lo pintan sobre el fondo normal, que si cambia. Un
- * solo juego de clases dejaba invisible una de las dos.
+ * Dos variantes por compatibilidad con quien las pide (portada y 404). Antes
+ * la portada pintaba el índice sobre una foto oscura y necesitaba su propia
+ * paleta; con el fondo del tema ya sirve la misma para las dos.
  */
-const PALETAS = {
-  hero: "bg-white/10 hover:bg-white/25 border-white/15",
-  pagina: "bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 border-black/10 dark:border-white/15",
-};
+const PALETA = "border-linea bg-superficie text-tinta-2 hover:border-acento/40 hover:bg-acento-suave hover:text-acento";
+const PALETAS = { hero: PALETA, pagina: PALETA };
 
 /**
  * El índice de los 66 libros, con enlace real a cada uno.
@@ -38,21 +35,21 @@ const IndiceLibros = ({ variante = "hero" }) => {
   ];
 
   return (
-    <nav className="w-full mt-16 mb-4" aria-labelledby="indice-titulo">
-      <h2 id="indice-titulo" className="text-xl font-bold text-center mb-6">
+    <nav className="mb-4 mt-12 w-full" aria-labelledby="indice-titulo">
+      <h2 id="indice-titulo" className="mb-4 text-base font-semibold text-tinta">
         {t("IndiceLibros")}
       </h2>
 
       {grupos.map(({ titulo, libros }) => (
-        <div key={titulo} className="mb-8">
-          <h3 className="text-sm font-semibold uppercase tracking-wide opacity-70 mb-3">{titulo}</h3>
+        <div key={titulo} className="mb-6">
+          <h3 className="mb-2 text-xs font-medium text-tinta-3">{titulo}</h3>
           <ul className="flex flex-wrap gap-1.5">
             {libros.map((libro) => (
               <li key={libro.slug}>
                 <Link
                   to={`/compare/${libro.slug}/1`}
                   title={`${nombreDeLibro(libro.id, idiomaNavegador)} — ${totalCapitulos(libro.id)} ${t("Capitulos")}`}
-                  className={`inline-block text-xs px-2.5 py-1 rounded-md border transition ${paleta}`}
+                  className={`inline-block rounded-md border px-2.5 py-1 text-xs transition-colors ${paleta}`}
                 >
                   {nombreDeLibro(libro.id, idiomaNavegador)}
                 </Link>

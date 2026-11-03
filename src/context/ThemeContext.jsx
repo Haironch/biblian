@@ -32,12 +32,12 @@ export const ThemeProvider = ({ children }) => {
       setTheme("dark");
       document.documentElement.classList.add("dark");
       document.documentElement.style.colorScheme = "dark";
-      document.querySelector("meta[name='theme-color']").setAttribute("content", "#20123A"); // Cambiar a color oscuro
+      document.querySelector("meta[name='theme-color']").setAttribute("content", "#1C1C1E"); // Igual que la lateral en oscuro
     } else {
       setTheme("light");
       document.documentElement.classList.remove("dark");
       document.documentElement.style.colorScheme = "light";
-      document.querySelector("meta[name='theme-color']").setAttribute("content", "#FDD07A"); // Cambiar a color claro
+      document.querySelector("meta[name='theme-color']").setAttribute("content", "#F5F5F7"); // Igual que la lateral en claro
     }
   }, [theme]);
 
