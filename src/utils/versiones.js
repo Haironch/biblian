@@ -6,9 +6,15 @@
  * pero en una dirección compartible es un desastre: 45 caracteres escapados por
  * versión, y con cinco versiones abiertas la URL deja de ser copiable.
  *
- * Ese nombre ya empieza por un número que es único en todo el catálogo (162
- * versiones, 162 prefijos distintos), así que el código corto no hay que
+ * Ese nombre ya empieza por un número, así que el código corto no hay que
  * inventarlo: ya estaba ahí. `?v=75,9,34` en vez de tres rutas completas.
+ *
+ * El código es el prefijo TAL CUAL, ceros incluidos. Como número no es único:
+ * cada idioma se numeró por su cuenta y con distinto relleno, así que
+ * "75. Español - Reina Valera [RV60]" y "075. Greek - Apostolic Bible Polyglot"
+ * daban los dos 75 (y como ellas, otras 18 parejas). Ganaba la última en
+ * cargarse y un enlace a la RV60 abría la griega. Como texto, "75" y "075" son
+ * distintos, y los enlaces viejos con "75" siguen abriendo la española.
  */
 import { BIBLIAS } from "../data/biblias";
 
@@ -179,18 +185,18 @@ const porRuta = new Map();
 
 for (const versiones of Object.values(BIBLIAS)) {
   for (const meta of Object.values(versiones)) {
-    const codigo = Number(String(meta.ruta).match(/^(\d+)\./)?.[1]);
-    if (!Number.isFinite(codigo)) continue;
+    const codigo = String(meta.ruta).match(/^(\d+)\./)?.[1];
+    if (!codigo) continue;
     porCodigo.set(codigo, meta.ruta);
     porRuta.set(meta.ruta, codigo);
   }
 }
 
-/** "075. Español - ..." -> 75 */
+/** "75. Español - ..." -> "75" */
 export const codigoDeVersion = (ruta) => porRuta.get(ruta) ?? null;
 
-/** 75 -> "075. Español - ..." */
-export const versionDesdeCodigo = (codigo) => porCodigo.get(Number(codigo)) ?? null;
+/** "75" -> "75. Español - ..." */
+export const versionDesdeCodigo = (codigo) => porCodigo.get(String(codigo).trim()) ?? null;
 
 /** Lista de rutas -> "75,9,34". Las que no estén en el catálogo se omiten. */
 export const codificarVersiones = (rutas) =>
