@@ -148,6 +148,43 @@ node api/migrate.mjs link
 node api/migrate.mjs audio --create-bucket
 ```
 
+### Datos de estudio (después de `build`, antes de subir a Turso)
+
+`build` deja vacías cuatro tablas que la app usa: el diccionario por idioma, su
+índice de búsqueda, la concordancia Strong y las referencias cruzadas. Hay que
+llenarlas aparte, y **otra vez cada vez que se reconstruye la base**. Con
+`api/.env` apuntando al archivo local (`TURSO_DATABASE_URL=file:build/biblian.db`)
+se escriben directo en `api/build/biblian.db`, sin gastar cuota de Turso.
+
+```bash
+cd api
+
+# Concordancia: sale de los textos interlineales de la propia base (~20 s).
+# Las fuentes se fijan a mano: entre las ediciones con Strong del AT hay
+# Septuagintas griegas (números G) y una interlineal con números recortados.
+OLD=$(sqlite3 build/biblian.db "SELECT id FROM Bibles WHERE name='Stuttgartensia [Strongs]'")
+NEW=$(sqlite3 build/biblian.db "SELECT id FROM Bibles WHERE name='Berean Interlinear'")
+node migrate.mjs strongs-index --old=$OLD --new=$NEW
+
+# Diccionario: español (copia de Strongs) e inglés (Strong original).
+# Archivos de https://github.com/openscriptures/strongs (CC BY-SA):
+#   greek/strongs-greek-dictionary.js y hebrew/strongs-hebrew-dictionary.js
+node migrate.mjs strongs-i18n --lang=es
+node migrate.mjs strongs-i18n --lang=en --greek=<ruta>/strongs-greek-dictionary.js --hebrew=<ruta>/strongs-hebrew-dictionary.js
+
+# Índice de búsqueda del diccionario (va DESPUÉS de strongs-i18n: indexa sus definiciones).
+node migrate.mjs strongs-search
+
+# Referencias cruzadas: Treasury of Scripture Knowledge de openbible.info (CC BY).
+#   https://a.openbible.info/data/cross-references.zip  -> cross_references.txt
+node migrate.mjs crossrefs --file=<ruta>/cross_references.txt
+```
+
+Resultado esperado: ~440,000 apariciones en `StrongOccurrences`, 14,198
+definiciones `es` y ~14,177 `en` en `StrongsI18n`, ~28,000 documentos en
+`StrongsIndex` y ~343,000 filas en `CrossRefs`. Las dos licencias piden crédito
+visible; está en la página de Información de la app.
+
 Alternativa sin archivo local: `node api/migrate.mjs schema` crea el esquema
 vacío en una base Turso ya existente, y a partir de ahí se puede poblar como se
 prefiera.

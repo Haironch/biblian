@@ -107,6 +107,39 @@ const About = () => {
             </a>
           </div>
 
+          {/*
+            Fuentes de los datos de estudio. Las dos licencias (CC-BY y
+            CC-BY-SA) piden crédito visible a cambio de poder usarlos gratis.
+          */}
+          <div className="mt-4 rounded-xl border border-linea p-4">
+            <h3 className="text-sm font-semibold text-tinta">{t("FuentesEstudioTitulo")}</h3>
+            <ul className="mt-2 space-y-1.5 text-xs leading-relaxed text-tinta-2">
+              <li>
+                {t("FuenteReferencias")}{" "}
+                <a href="https://www.openbible.info/labs/cross-references/" target="_blank" rel="noreferrer" className={enlaceExterno}>
+                  openbible.info
+                </a>{" "}
+                (
+                <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noreferrer" className={enlaceExterno}>
+                  CC BY
+                </a>
+                ).
+              </li>
+              <li>
+                {t("FuenteStrongIngles")}{" "}
+                <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noreferrer" className={enlaceExterno}>
+                  Open Scriptures
+                </a>{" "}
+                (
+                <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noreferrer" className={enlaceExterno}>
+                  CC BY-SA
+                </a>
+                ).
+              </li>
+              <li>{t("FuenteConcordancia")}</li>
+            </ul>
+          </div>
+
           {/* Aviso de derechos */}
           <div className="mt-4 rounded-xl border border-acento/30 bg-acento-solido/10 p-4">
             <h3 className="flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-300">
