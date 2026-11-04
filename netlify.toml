@@ -1,4 +1,4 @@
-# Despliegue en Netlify (biblia-paralela.netlify.app).
+# Despliegue en Netlify (biblian-app.netlify.app).
 #
 # Las redirecciones y las cabeceras viven en `public/_redirects` y
 # `public/_headers`; aquí solo va cómo se construye el sitio.
