@@ -11,7 +11,5 @@
 [build.environment]
   NODE_VERSION = "22"
 
-  # La API propia todavía no está desplegada: la app lee los textos directo
-  # de los JSON del repo (CDN de GitHub). Cuando exista la API, quitar esta
-  # línea (o ponerla en "turso") y agregar el proxy de /api en _redirects.
-  VITE_DATA_SOURCE = "github"
+  # Sin VITE_DATA_SOURCE: la app usa la API (Render + Turso) a través del
+  # proxy `/api/*` de public/_redirects.

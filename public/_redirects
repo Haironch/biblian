@@ -7,7 +7,7 @@
 # El backend se sirve bajo el MISMO origen que la app.
 #
 # Sin esto, la cookie de sesion es de tercera parte (la app en Netlify, la API
-# en sslip.io) y el navegador la descarta: Safari e ITP siempre, Brave igual,
+# en Render) y el navegador la descarta: Safari e ITP siempre, Brave igual,
 # Firefox la aisla y Chrome la esta eliminando. El sintoma era que el login
 # funcionaba —el usuario sale del cuerpo de la respuesta, no de la cookie— y al
 # recargar `/api/auth/me` salia sin cookie, devolvia 401 y la sesion se perdia.
@@ -18,10 +18,9 @@
 # Con el proxy el navegador solo ve el dominio de Netlify: la cookie pasa a ser
 # de primera parte y no depende de las politicas de terceros de cada navegador.
 # El token sigue en una cookie httpOnly, invisible para JS.
-# Pendiente: la API propia todavía no está desplegada. Cuando lo esté, va aquí:
-#   /api/*  https://<tu-api>/api/:splat  200
-# Mientras tanto la app lee los textos del repo (VITE_DATA_SOURCE=github en
-# netlify.toml) y las peticiones a /api caen en el 404 de abajo.
+#
+# La API vive en Render (servicio biblian-api, render.yaml).
+/api/*  https://biblian-api-iamc.onrender.com/api/:splat  200
 
 # ---------------------------------------------------------------------------
 #  Fallback de la SPA, ruta por ruta.
