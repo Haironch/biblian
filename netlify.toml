@@ -1,0 +1,17 @@
+# Despliegue en Netlify (biblia-paralela.netlify.app).
+#
+# Las redirecciones y las cabeceras viven en `public/_redirects` y
+# `public/_headers`; aquí solo va cómo se construye el sitio.
+
+[build]
+  # vite build + sitemap + prerenderizado de las páginas de capítulo.
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+  # La API propia todavía no está desplegada: la app lee los textos directo
+  # de los JSON del repo (CDN de GitHub). Cuando exista la API, quitar esta
+  # línea (o ponerla en "turso") y agregar el proxy de /api en _redirects.
+  VITE_DATA_SOURCE = "github"

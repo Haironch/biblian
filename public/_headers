@@ -25,6 +25,10 @@
 /robots.txt
   Cache-Control: public, max-age=0, must-revalidate
 
+# Audio del diccionario Strong: un MP3 por numero que no cambia nunca.
+/strongs/audio/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # Las paginas prerenderizadas son HTML: mismo trato que index.html.
 /compare/*
   Cache-Control: public, max-age=0, must-revalidate

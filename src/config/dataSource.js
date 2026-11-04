@@ -67,14 +67,16 @@ export const API_URL = (apiValida || (esLocalhost() ? API_LOCAL : API_MISMO_ORIG
 
 /** Rama del repo desde donde el CDN sirve los JSON originales. */
 export const CDN_URL = (
-  import.meta.env.VITE_CDN_URL ?? "https://raw.githubusercontent.com/CristopherPaiz/multi-bible-compare/main/src/assets"
+  import.meta.env.VITE_CDN_URL ?? "https://raw.githubusercontent.com/Haironch/biblian/main/src/assets"
 ).replace(/\/+$/, "");
 
 /**
- * Base del audio Strong. Por defecto el bucket que ya venía funcionando; se
- * puede apuntar a otro sin tocar código.
+ * Base del audio Strong. Por defecto el propio sitio: los MP3 viven en el repo
+ * y se publican junto a la app (ver el plugin `audioStrong` de vite.config.js),
+ * así que no hace falta un bucket aparte. Se puede apuntar a otro con
+ * `VITE_AUDIO_URL`, siempre que tenga la misma estructura de carpetas.
  */
-export const AUDIO_URL = (import.meta.env.VITE_AUDIO_URL ?? "https://music-fragments.s3.fr-par.scw.cloud").replace(/\/+$/, "");
+export const AUDIO_URL = (import.meta.env.VITE_AUDIO_URL ?? "").replace(/\/+$/, "");
 
 const DEFAULT_SOURCE = import.meta.env.VITE_DATA_SOURCE === SOURCES.GITHUB ? SOURCES.GITHUB : SOURCES.TURSO;
 

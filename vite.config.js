@@ -1,6 +1,8 @@
 import { defineConfig } from "vite";
 import { VitePWA } from "vite-plugin-pwa";
 import react from "@vitejs/plugin-react-swc";
+import fs from "node:fs";
+import path from "node:path";
 
 /*
  * Los JSON de las 150 biblias y los mp3 del diccionario viven en `src/assets`:
@@ -13,6 +15,54 @@ import react from "@vitejs/plugin-react-swc";
  * de migración los lee del disco directamente, sin pasar por Vite.
  */
 const ASSETS_PESADOS = ["**/src/assets/bibles/**", "**/src/assets/strongs/**"];
+
+/*
+ * Audio del diccionario Strong como archivos del propio sitio.
+ *
+ * Los ~14,000 MP3 ya están en el repo (`src/assets/strongs/Audio_*`). Antes se
+ * subían a un bucket aparte y la API redirigía a él; ahora se publican junto a
+ * la app en `/strongs/audio/{greek|hebrew}/<n>.mp3`, la misma estructura que
+ * tenía el bucket, y no hace falta ni bucket ni llaves.
+ *
+ * - En desarrollo, un middleware los sirve directo desde `src/assets`.
+ * - Al compilar se copian a `dist`. No pasan por el bundler (son 107 MB y no
+ *   hay nada que transformar) ni por el precache del service worker, que solo
+ *   mira js/css/html/imágenes.
+ */
+const AUDIO_STRONG = { greek: "src/assets/strongs/Audio_Griego", hebrew: "src/assets/strongs/Audio_Hebreo" };
+
+const audioStrong = () => {
+  let salida = "dist";
+  return {
+    name: "audio-strong",
+    configResolved(config) {
+      salida = path.resolve(config.root, config.build.outDir);
+    },
+    configureServer(server) {
+      server.middlewares.use((req, res, next) => {
+        const coincide = req.url?.match(/^\/strongs\/audio\/(greek|hebrew)\/(\d+)\.mp3(?:\?.*)?$/);
+        if (!coincide) return next();
+        const archivo = path.resolve(AUDIO_STRONG[coincide[1]], `${coincide[2]}.mp3`);
+        if (!fs.existsSync(archivo)) {
+          res.statusCode = 404;
+          return res.end();
+        }
+        res.setHeader("Content-Type", "audio/mpeg");
+        fs.createReadStream(archivo).pipe(res);
+      });
+    },
+    closeBundle() {
+      for (const [idioma, origen] of Object.entries(AUDIO_STRONG)) {
+        if (!fs.existsSync(origen)) continue;
+        const destino = path.join(salida, "strongs", "audio", idioma);
+        fs.mkdirSync(destino, { recursive: true });
+        for (const nombre of fs.readdirSync(origen)) {
+          if (nombre.endsWith(".mp3")) fs.copyFileSync(path.join(origen, nombre), path.join(destino, nombre));
+        }
+      }
+    },
+  };
+};
 
 export default defineConfig({
   plugins: [
@@ -56,6 +106,7 @@ export default defineConfig({
       },
     }),
     react(),
+    audioStrong(),
   ],
   server: {
     watch: {

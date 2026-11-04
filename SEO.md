@@ -37,7 +37,7 @@ JSON-LD de cada ruta. Lo consumen dos sitios que **tienen que coincidir**:
 
 Si divergieran, el buscador se quedaría con lo que ve al renderizar y el
 prerenderizado no serviría de nada. El dominio sale de `src/config/sitio.js`
-(variable `VITE_SITE_URL`, con `https://biblian.netlify.app` por defecto).
+(variable `VITE_SITE_URL`, con `https://biblia-paralela.netlify.app` por defecto).
 
 ### 2. Prerenderizado: 1262 archivos HTML
 
@@ -138,12 +138,12 @@ npm run og          # regenera public/og-image.png
 
 ## Puesta en marcha (una sola vez, a mano)
 
-1. **Confirmar el dominio.** Si no es `https://biblian.netlify.app`, definir
+1. **Confirmar el dominio.** Si no es `https://biblia-paralela.netlify.app`, definir
    `VITE_SITE_URL` en las variables de entorno de Netlify y reconstruir.
 2. **Google Search Console** → añadir la propiedad, verificarla y pegar el
    código en el `<meta name="google-site-verification">` de `index.html` (está
    comentado, junto a la referencia a este archivo).
-3. Enviar `https://biblian.netlify.app/sitemap.xml` en Search Console.
+3. Enviar `https://biblia-paralela.netlify.app/sitemap.xml` en Search Console.
 4. **Bing Webmaster Tools**: importar la propiedad desde Search Console.
 5. Comprobar con la **prueba de resultados enriquecidos** de Google: la portada,
    `/about` (FAQ) y un capítulo (`/compare/jua/3`).

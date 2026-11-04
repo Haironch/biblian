@@ -13,7 +13,7 @@
  * Cambiar de dominio es cambiar `VITE_SITE_URL` (o esta constante) y volver a
  * construir: canonical, Open Graph, hreflang, sitemap y JSON-LD salen de aquí.
  */
-const DOMINIO_POR_DEFECTO = "https://biblian.netlify.app";
+const DOMINIO_POR_DEFECTO = "https://biblia-paralela.netlify.app";
 
 /*
  * `import.meta.env` se escribe TAL CUAL, sin encadenamiento opcional en esa

@@ -1,4 +1,4 @@
-# Biblian — https://biblian.netlify.app
+# Biblian — https://biblia-paralela.netlify.app
 #
 # Se permite todo el contenido de lectura. Lo bloqueado no es secreto: son
 # pantallas de estado del usuario (su cuenta, sus notas, su historial) y el
@@ -18,4 +18,4 @@ Disallow: /notes
 # URLs anunciadas en hreflang no apunten a algo bloqueado.
 Allow: /*?lng=
 
-Sitemap: https://biblian.netlify.app/sitemap.xml
+Sitemap: https://biblia-paralela.netlify.app/sitemap.xml
