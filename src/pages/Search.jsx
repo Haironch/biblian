@@ -2,7 +2,7 @@ import { useContext, useEffect, useMemo, useRef, useState, useCallback } from "r
 import { useNavigate, useSearchParams } from "react-router-dom";
 import DataContext from "../context/DataContext";
 import LanguageContext from "../context/LanguageContext";
-import { buscar, buscarStrongs, listarBiblias, LARGO_MINIMO } from "../services/searchSource";
+import { buscar, listarBiblias, LARGO_MINIMO } from "../services/searchSource";
 import { getDataSource, onDataSourceChange, setDataSource, SOURCES } from "../config/dataSource";
 import { aTextoPlano } from "../utils/textoPlano";
 import { MAX_VERSIONES_COMPARADAS, nombreIdioma, versionDeReferencia } from "../utils/versiones";
@@ -24,7 +24,6 @@ const Search = () => {
     bibliasSeleccionadas,
     setBibliasSeleccionadas,
     destacarVersion,
-    strongFun,
   } = useContext(DataContext);
   const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ const Search = () => {
    * mantener los dos sincronizados en ambos sentidos solo serviría para que se
    * pisaran mientras el usuario escribe.
    */
-  const [parametros, setParametros] = useSearchParams();
+  const [parametros] = useSearchParams();
   const consultaInicial = parametros.get("q") ?? "";
 
   const [texto, setTexto] = useState(consultaInicial);
@@ -52,32 +51,13 @@ const Search = () => {
     }
   });
   /*
-   * Qué se está buscando: el TEXTO BÍBLICO o el DICCIONARIO Strong.
-   *
-   * Son dos índices distintos y dos formas de resultado, pero una sola
-   * pregunta del usuario —dónde sale esta palabra— y un solo campo donde
-   * escribirla. Partirlo en dos pantallas obligaría a saber de antemano en cuál
-   * buscar, que es justo lo que no se sabe.
-   *
-   * El selector de versión y el filtro por libro solo se pintan en modo
-   * bíblico: el diccionario no tiene ni libros ni versiones.
-   *
-   * Vive en la URL (`?modo=strong`) y no en un estado: así "Diccionario" de la
-   * barra lateral es un enlace normal que abre esta pantalla ya en el modo
-   * Strong, y la lateral sabe cuál de los dos resaltar.
+   * El diccionario Strong tuvo aquí su pestaña (`?modo=strong`) antes de tener
+   * página propia. Un enlace viejo lleva a esa página en vez de a una búsqueda
+   * bíblica que no es lo que se pidió.
    */
-  const modo = parametros.get("modo") === "strong" ? "strong" : "biblia";
-  const setModo = (valor) =>
-    setParametros(
-      (previos) => {
-        const siguientes = new URLSearchParams(previos);
-        if (valor === "strong") siguientes.set("modo", "strong");
-        else siguientes.delete("modo");
-        return siguientes;
-      },
-      { replace: true }
-    );
-  const [resultadosStrong, setResultadosStrong] = useState(null);
+  useEffect(() => {
+    if (parametros.get("modo") === "strong") navigate("/dictionary", { replace: true });
+  }, [parametros, navigate]);
 
   const [libroFiltro, setLibroFiltro] = useState("");
   const [catalogo, setCatalogo] = useState([]);
@@ -211,7 +191,7 @@ const Search = () => {
 
   // Efecto de búsqueda principal
   useEffect(() => {
-    if (modo !== "biblia" || !disponible || termino.length < LARGO_MINIMO || !bibliaId) {
+    if (!disponible || termino.length < LARGO_MINIMO || !bibliaId) {
       setResultados(null);
       return;
     }
@@ -242,43 +222,7 @@ const Search = () => {
       .finally(() => setCargando(false));
 
     return () => controller.abort();
-  }, [modo, termino, bibliaId, libroFiltro, pagina, disponible]);
-
-  /*
-   * Búsqueda en el diccionario Strong.
-   *
-   * Va aparte del efecto anterior y no dentro de un `if`: son dos peticiones a
-   * endpoints distintos, con su propia cancelación y su propia paginación.
-   * Mezcladas, cambiar de modo dejaría en pantalla los resultados del otro
-   * mientras llega la respuesta nueva.
-   */
-  useEffect(() => {
-    if (modo !== "strong" || !disponible || termino.length < LARGO_MINIMO) {
-      setResultadosStrong(null);
-      return;
-    }
-
-    const controller = new AbortController();
-    setCargando(true);
-    setError(null);
-
-    buscarStrongs({ q: termino, lang: idiomaNavegador, pagina, limite: POR_PAGINA, signal: controller.signal })
-      .then(setResultadosStrong)
-      .catch((fallo) => {
-        if (fallo?.name === "AbortError") return;
-        setError(fallo.message);
-        setResultadosStrong(null);
-      })
-      .finally(() => setCargando(false));
-
-    return () => controller.abort();
-  }, [modo, termino, pagina, disponible, idiomaNavegador]);
-
-  // Al cambiar de modo se vuelve a la primera página: la 3 de un buscador no
-  // significa nada en el otro.
-  useEffect(() => {
-    setPagina(1);
-  }, [modo]);
+  }, [termino, bibliaId, libroFiltro, pagina, disponible]);
 
   /*
    * El catálogo agrupado por idioma.
@@ -494,32 +438,8 @@ const Search = () => {
         />
       )}
 
-      {/* Qué se busca. Va lo primero porque decide qué significa todo lo demás
-          de la pantalla: en modo diccionario no hay versión ni libro. */}
-      <div role="tablist" className="mx-auto mb-4 flex max-w-sm gap-1 rounded-xl bg-tinta/5 p-1">
-        {[
-          ["biblia", "BuscarModoBiblia"],
-          ["strong", "BuscarModoStrong"],
-        ].map(([valor, clave]) => (
-          <button
-            key={valor}
-            type="button"
-            role="tab"
-            aria-selected={modo === valor}
-            onClick={() => setModo(valor)}
-            className={`flex-1 rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
-              modo === valor
-                ? "bg-superficie text-tinta"
-                : "text-tinta-3 hover:text-tinta"
-            }`}
-          >
-            {t(clave)}
-          </button>
-        ))}
-      </div>
-
       {/* Encabezado y configuración de versión bíblica */}
-      <div className={`mb-6 rounded-xl border border-linea bg-superficie p-5 ${modo === "strong" ? "hidden" : ""}`}>
+      <div className="mb-6 rounded-xl border border-linea bg-superficie p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <span className="text-xs font-semibold uppercase tracking-wider text-acento">
@@ -597,8 +517,8 @@ const Search = () => {
             )}
           </div>
 
-          {/* Filtro por Libro (Opcional). El diccionario no tiene libros. */}
-          <div className={`min-w-[180px] ${modo === "strong" ? "hidden" : ""}`}>
+          {/* Filtro por Libro (Opcional) */}
+          <div className="min-w-[180px]">
             <label htmlFor="filtro-libro-busqueda" className="sr-only">
               {t("BuscarFiltrarLibro")}
             </label>
@@ -645,7 +565,7 @@ const Search = () => {
       )}
 
       {/* Estado inicial / sugerencias cuando no hay búsqueda activa */}
-      {!cargando && ((modo === "biblia" && !resultados) || (modo === "strong" && !resultadosStrong) || termino.length < LARGO_MINIMO) && (
+      {!cargando && (!resultados || termino.length < LARGO_MINIMO) && (
         <div className="mt-8 rounded-2xl border border-dashed border-linea-fuerte bg-superficie-2/50 p-8 text-center">
           <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-acento-suave text-acento">
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -688,77 +608,8 @@ const Search = () => {
         </div>
       )}
 
-      {/*
-        Resultados del diccionario.
-        Al tocar uno se abre el modal de Strong, que es la ficha completa con
-        definición y audio: repetir aquí lo que ese modal ya hace mejor sería
-        mantener dos vistas del mismo dato.
-      */}
-      {!cargando && modo === "strong" && resultadosStrong && (
-        <div className="mt-6">
-          <div className="mb-3 flex items-center justify-between px-1">
-            <p className="text-xs font-medium text-tinta-2">
-              {t("BuscarResultadosStrong", { total: resultadosStrong.pagination.total })}
-            </p>
-            {resultadosStrong.pagination.total > 0 && (
-              <span className="rounded-full bg-acento-suave px-2.5 py-0.5 text-xs font-medium text-acento">
-                {pagina} / {Math.max(1, resultadosStrong.pagination.totalPages)}
-              </span>
-            )}
-          </div>
-
-          {resultadosStrong.data.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-linea-fuerte p-8 text-center">
-              <p className="text-sm text-tinta-2">{t("BuscarSinResultados", { termino })}</p>
-            </div>
-          ) : (
-            <ul className="flex flex-col gap-2">
-              {resultadosStrong.data.map((entrada) => (
-                <li key={entrada.code}>
-                  <button
-                    type="button"
-                    onClick={() => strongFun(entrada.code)}
-                    className="w-full rounded-xl border border-linea bg-superficie p-3 text-left transition hover:border-acento hover:bg-acento-suave"
-                  >
-                    <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5">
-                      <span className="rounded bg-acento-suave px-1.5 py-0.5 text-xs font-semibold text-acento">{entrada.code}</span>
-                      <span className="text-base font-semibold text-tinta">{entrada.lemma}</span>
-                      {entrada.transliteration && <span className="text-sm italic text-tinta-3">{entrada.transliteration}</span>}
-                    </div>
-                    {entrada.definition && (
-                      <p className="mt-1 line-clamp-2 text-sm text-tinta-2">{aTextoPlano(entrada.definition)}</p>
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-
-          {resultadosStrong.pagination.totalPages > 1 && (
-            <div className="mt-5 flex items-center justify-center gap-3">
-              <button
-                type="button"
-                onClick={() => setPagina((previo) => Math.max(1, previo - 1))}
-                disabled={pagina <= 1}
-                className="rounded-lg border border-linea-fuerte px-4 py-2 text-sm font-medium text-tinta-2 disabled:opacity-40"
-              >
-                {t("BuscarAnterior")}
-              </button>
-              <button
-                type="button"
-                onClick={() => setPagina((previo) => Math.min(resultadosStrong.pagination.totalPages, previo + 1))}
-                disabled={pagina >= resultadosStrong.pagination.totalPages}
-                className="rounded-lg border border-linea-fuerte px-4 py-2 text-sm font-medium text-tinta-2 disabled:opacity-40"
-              >
-                {t("BuscarSiguiente")}
-              </button>
-            </div>
-          )}
-        </div>
-      )}
-
       {/* Lista de resultados */}
-      {!cargando && modo === "biblia" && resultados && (
+      {!cargando && resultados && (
         <div className="mt-6">
           <div className="mb-3 flex items-center justify-between px-1">
             <p className="text-xs font-medium text-tinta-2">

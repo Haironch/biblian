@@ -10,6 +10,7 @@ import HistoryPage from "./pages/HistoryPage";
 import Search from "./pages/Search";
 import Account from "./pages/Account";
 import Notes from "./pages/Notes";
+import Dictionary from "./pages/Dictionary";
 import { useSync } from "./hooks/useSync";
 import FloatingBubble from "./components/FloatingBubble";
 import StrongPopup from "./components/StrongPopup";
@@ -131,6 +132,8 @@ const App = () => {
             }
           />
           <Route path="/notes" element={<Notes />} />
+          <Route path="/dictionary" element={<Dictionary />} />
+          <Route path="/dictionary/:codigo" element={<Dictionary />} />
           <Route
             path="/atlas"
             element={

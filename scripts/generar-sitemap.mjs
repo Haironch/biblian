@@ -72,7 +72,7 @@ ${archivos.map((archivo) => `  <sitemap>\n    <loc>${SITE_URL}/${archivo}</loc>\
  * comparador primero, los capítulos al final porque son 1189 y ninguno es más
  * importante que la puerta de entrada.
  */
-const PRIORIDAD = { "/": "1.0", "/compare": "0.9", "/search": "0.8", "/about": "0.6", "/3d": "0.6", "/atlas": "0.6" };
+const PRIORIDAD = { "/": "1.0", "/compare": "0.9", "/search": "0.8", "/dictionary": "0.7", "/about": "0.6", "/3d": "0.6", "/atlas": "0.6" };
 
 const paginas = rutasEstaticas().map((ruta) => entrada({ ruta, prioridad: PRIORIDAD[ruta] ?? "0.5", frecuencia: ruta === "/" ? "weekly" : "monthly" }));
 const capitulos = rutasDeCapitulos().map((ruta) => entrada({ ruta, prioridad: "0.6", frecuencia: "monthly" }));

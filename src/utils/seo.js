@@ -63,6 +63,11 @@ const TEXTOS = {
       description: "Busca cualquier palabra o frase en la Biblia y salta al versículo exacto. Resultados con referencia, contexto y comparación entre versiones.",
       h1: "Buscar en la Biblia",
     },
+    dictionary: {
+      title: "Diccionario Strong — hebreo y griego de la Biblia",
+      description: "Las 8674 palabras hebreas y 5524 griegas de la Biblia con su número Strong: significado, pronunciación con audio y los versículos donde aparece cada una.",
+      h1: "Diccionario Strong",
+    },
     about: {
       title: "Sobre Biblian — qué es y de dónde salen los textos",
       description: `Biblian es una app libre y gratuita para comparar ${TOTAL_VERSIONES}+ versiones de la Biblia con diccionario Strong. Aquí se explica su origen, sus fuentes y quién colabora.`,
@@ -103,6 +108,11 @@ const TEXTOS = {
       title: "Search the Bible — words, phrases and verses",
       description: "Search any word or phrase in the Bible and jump straight to the verse. Results include reference, context and cross-version comparison.",
       h1: "Search the Bible",
+    },
+    dictionary: {
+      title: "Strong's dictionary — Biblical Hebrew and Greek",
+      description: "All 8674 Hebrew and 5524 Greek words of the Bible by Strong's number: meaning, pronunciation with audio and every verse where each one appears.",
+      h1: "Strong's dictionary",
     },
     about: {
       title: "About Biblian — what it is and where the texts come from",
@@ -328,6 +338,10 @@ export const metadatosDeRuta = ({ ruta = "/", params = {}, idioma = "es", extrac
     return { ...base, title: conMarca(t.search.title), description: t.search.description, h1: t.search.h1, jsonLd: { "@context": "https://schema.org", "@graph": grafoBase(idioma) } };
   }
 
+  if (seccion === "dictionary") {
+    return { ...base, title: conMarca(t.dictionary.title), description: t.dictionary.description, h1: t.dictionary.h1, jsonLd: { "@context": "https://schema.org", "@graph": grafoBase(idioma) } };
+  }
+
   if (seccion === "about") {
     return {
       ...base,
@@ -509,7 +523,7 @@ export const preguntasFrecuentes = (idioma = "es") => ({
 });
 
 /** Todas las rutas indexables que existen, para el sitemap y el prerenderizado. */
-export const rutasEstaticas = () => ["/", "/compare", "/search", "/about", "/3d", "/atlas"];
+export const rutasEstaticas = () => ["/", "/compare", "/search", "/dictionary", "/about", "/3d", "/atlas"];
 
 export const rutasDeLibros = () => LIBROS.map((libro) => `/compare/${libro.slug}`);
 

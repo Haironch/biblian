@@ -39,6 +39,8 @@
 /compare        /index.html  200
 /compare/*      /index.html  200
 /search         /index.html  200
+/dictionary     /index.html  200
+/dictionary/*   /index.html  200
 /about          /index.html  200
 /settings       /index.html  200
 /history        /index.html  200
