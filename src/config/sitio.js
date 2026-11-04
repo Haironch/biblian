@@ -37,6 +37,14 @@ export const AUTOR = "Cristopher Paiz";
 
 export const REPO_URL = "https://github.com/CristopherPaiz/multi-bible-compare";
 
+/**
+ * El repo de ESTA versión. `REPO_URL` es el del proyecto original y solo se usa
+ * para darle crédito en Información; para la identidad del sitio (el `sameAs`
+ * del JSON-LD, que le dice a los buscadores qué otras páginas son "lo mismo"
+ * que este sitio) va este.
+ */
+export const REPO_PROPIO = "https://github.com/Haironch/biblian";
+
 /** Idiomas de la interfaz. El primero es el que sirve de `x-default`. */
 export const IDIOMAS = ["es", "en"];
 

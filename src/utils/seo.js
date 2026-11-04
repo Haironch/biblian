@@ -17,7 +17,7 @@
  * dijera una cosa y el DOM renderizado otra, el buscador se queda con la
  * segunda y el trabajo del prerenderizado se pierde.
  */
-import { SITE_NAME, SITE_URL, TOTAL_VERSIONES, urlAbsoluta } from "../config/sitio.js";
+import { SITE_NAME, SITE_URL, TOTAL_VERSIONES, urlAbsoluta, REPO_PROPIO } from "../config/sitio.js";
 import { LIBROS, libroPorSlug, nombreDeLibro } from "../data/libros.js";
 import { totalCapitulos } from "../data/canon.js";
 
@@ -194,7 +194,7 @@ export const grafoBase = (idioma = "es") => [
     name: SITE_NAME,
     url: `${SITE_URL}/`,
     logo: { "@type": "ImageObject", url: `${SITE_URL}/bibleIcon.svg` },
-    sameAs: ["https://github.com/CristopherPaiz/multi-bible-compare"],
+    sameAs: [REPO_PROPIO],
   },
   {
     "@type": "WebSite",
