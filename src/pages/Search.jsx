@@ -38,7 +38,7 @@ const Search = () => {
    * mantener los dos sincronizados en ambos sentidos solo serviría para que se
    * pisaran mientras el usuario escribe.
    */
-  const [parametros] = useSearchParams();
+  const [parametros, setParametros] = useSearchParams();
   const consultaInicial = parametros.get("q") ?? "";
 
   const [texto, setTexto] = useState(consultaInicial);
@@ -61,8 +61,22 @@ const Search = () => {
    *
    * El selector de versión y el filtro por libro solo se pintan en modo
    * bíblico: el diccionario no tiene ni libros ni versiones.
+   *
+   * Vive en la URL (`?modo=strong`) y no en un estado: así "Diccionario" de la
+   * barra lateral es un enlace normal que abre esta pantalla ya en el modo
+   * Strong, y la lateral sabe cuál de los dos resaltar.
    */
-  const [modo, setModo] = useState("biblia");
+  const modo = parametros.get("modo") === "strong" ? "strong" : "biblia";
+  const setModo = (valor) =>
+    setParametros(
+      (previos) => {
+        const siguientes = new URLSearchParams(previos);
+        if (valor === "strong") siguientes.set("modo", "strong");
+        else siguientes.delete("modo");
+        return siguientes;
+      },
+      { replace: true }
+    );
   const [resultadosStrong, setResultadosStrong] = useState(null);
 
   const [libroFiltro, setLibroFiltro] = useState("");

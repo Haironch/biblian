@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Link, useLocation } from "react-router-dom";
 import { useContext, useEffect, useRef, useState } from "react";
-import { BookOpen, ChevronLeft, ChevronRight, Columns2, Globe, History, House, Info, Languages, Moon, NotebookPen, Search, Settings, Sun, UserRound, Ellipsis } from "lucide-react";
+import { BookA, BookOpen, ChevronLeft, ChevronRight, Columns2, Globe, History, House, Info, Languages, Moon, NotebookPen, Search, Settings, Sun, UserRound, Ellipsis } from "lucide-react";
 import LOGO from "/bibleIcon.svg";
 import LanguageContext from "../context/LanguageContext";
 import ThemeContext from "../context/ThemeContext";
@@ -28,6 +28,9 @@ const RUTAS_LECTURA = [
 
 const RUTAS_ESTUDIO = [
   { to: "/notes", clave: "NotasTitulo", Icono: NotebookPen },
+  // El diccionario es el modo Strong de Buscar; aquí solo se le da la entrada
+  // a la vista que tenía escondida dentro de esa pantalla.
+  { to: "/search?modo=strong", clave: "Diccionario", Icono: BookA },
   { to: "/atlas", clave: "AtlasTitulo", Icono: Globe },
   { to: "/3d", clave: "Biblia3D", Icono: BookOpen },
 ];
@@ -42,7 +45,19 @@ const RUTAS_CUENTA = [
 // algo que escribiste tú, Historial se alcanza igual desde Comparar.
 const PESTANAS_MOVIL = ["/", "/compare", "/search", "/notes"];
 
-const esActiva = (pathname, to) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
+/*
+ * `to` puede traer consulta ("/search?modo=strong"): entonces cuenta también
+ * la consulta, para que en el diccionario se resalte "Diccionario" y no
+ * "Buscar", que es la misma ruta.
+ */
+const esModoStrong = (search) => new URLSearchParams(search).get("modo") === "strong";
+const esActiva = (pathname, to, search = "") => {
+  const [ruta, consulta] = to.split("?");
+  if (ruta === "/") return pathname === "/";
+  if (!pathname.startsWith(ruta)) return false;
+  if (ruta === "/search") return esModoStrong(search) === Boolean(consulta);
+  return true;
+};
 
 /** Un renglón de la lateral. El activo lleva el fondo del acento, como Finder. */
 const EnlaceLateral = ({ to, etiqueta, Icono, activo }) => (
@@ -124,7 +139,7 @@ const Navbar = () => {
     useContext(DataContext);
   const [menuAbierto, setMenuAbierto] = useState(false);
   const menuRef = useRef(null);
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   const hayVersiculo = versiculoSeleccionadoNumero > 0;
   const lectura = RUTAS_LECTURA.filter((r) => !r.requiereVersiculo || hayVersiculo);
@@ -133,10 +148,11 @@ const Navbar = () => {
   const enMas = todas.filter(({ to }) => !PESTANAS_MOVIL.includes(to));
 
   // El menú se cierra al cambiar de ruta: si no, al tocar "Ajustes" el panel
-  // seguiría abierto encima de la página nueva.
+  // seguiría abierto encima de la página nueva. Cuenta también la consulta:
+  // de Buscar a Diccionario solo cambia `?modo=strong`.
   useEffect(() => {
     setMenuAbierto(false);
-  }, [pathname]);
+  }, [pathname, search]);
 
   useEffect(() => {
     if (!menuAbierto) return;
@@ -197,7 +213,7 @@ const Navbar = () => {
    * en Ajustes ninguna pestaña quedaba marcada y la barra decía que no estás
    * en ninguna parte.
    */
-  const enSecundaria = enMas.some(({ to }) => esActiva(pathname, to));
+  const enSecundaria = enMas.some(({ to }) => esActiva(pathname, to, search));
 
   /*
    * Al confirmar biblias nuevas, capítulo y versículo se ponen a `null`, que no
@@ -206,7 +222,7 @@ const Navbar = () => {
   const mostrarPasaje = pathname.startsWith("/compare") && Boolean(versiculoSeleccionadoNumero && libroSeleccionado && capituloSeleccionadoNumero);
 
   const grupo = (rutas) =>
-    rutas.map(({ to, clave, Icono }) => <EnlaceLateral key={to} to={to} etiqueta={t(clave)} Icono={Icono} activo={esActiva(pathname, to)} />);
+    rutas.map(({ to, clave, Icono }) => <EnlaceLateral key={to} to={to} etiqueta={t(clave)} Icono={Icono} activo={esActiva(pathname, to, search)} />);
 
   return (
     <>
@@ -252,8 +268,8 @@ const Navbar = () => {
                 <Link
                   role="menuitem"
                   to={to}
-                  aria-current={esActiva(pathname, to) ? "page" : undefined}
-                  className={`flex items-center gap-3 px-4 py-3 text-sm ${esActiva(pathname, to) ? "font-medium text-acento" : "text-tinta"} active:bg-tinta/5`}
+                  aria-current={esActiva(pathname, to, search) ? "page" : undefined}
+                  className={`flex items-center gap-3 px-4 py-3 text-sm ${esActiva(pathname, to, search) ? "font-medium text-acento" : "text-tinta"} active:bg-tinta/5`}
                 >
                   <Icono className="h-5 w-5 shrink-0" strokeWidth={1.8} aria-hidden="true" />
                   {t(clave)}
@@ -265,7 +281,7 @@ const Navbar = () => {
 
         <ul className="flex h-14 items-stretch">
           {pestanas.map(({ to, clave, Icono }) => {
-            const activo = esActiva(pathname, to);
+            const activo = esActiva(pathname, to, search);
             return (
               <li key={to} className="min-w-0 flex-1">
                 <Link to={to} aria-current={activo ? "page" : undefined} className={`flex h-full flex-col items-center justify-center gap-0.5 ${activo ? "text-acento" : "text-tinta-3"}`}>
