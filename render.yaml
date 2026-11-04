@@ -14,7 +14,10 @@ services:
     region: virginia
     plan: free
     rootDir: api
-    buildCommand: npm ci && npm run build
+    # `--include=dev`: con NODE_ENV=production `npm ci` se salta las
+    # devDependencies, y TypeScript es una. Sin él, el build usaba un `tsc`
+    # global de Render (otra versión) que rechaza el tsconfig.
+    buildCommand: npm ci --include=dev && npm run build
     startCommand: npm start
     healthCheckPath: /health
     autoDeploy: true
