@@ -228,3 +228,54 @@ export const marcarPalabrasConOriginal = (html, marcables) => {
     )
     .join("");
 };
+
+/*
+ * Interlineal del versículo: el texto completo partido en frases, cada una con
+ * TODOS sus códigos (artículo incluido) y la frase final sin número al final.
+ *
+ * A diferencia de `etiquetasDelVersiculo`, aquí no se descarta nada: es para
+ * leer el versículo entero con el original debajo, no para encontrar una
+ * palabra. El orden es el de la traducción (interlineal "inverso"): el hebreo
+ * y el griego van debajo de la palabra española que los traduce.
+ */
+export const segmentosInterlineales = (html, bookId) => {
+  const prefijo = Number(bookId) <= ULTIMO_LIBRO_AT ? "H" : "G";
+  const partes = String(html ?? "").split(/<sup>\s*(\d+)\s*<\/sup>/i);
+  const segmentos = [];
+
+  for (let i = 0; i < partes.length; i += 2) {
+    const texto = textoPlano(partes[i]);
+    const numero = partes[i + 1];
+    const codigo = numero === undefined ? null : `${prefijo}${Number(numero)}`;
+
+    if (texto) segmentos.push({ texto, codigos: codigo ? [codigo] : [] });
+    else if (codigo && segmentos.length > 0) segmentos[segmentos.length - 1].codigos.push(codigo);
+    else if (codigo) segmentos.push({ texto: "", codigos: [codigo] });
+  }
+
+  return segmentos;
+};
+
+/**
+ * Las frases del versículo para el interlineal, y de qué versión salieron.
+ *
+ * Si la versión que se lee trae números Strong se usa esa; si no, la primera
+ * versión puente que tenga el versículo.
+ *
+ * @returns {Promise<{ version: string, segmentos: Array<{texto:string, codigos:string[]}> } | null>}
+ */
+export const interlinealDelVersiculo = async ({ version, bookId, capitulo, versiculo }) => {
+  const candidatas = [version, ...VERSIONES_PUENTE.filter((v) => v !== version)].filter(Boolean);
+
+  for (const candidata of candidatas) {
+    try {
+      const capituloTexto = await capituloPuente(candidata, bookId, capitulo);
+      const html = capituloTexto?.[versiculo];
+      if (!/<sup>\s*\d+\s*<\/sup>/i.test(html ?? "")) continue;
+      return { version: candidata, segmentos: segmentosInterlineales(html, bookId) };
+    } catch {
+      // Sin esa versión (red, fuente caída): se prueba la siguiente.
+    }
+  }
+  return null;
+};

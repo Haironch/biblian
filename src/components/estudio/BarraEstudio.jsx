@@ -7,6 +7,7 @@ import { formatearReferencia } from "../../utils/referencia";
 import { ISO_POR_IDIOMA, idiomaDeVersion } from "../../utils/versiones";
 import PanelNotas from "./PanelNotas";
 import PanelReferencias from "./PanelReferencias";
+import PanelInterlineal from "./PanelInterlineal";
 import PanelAudio from "./PanelAudio";
 import PanelExportar from "./PanelExportar";
 import PanelAjustes from "./PanelAjustes";
@@ -37,6 +38,20 @@ const IconoReferencias = ({ className }) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
     <path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.5 1.5" />
     <path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7L12 19" />
+  </svg>
+);
+
+// Una línea de texto con otra debajo: lo que es un interlineal.
+const IconoInterlineal = ({ className }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round" className={className} aria-hidden="true">
+    <path d="M4 6h6" />
+    <path d="M14 6h6" />
+    <path d="M5 10.5h4" strokeWidth={1.4} opacity={0.6} />
+    <path d="M15 10.5h4" strokeWidth={1.4} opacity={0.6} />
+    <path d="M4 15h7" />
+    <path d="M15 15h5" />
+    <path d="M5 19.5h5" strokeWidth={1.4} opacity={0.6} />
+    <path d="M16 19.5h3" strokeWidth={1.4} opacity={0.6} />
   </svg>
 );
 
@@ -86,6 +101,7 @@ const IconoAjustes = ({ className }) => (
 const CLASE = { className: PropTypes.string };
 IconoNota.propTypes = CLASE;
 IconoReferencias.propTypes = CLASE;
+IconoInterlineal.propTypes = CLASE;
 IconoAudio.propTypes = CLASE;
 IconoExportar.propTypes = CLASE;
 IconoDiferencias.propTypes = CLASE;
@@ -188,6 +204,11 @@ const BarraEstudio = () => {
   };
 
   /*
+   * Hasta `xl` el icono va SIEMPRE con su nombre debajo y los botones se
+   * reparten el ancho: con siete botones en fila (icono + texto al lado) no
+   * caben en una tableta ni en una ventana a media pantalla, y el último
+   * quedaba cortado.
+   *
    * En móvil el icono va SIEMPRE con su nombre debajo.
    *
    * Antes la etiqueta era `hidden sm:inline`, así que en el teléfono quedaban
@@ -205,14 +226,14 @@ const BarraEstudio = () => {
       title={etiqueta}
       aria-label={etiqueta}
       aria-expanded={panel === id}
-      className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
+      className={`relative flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0 py-1 transition-colors xl:h-9 xl:flex-none xl:flex-row xl:gap-1.5 xl:px-3 xl:py-0 ${
         panel === id || activo ? "bg-acento-suave text-acento" : "text-tinta-2 hover:bg-tinta/5 hover:text-tinta"
       }`}
     >
       <Icono className="h-5 w-5 shrink-0" />
       {/* `truncate` y no un texto más corto: en una pantalla estrecha se
           recorta el final, que sigue siendo más informativo que nada. */}
-      <span className="w-full truncate text-center text-[10px] font-medium leading-none tracking-tight max-[359px]:text-[9px] sm:text-xs sm:tracking-normal">{etiqueta}</span>
+      <span className="w-full truncate text-center text-[10px] font-medium leading-none tracking-tight max-[359px]:text-[9px] xl:text-xs xl:tracking-normal">{etiqueta}</span>
       {insignia !== null && insignia > 0 && (
         <span className="absolute right-0 top-0 grid h-4 min-w-4 place-items-center rounded-full bg-acento-solido px-1 text-[10px] font-semibold text-white">{insignia}</span>
       )}
@@ -272,7 +293,11 @@ const BarraEstudio = () => {
               paneles hablan del versículo abierto, que está en la miga de pan.
             */}
             <h2 className="min-w-0 truncate text-sm font-semibold text-tinta">
-              {montado === "referencias" ? t("Panel_referencias_de", { ref: referencia }) : t(`Panel_${montado}`)}
+              {montado === "referencias"
+                ? t("Panel_referencias_de", { ref: referencia })
+                : montado === "interlineal"
+                  ? t("Panel_interlineal_de", { ref: referencia })
+                  : t(`Panel_${montado}`)}
             </h2>
             <button
               type="button"
@@ -293,6 +318,8 @@ const BarraEstudio = () => {
 
             {montado === "referencias" && <PanelReferencias bookId={bookId} capitulo={capituloSeleccionadoNumero} versiculo={versiculoSeleccionadoNumero} />}
 
+            {montado === "interlineal" && <PanelInterlineal bookId={bookId} capitulo={capituloSeleccionadoNumero} versiculo={versiculoSeleccionadoNumero} />}
+
             {montado === "audio" && versionTrabajo && <PanelAudio biblia={versionTrabajo} iso={isoPrincipal} />}
 
             {montado === "exportar" && <PanelExportar bookId={bookId} capitulo={capituloSeleccionadoNumero} versiculo={versiculoSeleccionadoNumero} />}
@@ -309,18 +336,19 @@ const BarraEstudio = () => {
       <div className="mx-auto flex w-full items-center gap-1 border-t border-linea bg-superficie/95 px-1 py-1.5 backdrop-blur sm:px-2 sm:w-11/12 sm:max-w-3xl sm:gap-2 sm:rounded-t-2xl sm:border sm:border-b-0 sm:px-3 sm:py-2 sm:shadow-lg">
         {/* La referencia no cabe en móvil junto a seis botones, y ya está en la
             miga de pan de arriba: aquí solo aparece cuando sobra sitio. */}
-        <span className="hidden min-w-0 flex-1 truncate text-xs font-medium text-tinta-2 lg:block">{referencia}</span>
+        <span className="hidden min-w-0 flex-1 truncate text-xs font-medium text-tinta-2 xl:block">{referencia}</span>
 
         {/* `items-stretch` y cada botón con `flex-1`: en móvil los seis se
             reparten el ancho a partes iguales, así que el área de toque no
             depende de lo larga que sea la palabra. */}
-        <div className="flex flex-1 items-stretch gap-0 sm:gap-0.5 lg:flex-none lg:justify-end lg:gap-2">
+        <div className="flex flex-1 items-stretch gap-0 sm:gap-0.5 xl:flex-none xl:justify-end xl:gap-2">
           {/* Resaltar y anotar eran dos botones. Son la misma accion —marcar
               este versiculo— y separarlas obligaba a abrir un panel, cerrarlo y
               abrir otro para hacer lo normal: resaltar y escribir por que. */}
           {boton("notas", IconoNota, t("AnotarTitulo"), { activo: Boolean(colorActual), insignia: totalNotas })}
           {boton("audio", IconoAudio, t("AudioTitulo"))}
           {boton("referencias", IconoReferencias, t("ReferenciasTitulo"))}
+          {boton("interlineal", IconoInterlineal, t("InterlinealTitulo"))}
 
           {/* Este no abre panel: es un interruptor. Vive entre los demás y no
               al final porque es una forma de VER el versículo, igual de
@@ -331,12 +359,12 @@ const BarraEstudio = () => {
             title={t("DiferenciasTitulo")}
             aria-label={t("DiferenciasTitulo")}
             aria-pressed={modoDiferencias}
-            className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0 py-1 transition-colors sm:h-9 sm:flex-none sm:flex-row sm:gap-1.5 sm:px-3 sm:py-0 ${
+            className={`flex min-w-0 flex-1 flex-col items-center justify-center gap-0.5 rounded-xl px-0 py-1 transition-colors xl:h-9 xl:flex-none xl:flex-row xl:gap-1.5 xl:px-3 xl:py-0 ${
               modoDiferencias ? "bg-acento-suave text-acento" : "text-tinta-2 hover:bg-tinta/5 hover:text-tinta"
             }`}
           >
             <IconoDiferencias className="h-5 w-5 shrink-0" />
-            <span className="w-full truncate text-center text-[10px] font-medium leading-none tracking-tight max-[359px]:text-[9px] sm:text-xs sm:tracking-normal">{t("DiferenciasTitulo")}</span>
+            <span className="w-full truncate text-center text-[10px] font-medium leading-none tracking-tight max-[359px]:text-[9px] xl:text-xs xl:tracking-normal">{t("DiferenciasTitulo")}</span>
           </button>
 
           {boton("exportar", IconoExportar, t("ExportarTitulo"))}
