@@ -11,3 +11,6 @@ temp/
 # Base construida en local (cientos de MB)
 build/
 .env.bak
+
+# Credenciales de la base en Turso (producción). Solo en esta máquina.
+.env.produccion

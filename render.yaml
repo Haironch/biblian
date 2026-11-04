@@ -1,0 +1,47 @@
+# Blueprint de Render para la API de Biblian.
+#
+# Render -> New -> Blueprint -> este repo. Crea el servicio con todo lo de
+# abajo y solo pide los valores marcados `sync: false` (los de Turso), que son
+# secretos y no van en el repo.
+#
+# Región Virginia: la base vive en Turso AWS us-east-1, y base y API cerca es
+# lo que más baja la latencia de cada consulta.
+
+services:
+  - type: web
+    name: biblian-api
+    runtime: node
+    region: virginia
+    plan: free
+    rootDir: api
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /health
+    autoDeploy: true
+    # Solo redesplegar cuando cambia la API: el frontend lo publica Netlify y
+    # un cambio de CSS no tiene por qué reiniciar el servidor.
+    buildFilter:
+      paths:
+        - api/**
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+      # Render inyecta PORT por su cuenta; la API lo lee de ahí.
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      # Secreto propio de este despliegue, generado por Render al crear el
+      # servicio. Nunca el de otro proyecto.
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_EXPIRATION_TIME
+        value: 7d
+      - key: SALT_ROUNDS
+        value: "10"
+      - key: FRONTEND_URL
+        value: https://biblian-app.netlify.app
+      - key: CORS_ORIGINS
+        value: https://biblian-app.netlify.app

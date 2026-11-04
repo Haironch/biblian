@@ -25,9 +25,29 @@ app.use(helmet({ crossOriginResourcePolicy: { policy: 'cross-origin' } }))
 // el costo es ruido frente al round-trip que se ahorra.
 app.use(compression())
 
+/*
+ * IP con la que se cuenta el límite.
+ *
+ * La UI llama a la API a través del proxy de Netlify (`/api/*` en _redirects),
+ * así que para Express la petición llega desde Netlify y `req.ip` es la de su
+ * borde, la misma para todos los visitantes: compartirían un solo cupo de 300 y
+ * con pocos usuarios a la vez la API empezaría a responder 429. Netlify manda la
+ * IP real del visitante en `x-nf-client-connection-ip`; se usa esa cuando está.
+ *
+ * La cabecera se puede falsificar llamando a Render directo, pero el límite es
+ * una protección blanda contra abuso, y dejar a todos los usuarios reales en un
+ * mismo cupo es el problema más grave de los dos.
+ */
+const ipDelVisitante = (req: Request): string => {
+  const deNetlify = req.headers['x-nf-client-connection-ip']
+  const ip = Array.isArray(deNetlify) ? deNetlify[0] : deNetlify
+  return ip?.trim() || req.ip || 'desconocida'
+}
+
 const limiter = rateLimit({
   windowMs: 30 * 60 * 1000,
   max: 300,
+  keyGenerator: ipDelVisitante,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
