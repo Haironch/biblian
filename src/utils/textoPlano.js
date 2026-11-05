@@ -25,6 +25,9 @@ export const aTextoPlano = (html) =>
     .replace(/<sup>[\s\S]*?<\/sup>/gi, " ")
     .replace(/<m>[\s\S]*?<\/m>/gi, " ")
     .replace(/<f>[\s\S]*?<\/f>/gi, " ")
+    // Algunas versiones (NVI) usan `<n>` para la llamada de nota, "[1]". No
+    // es glosa sino una referencia a una nota que al copiar no viaja.
+    .replace(/<n>\s*\[\d+\]\s*<\/n>/gi, " ")
     .replace(/\\par\b/gi, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/\s+([,.;:!?])/g, "$1")

@@ -16,6 +16,13 @@ import { formatearReferencia } from "./referencia";
 /** "075. Español - Reina Valera [RV60] (1960)" -> "Reina Valera [RV60] (1960)" */
 export const nombreCortoVersion = (ruta) => String(ruta ?? "").split(" - ").slice(1).join(" - ").trim() || String(ruta ?? "");
 
+/*
+ * ", Reina Valera (1960)" y no " (Reina Valera (1960))": casi todos los
+ * nombres ya terminan en el año entre paréntesis, y envolverlos en otro par
+ * dejaba "))" al final de cada cita.
+ */
+const sufijoVersion = (version) => (version ? `, ${nombreCortoVersion(version)}` : "");
+
 /**
  * Una cita lista para pegar: texto entrecomillado, referencia y versión.
  *
@@ -28,7 +35,7 @@ export const nombreCortoVersion = (ruta) => String(ruta ?? "").split(" - ").slic
 export const citaDeVersiculo = ({ texto, referencia, version, t }) => {
   const limpio = aTextoPlano(texto);
   const ref = formatearReferencia(referencia, t);
-  const sufijo = version ? ` (${nombreCortoVersion(version)})` : "";
+  const sufijo = sufijoVersion(version);
   return `«${limpio}» — ${ref}${sufijo}`;
 };
 
@@ -134,4 +141,40 @@ export const descargarTexto = (nombreArchivo, contenido, tipo = "text/markdown;c
 
   // Sin revocar, el blob se queda en memoria hasta recargar la página.
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
+
+/**
+ * [1, 3, 4, 5, 8] -> "1, 3-5, 8". Los seguidos se juntan en un rango, como se
+ * escriben las citas a mano.
+ */
+export const rangosDeVersiculos = (numeros) => {
+  const ordenados = [...new Set(numeros.map(Number))].sort((a, b) => a - b);
+  const tramos = [];
+  for (const n of ordenados) {
+    const ultimo = tramos[tramos.length - 1];
+    if (ultimo && n === ultimo[1] + 1) ultimo[1] = n;
+    else tramos.push([n, n]);
+  }
+  return tramos.map(([desde, hasta]) => (desde === hasta ? `${desde}` : `${desde}-${hasta}`)).join(", ");
+};
+
+/**
+ * Varios versículos de un capítulo listos para pegar.
+ *
+ * Uno solo sale igual que `citaDeVersiculo`. Con varios, cada uno en su
+ * renglón con su número delante —"1 y 4" no se pueden juntar en una frase
+ * como si fueran seguidos— y la cita completa al final.
+ */
+export const citaDeVersiculos = ({ capituloTexto, numeros, bookId, capitulo, version, t }) => {
+  const ordenados = [...new Set(numeros.map(Number))].sort((a, b) => a - b);
+  const conTexto = ordenados.map((n) => ({ n, texto: aTextoPlano(capituloTexto?.[String(n)] ?? "") })).filter((v) => v.texto);
+  if (conTexto.length === 0) return "";
+
+  const sufijo = sufijoVersion(version);
+  if (conTexto.length === 1) {
+    return citaDeVersiculo({ texto: conTexto[0].texto, referencia: { bookId, capitulo, versiculo: conTexto[0].n }, version, t });
+  }
+
+  const cita = `${formatearReferencia({ bookId, capitulo }, t)}:${rangosDeVersiculos(conTexto.map((v) => v.n))}${sufijo}`;
+  return `${conTexto.map(({ n, texto }) => `${n} ${texto}`).join("\n")}\n— ${cita}`;
 };

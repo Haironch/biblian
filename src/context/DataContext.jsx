@@ -93,6 +93,33 @@ export const DataProvider = ({ children }) => {
   const [capituloSeleccionadoNumero, setCapituloSeleccionadoNumero] = useState(0);
   const [versiculoSeleccionado, setVersiculoSeleccionado] = useState(0);
   const [versiculoSeleccionadoNumero, setVersiculoSeleccionadoNumero] = useState(0);
+
+  /*
+   * Versículos MARCADOS para copiar: "el 1", "el 1 y el 4", "del 3 al 5".
+   *
+   * Es aparte del versículo activo (`versiculoSeleccionadoNumero`), que es UNO
+   * y decide la barra de estudio, la URL y el globito de las palabras. Marcar
+   * va acumulando; el activo es siempre el último que se tocó.
+   *
+   * `versionMarcada` es la columna donde se tocó por última vez: con seis
+   * versiones abiertas, se copia la que se estaba leyendo.
+   */
+  const [versiculosMarcados, setVersiculosMarcados] = useState([]);
+  const [versionMarcada, setVersionMarcada] = useState(null);
+
+  const marcarVersiculo = useCallback((numero, version) => {
+    const n = Number(numero);
+    setVersiculosMarcados((previos) => (previos.includes(n) ? previos : [...previos, n].sort((a, b) => a - b)));
+    if (version) setVersionMarcada(version);
+  }, []);
+
+  const desmarcarVersiculo = useCallback((numero) => {
+    const n = Number(numero);
+    setVersiculosMarcados((previos) => previos.filter((v) => v !== n));
+  }, []);
+
+  const limpiarMarcados = useCallback(() => setVersiculosMarcados([]), []);
+
   const [libros, setLibros] = useState({});
   // `idiomaNavegador` se usa para elegir la versión de trabajo por defecto: con
   // la app en español, la previsualización debe salir en español y no en la
@@ -708,6 +735,9 @@ export const DataProvider = ({ children }) => {
   useEffect(() => {
     textosRef.current = {};
     setTextosPorBiblia({});
+    // Lo marcado para copiar es de ESTE capítulo: "1 y 4" en Romanos 8 no
+    // significa nada en Romanos 9.
+    setVersiculosMarcados([]);
   }, [libroSeleccionado, capituloSeleccionadoNumero]);
 
   const diferenciasPorBiblia = useMemo(() => {
@@ -896,6 +926,11 @@ export const DataProvider = ({ children }) => {
         setVersiculoSeleccionado,
         versiculoSeleccionadoNumero,
         setVersiculoSeleccionadoNumero,
+        versiculosMarcados,
+        versionMarcada,
+        marcarVersiculo,
+        desmarcarVersiculo,
+        limpiarMarcados,
         capituloSeleccionadoNumero,
         setCapituloSeleccionadoNumero,
         paginaInicio,

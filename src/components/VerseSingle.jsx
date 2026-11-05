@@ -138,6 +138,9 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
   const {
     versiculoSeleccionadoNumero,
     setVersiculoSeleccionadoNumero,
+    versiculosMarcados,
+    marcarVersiculo,
+    desmarcarVersiculo,
     setCompartirVerse,
     tamanioVerseAlto,
     mostrarStrongPopup,
@@ -206,11 +209,26 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
   // `true` mientras no haya ni un versículo que pintar.
   const sinContenido = !textoVisible || (esCapitulo && Object.keys(texto).length === 0);
 
+  /*
+   * Tocar un versículo lo MARCA para copiar y lo deja activo; tocar otro lo
+   * suma ("1 y 4"). Tocar uno ya marcado que no es el activo lo desmarca.
+   *
+   * El activo no se desmarca tocándolo: dentro de él, tocar una palabra abre
+   * su original, y ese gesto no puede quitar la marca a la vez. Para eso está
+   * la ✕ de la barra de copiar.
+   */
   const handleVerseClick = useCallback(
     (versiculo) => {
+      const n = Number(versiculo);
+      const esActivo = n === Number(versiculoSeleccionadoNumero);
+      if (!esActivo && versiculosMarcados.includes(n)) {
+        desmarcarVersiculo(n);
+        return;
+      }
+      marcarVersiculo(n, nombre);
       setVersiculoSeleccionadoNumero(versiculo);
     },
-    [setVersiculoSeleccionadoNumero],
+    [versiculoSeleccionadoNumero, versiculosMarcados, marcarVersiculo, desmarcarVersiculo, setVersiculoSeleccionadoNumero, nombre],
   );
 
   // Las traducciones son de ESTE capítulo: al cambiar de libro o capítulo se
@@ -573,9 +591,12 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                * perdería de vista cuál es el versículo activo — que es la
                * referencia que enseña la barra de arriba.
                */
+              const marcado = !seleccionado && versiculosMarcados.includes(Number(versiculo));
               const fondo = seleccionado
                 ? "border-acento bg-acento-suave text-tinta"
-                : color
+                : marcado
+                  ? "border-acento/50 bg-acento-suave/50 text-tinta"
+                  : color
                   ? `border-transparent ${CLASES_COLOR[color] ?? ""}`
                   : "border-transparent text-tinta hover:bg-superficie-2";
 
@@ -583,6 +604,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                 <p
                   key={versiculo}
                   data-verse={versiculo}
+                  aria-selected={seleccionado || marcado}
                   onClick={() => handleVerseClick(versiculo)}
                   // El borde izquierdo va siempre, transparente cuando no toca:
                   // si apareciera solo al seleccionar, el texto se correría 3px
@@ -595,7 +617,7 @@ const VerseSingle = ({ texto, nombre, iso, cargando = false, bookId }) => {
                     corrido hacia la derecha. Que la primera línea arranque al
                     lado del número lo resuelve el CSS del marcado, no el layout.
                   */}
-                  <span className={`mr-1.5 select-none font-sans text-[11px] font-semibold tabular-nums ${seleccionado ? "text-acento" : "text-tinta-3"}`}>{versiculo}</span>
+                  <span className={`mr-1.5 select-none font-sans text-[11px] font-semibold tabular-nums ${seleccionado || marcado ? "text-acento" : "text-tinta-3"}`}>{versiculo}</span>
                   {tieneNota && (
                     // Un punto y no un icono: va dentro del renglón del texto y
                     // cualquier cosa más alta descuadraría la primera línea.

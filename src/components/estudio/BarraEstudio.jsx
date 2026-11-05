@@ -8,6 +8,7 @@ import { ISO_POR_IDIOMA, idiomaDeVersion } from "../../utils/versiones";
 import PanelNotas from "./PanelNotas";
 import PanelReferencias from "./PanelReferencias";
 import PanelInterlineal from "./PanelInterlineal";
+import BarraCopiar from "./BarraCopiar";
 import PanelAudio from "./PanelAudio";
 import PanelExportar from "./PanelExportar";
 import PanelAjustes from "./PanelAjustes";
@@ -259,6 +260,9 @@ const BarraEstudio = () => {
       {/* Se aparta de la lateral y de las pestañas con las variables del
           esqueleto: `fixed` mide contra la ventana, no contra el contenido. */}
       <div ref={contenedorRef} className="fixed bottom-pestanas left-lateral right-0 z-20">
+      {/* Copiar lo marcado. Se esconde con un panel abierto: los dos ocupan el
+          mismo sitio encima de la barra, y el panel es lo que se pidió. */}
+      {!panel && <BarraCopiar bookId={bookId} />}
       {/*
         En móvil, panel y barra van de borde a borde y sin esquinas
         redondeadas: pegados a los lados se leen como parte de la pantalla. Con
