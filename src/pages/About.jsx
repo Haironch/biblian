@@ -2,6 +2,7 @@ import { useContext, useState, useMemo } from "react";
 import LanguageContext from "../context/LanguageContext";
 import { BEBLIA_INFO, BIBLIAS_ATRIBUCION } from "../data/colaboradores";
 import { CARACTERISTICAS_POR_BIBLIA, MAPA_CARACTERISTICAS } from "../data/biblias";
+import IconoDato from "../components/IconoDato";
 import PreguntasFrecuentes from "../components/PreguntasFrecuentes";
 import { ArrowUpRight, Github, Sprout, TriangleAlert } from "lucide-react";
 import { AUTOR, REPO_URL } from "../config/sitio";
@@ -266,7 +267,7 @@ const About = () => {
                                       title={t(`Feat_${featKey}_desc`)}
                                       className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded border text-[9px] font-medium ${info.clase}`}
                                     >
-                                      <span>{info.icono}</span>
+                                      <IconoDato nombre={info.icono} className="h-2.5 w-2.5" />
                                       <span>{t(`Feat_${featKey}`)}</span>
                                     </span>
                                   );

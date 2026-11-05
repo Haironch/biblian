@@ -1,6 +1,7 @@
 import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
+import { ArrowBigUpDash } from "lucide-react";
 import AuthContext from "../context/AuthContext";
 import LanguageContext from "../context/LanguageContext";
 import { setDataSource, SOURCES } from "../config/dataSource";
@@ -524,7 +525,7 @@ const Account = () => {
 
           {mayusculas && (
             <p className="-mt-1 mb-3 flex items-center gap-1.5 rounded-lg bg-amber-50 px-2.5 py-1.5 text-xs font-medium text-amber-800 dark:bg-amber-950/40 dark:text-amber-300">
-              <span aria-hidden="true">⇪</span>
+              <ArrowBigUpDash className="h-4 w-4 shrink-0" strokeWidth={2} aria-hidden="true" />
               {t("CuentaMayusculas")}
             </p>
           )}

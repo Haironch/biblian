@@ -7,6 +7,8 @@ import { useHistoryBlocker } from "../hooks/useHistoryBlocker";
 import { useBloquearScroll } from "../hooks/useBloquearScroll";
 import { favoritos as almacenFavoritos, useAlmacen } from "../services/almacenLocal";
 import { MAX_VERSIONES_COMPARADAS as MAX_SELECTIONS, tieneOriginales } from "../utils/versiones";
+import { Check, Plus } from "lucide-react";
+import IconoDato from "./IconoDato";
 import {
   BIBLIAS,
   RECOMENDADAS,
@@ -605,7 +607,7 @@ const ListBooks = () => {
                           : "bg-superficie-2 text-tinta-2 hover:bg-tinta/10"
                       }`}
                     >
-                      🌟 {t("TodasLasRecomendadas")} ({RECOMENDADAS.length})
+                      {t("TodasLasRecomendadas")} ({RECOMENDADAS.length})
                     </button>
 
                     {CATEGORIAS_RECOMENDADAS.map((cat) => {
@@ -621,7 +623,7 @@ const ListBooks = () => {
                               : "bg-superficie-2 text-tinta-2 hover:bg-tinta/10"
                           }`}
                         >
-                          <span>{cat.icono}</span>
+                          <IconoDato nombre={cat.icono} className="h-3.5 w-3.5" />
                           <span>{t(cat.tituloKey).split("(")[0].trim()}</span>
                           <span className="opacity-70 text-[11px]">({cat.versiones.length})</span>
                         </button>
@@ -689,10 +691,7 @@ const ListBooks = () => {
                 <div className="pt-2 border-t border-linea">
                   <div className="flex items-center justify-between gap-2 mb-2">
                     <div>
-                      <h3 className="text-sm font-bold text-tinta flex items-center gap-1.5">
-                        <span>✨</span>
-                        <span>{t("PresetsEstudio")}</span>
-                      </h3>
+                      <h3 className="text-sm font-bold text-tinta">{t("PresetsEstudio")}</h3>
                       <p className="text-xs text-tinta-3">
                         {t("GuiasEstudio")}
                       </p>
@@ -711,7 +710,7 @@ const ListBooks = () => {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <div>
                               <h4 className="font-bold text-xs sm:text-sm text-tinta flex items-center gap-1.5">
-                                <span>{cat.icono}</span>
+                                <IconoDato nombre={cat.icono} className="h-4 w-4 text-acento" />
                                 <span>{t(cat.tituloKey)}</span>
                               </h4>
                               <p className="text-[11px] text-tinta-2 mt-0.5 leading-relaxed">
@@ -727,7 +726,14 @@ const ListBooks = () => {
                                   : "bg-acento-solido hover:bg-acento-solido/90 text-white shadow-xs"
                               }`}
                             >
-                              {todasSeleccionadas ? `✓ ${t("PresetActivo")}` : t("AplicarPreset")}
+                              {todasSeleccionadas ? (
+                                <span className="inline-flex items-center gap-1">
+                                  <Check className="h-3.5 w-3.5" strokeWidth={2.4} aria-hidden="true" />
+                                  {t("PresetActivo")}
+                                </span>
+                              ) : (
+                                t("AplicarPreset")
+                              )}
                             </button>
                           </div>
 
@@ -747,7 +753,11 @@ const ListBooks = () => {
                                       : "border-linea bg-superficie-2 text-tinta-2 hover:border-linea-fuerte"
                                   }`}
                                 >
-                                  <span>{activa ? "✓" : "+"}</span>
+                                  {activa ? (
+                                    <Check className="h-3 w-3 shrink-0" strokeWidth={2.4} aria-hidden="true" />
+                                  ) : (
+                                    <Plus className="h-3 w-3 shrink-0" strokeWidth={2.4} aria-hidden="true" />
+                                  )}
                                   <span>{ver.titulo}</span>
                                 </button>
                               );
@@ -866,7 +876,7 @@ const ListBooks = () => {
                                             title={t(recInfo.categoriaKey)}
                                             className="inline-flex max-w-full items-center gap-1 whitespace-nowrap rounded-full bg-acento-suave px-2 py-0.5 text-[10px] font-medium text-acento"
                                           >
-                                            <span>{recInfo.icono}</span>
+                                            <IconoDato nombre={recInfo.icono} />
                                             {/* En un teléfono angosto la frase no cabe: termina en "…" en
                                                 vez de cortarse a media letra. El texto completo va en el `title`. */}
                                             <span className="min-w-0 truncate">{t(recInfo.tagKey)}</span>
@@ -882,7 +892,7 @@ const ListBooks = () => {
                                               title={t(`Feat_${featKey}_desc`)}
                                               className={`inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded border text-[9px] font-medium whitespace-nowrap ${info.clase}`}
                                             >
-                                              <span>{info.icono}</span>
+                                              <IconoDato nombre={info.icono} className="h-2.5 w-2.5" />
                                               <span>{t(`Feat_${featKey}`)}</span>
                                             </span>
                                           );

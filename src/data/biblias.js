@@ -889,7 +889,7 @@ export const CATEGORIAS_RECOMENDADAS = [
     id: "historica",
     tituloKey: "Categoria_historica",
     descripcionKey: "Desc_historica",
-    icono: "📜",
+    icono: "ScrollText",
     versiones: [
       {
         titulo: "Códice de Alepo (920 d.C.)",
@@ -922,7 +922,7 @@ export const CATEGORIAS_RECOMENDADAS = [
     id: "formal",
     tituloKey: "Categoria_formal",
     descripcionKey: "Desc_formal",
-    icono: "🎯",
+    icono: "Scale",
     versiones: [
       {
         titulo: "La Biblia de las Américas (LBLA)",
@@ -955,7 +955,7 @@ export const CATEGORIAS_RECOMENDADAS = [
     id: "dinamica",
     tituloKey: "Categoria_dinamica",
     descripcionKey: "Desc_dinamica",
-    icono: "📖",
+    icono: "BookOpen",
     versiones: [
       {
         titulo: "Nueva Versión Internacional (NVI)",
@@ -988,7 +988,7 @@ export const CATEGORIAS_RECOMENDADAS = [
     id: "exegesis",
     tituloKey: "Categoria_exegesis",
     descripcionKey: "Desc_exegesis",
-    icono: "🏛️",
+    icono: "Landmark",
     versiones: [
       {
         titulo: "Berean Standard Bible (BSB)",
@@ -1011,7 +1011,7 @@ export const CATEGORIAS_RECOMENDADAS = [
     id: "strong",
     tituloKey: "Categoria_strong",
     descripcionKey: "Desc_strong",
-    icono: "🔍",
+    icono: "Languages",
     versiones: [
       {
         titulo: "Stuttgartensia Hebrea [Strongs]",
@@ -1250,26 +1250,26 @@ export const CARACTERISTICAS_POR_BIBLIA = {
 export const MAPA_CARACTERISTICAS = {
   strong: {
     label: "Strong",
-    icono: "🔢",
+    icono: "Hash",
     tooltip: "Contiene números y concordancia Strong interactiva",
-    clase: "bg-blue-50 text-blue-700 dark:bg-blue-950/80 dark:text-blue-300 border-blue-200 dark:border-blue-800"
+    clase: "border-linea bg-superficie text-tinta-2"
   },
   morfologia: {
     label: "Morfología",
-    icono: "🔤",
+    icono: "Type",
     tooltip: "Contiene análisis gramatical y morfológico",
-    clase: "bg-purple-50 text-purple-700 dark:bg-purple-950/80 dark:text-purple-300 border-purple-200 dark:border-purple-800"
+    clase: "border-linea bg-superficie text-tinta-2"
   },
   glosas: {
     label: "Notas",
-    icono: "📝",
+    icono: "StickyNote",
     tooltip: "Contiene variantes críticas y notas de manuscritos",
-    clase: "bg-amber-50 text-amber-700 dark:bg-amber-950/80 dark:text-amber-300 border-amber-200 dark:border-amber-800"
+    clase: "border-linea bg-superficie text-tinta-2"
   },
   cursivas: {
     label: "Cursivas",
-    icono: "📑",
+    icono: "Italic",
     tooltip: "Resalta palabras añadidas por traductores",
-    clase: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/80 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800"
+    clase: "border-linea bg-superficie text-tinta-2"
   }
 };

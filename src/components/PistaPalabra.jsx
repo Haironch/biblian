@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Sparkles, X } from "lucide-react";
+import { Languages, X } from "lucide-react";
 import LanguageContext from "../context/LanguageContext";
 
 const CLAVE = "pistaPalabraOriginal";
@@ -40,7 +40,7 @@ const PistaPalabra = () => {
 
   return (
     <div className="animate-fade-in mb-4 flex items-start gap-2.5 rounded-xl border border-acento/20 bg-acento-suave px-3.5 py-2.5 text-sm text-tinta">
-      <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-acento" strokeWidth={1.8} aria-hidden="true" />
+      <Languages className="mt-0.5 h-4 w-4 shrink-0 text-acento" strokeWidth={1.8} aria-hidden="true" />
       <p className="min-w-0 flex-1 leading-snug">{t("PistaPalabraOriginal")}</p>
       <button
         type="button"
