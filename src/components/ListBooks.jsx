@@ -22,10 +22,25 @@ const CLAVE_SECCIONES = "seccionesBibliasAbiertas";
 
 const FILTROS = ["todas", "favoritas", "seleccionadas", "recomendadas", "originales"];
 
-const TOTAL_BIBLIAS = Object.values(BIBLIAS).reduce((total, grupo) => total + Object.keys(grupo).length, 0);
-const TOTAL_CON_ORIGINALES = Object.values(BIBLIAS)
-  .flatMap((grupo) => Object.values(grupo))
-  .filter((libro) => tieneOriginales(libro.ruta)).length;
+/*
+ * Filtro por idioma, lo primero del selector.
+ *
+ * Casi todo el mundo busca en español o en inglés; el resto (griego, hebreo,
+ * idiomas de Guatemala, náhuatl...) va junto en "Otros". Elegir uno antes de
+ * ver la lista evita recorrer 142 versiones para llegar a la que se quiere.
+ */
+const IDIOMAS_FILTRO = ["todos", "spanish", "english", "otros"];
+const PRINCIPALES = new Set(["spanish", "english"]);
+const CLAVE_IDIOMA_FILTRO = "filtroIdiomaVersiones";
+const enIdiomaFiltro = (idioma, filtro) => filtro === "todos" || (filtro === "otros" ? !PRINCIPALES.has(idioma) : idioma === filtro);
+const TOTAL_POR_IDIOMA_FILTRO = Object.fromEntries(
+  IDIOMAS_FILTRO.map((filtro) => [
+    filtro,
+    Object.entries(BIBLIAS)
+      .filter(([idioma]) => enIdiomaFiltro(idioma, filtro))
+      .reduce((total, [, grupo]) => total + Object.keys(grupo).length, 0),
+  ]),
+);
 
 const normalizar = (texto) =>
   String(texto)
@@ -132,6 +147,24 @@ const ListBooks = () => {
     useContext(DataContext);
   const [searchTerm, setSearchTerm] = useState("");
   const [filtro, setFiltro] = useState("todas");
+  // Se recuerda entre aperturas: quien lee en inglés no tiene por qué volver a
+  // elegirlo cada vez que abre el selector.
+  const [idiomaFiltro, setIdiomaFiltroEstado] = useState(() => {
+    try {
+      const guardado = localStorage.getItem(CLAVE_IDIOMA_FILTRO);
+      return IDIOMAS_FILTRO.includes(guardado) ? guardado : "todos";
+    } catch {
+      return "todos";
+    }
+  });
+  const setIdiomaFiltro = (valor) => {
+    setIdiomaFiltroEstado(valor);
+    try {
+      localStorage.setItem(CLAVE_IDIOMA_FILTRO, valor);
+    } catch {
+      // Sin almacenamiento el filtro funciona igual, solo no se recuerda.
+    }
+  };
   const [subFiltroRecomendada, setSubFiltroRecomendada] = useState("todas");
   const [infoAbierta, setInfoAbierta] = useState(false);
   const [aviso, setAviso] = useState("");
@@ -326,6 +359,7 @@ const ListBooks = () => {
     const busqueda = normalizar(searchTerm.trim());
 
     return idiomas
+      .filter((idioma) => enIdiomaFiltro(idioma, idiomaFiltro))
       .map((idioma) => {
         const nombreIdioma = normalizar(traducirIdioma(idioma));
         const libros = Object.entries(BIBLIAS[idioma]).filter(([titulo, libro]) => {
@@ -336,23 +370,38 @@ const ListBooks = () => {
         return { idioma, nombre: traducirIdioma(idioma), libros };
       })
       .filter((seccion) => seccion.libros.length > 0);
-  }, [idiomas, searchTerm, pasaFiltro, traducirIdioma]);
+  }, [idiomas, searchTerm, pasaFiltro, traducirIdioma, idiomaFiltro]);
 
   const totalVisible = secciones.reduce((total, seccion) => total + seccion.libros.length, 0);
   // Buscando o filtrando, plegar secciones esconde justo lo que se busca.
-  const forzarAbiertas = searchTerm.trim().length > 0 || filtro !== "todas";
+  // Con Español o Inglés elegido queda una sola sección: plegada sería una
+  // pantalla vacía con un título.
+  const forzarAbiertas = searchTerm.trim().length > 0 || filtro !== "todas" || idiomaFiltro === "spanish" || idiomaFiltro === "english";
   const estaAbierta = (idioma) => forzarAbiertas || seccionesAbiertas.includes(idioma);
 
   const alternarSeccion = (idioma) => {
     setSeccionesAbiertas((previas) => (previas.includes(idioma) ? previas.filter((x) => x !== idioma) : [...previas, idioma]));
   };
 
+  /*
+   * Los contadores cuentan dentro del idioma elegido: con "Inglés" puesto,
+   * "Todas 142" prometería versiones que la lista no va a enseñar.
+   */
+  const rutasDelIdioma = useMemo(
+    () =>
+      Object.entries(BIBLIAS)
+        .filter(([idioma]) => enIdiomaFiltro(idioma, idiomaFiltro))
+        .flatMap(([, grupo]) => Object.values(grupo).map((libro) => libro.ruta)),
+    [idiomaFiltro],
+  );
+
   const contadorFiltro = (nombre) => {
-    if (nombre === "favoritas") return favoriteBooks.length;
-    if (nombre === "seleccionadas") return selectedBooks.length;
-    if (nombre === "recomendadas") return RECOMENDADAS.length;
-    if (nombre === "originales") return TOTAL_CON_ORIGINALES;
-    return TOTAL_BIBLIAS;
+    const enIdioma = (lista) => lista.filter((ruta) => rutasDelIdioma.includes(ruta)).length;
+    if (nombre === "favoritas") return enIdioma(favoriteBooks);
+    if (nombre === "seleccionadas") return enIdioma(selectedBooks);
+    if (nombre === "recomendadas") return enIdioma(RECOMENDADAS);
+    if (nombre === "originales") return rutasDelIdioma.filter(tieneOriginales).length;
+    return rutasDelIdioma.length;
   };
 
   const claseChip = (activo) =>
@@ -442,6 +491,25 @@ const ListBooks = () => {
                     </svg>
                   </button>
                 </div>
+              </div>
+
+              {/* IDIOMA: lo primero que se decide, antes de buscar o filtrar. */}
+              <div role="tablist" aria-label={t("FiltroIdioma")} className="mt-3 flex gap-1 rounded-xl bg-tinta/5 p-1">
+                {IDIOMAS_FILTRO.map((valor) => (
+                  <button
+                    key={valor}
+                    type="button"
+                    role="tab"
+                    aria-selected={idiomaFiltro === valor}
+                    onClick={() => setIdiomaFiltro(valor)}
+                    className={`min-w-0 flex-1 rounded-lg px-1.5 py-1.5 text-xs font-semibold transition-colors sm:text-sm ${
+                      idiomaFiltro === valor ? "bg-superficie text-tinta shadow-sm" : "text-tinta-3 hover:text-tinta"
+                    }`}
+                  >
+                    <span className="block truncate">{t(`FiltroIdioma_${valor}`)}</span>
+                    <span className="block text-[10px] font-normal tabular-nums opacity-70">{TOTAL_POR_IDIOMA_FILTRO[valor]}</span>
+                  </button>
+                ))}
               </div>
 
               {/* BUSQUEDA */}
